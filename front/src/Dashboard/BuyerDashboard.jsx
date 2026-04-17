@@ -17,6 +17,13 @@ import {
   DollarSign,
   Copy,
 } from 'lucide-react';
+import Progress from './Progress';
+import land1 from '../../assets/land1.jpg';
+import land2 from '../../assets/land2.jpg';
+import land3 from '../../assets/land3.jpg';
+import land4 from '../../assets/land4.jpg';
+
+// import { sign } from 'node:crypto';
  //
 
 //BUY PLOT options..
@@ -30,7 +37,7 @@ const DUMMY_MARKETPLACE_DATA = [
     price: '25 ETH',
     surveyNo: 'PUNE-2024-001',
     owner: '0x742d35Cc6634C0532925a3b844Bc622e4A8a4C0f',
-    image: 'https://www.istockphoto.com/photos/land-pic',
+    image: land1,
     litigationStatus: 'Clean',
   },
   {
@@ -40,7 +47,7 @@ const DUMMY_MARKETPLACE_DATA = [
     price: '35 ETH',
     surveyNo: 'MUMBAI-2024-002',
     owner: '0x8ba1f109551bD432803012645Ac136ddd64DBA72',
-    image: 'https://via.placeholder.com/350x250/1e293b/10b981?text=Property+102',
+    image: land2,
     litigationStatus: 'Clean',
   },
   {
@@ -50,7 +57,7 @@ const DUMMY_MARKETPLACE_DATA = [
     price: '45 ETH',
     surveyNo: 'BANGALORE-2024-003',
     owner: '0xaBc1234567890DEF1234567890DEF1234567890',
-    image: 'https://via.placeholder.com/350x250/1e293b/10b981?text=Property+103',
+    image: land3,
     litigationStatus: 'Disputed',
   },
   {
@@ -60,7 +67,7 @@ const DUMMY_MARKETPLACE_DATA = [
     price: '50 ETH',
     surveyNo: 'DELHI-2024-004',
     owner: '0xDEF1234567890ABC1234567890ABC1234567890',
-    image: 'https://via.placeholder.com/350x250/1e293b/10b981?text=Property+104',
+    image: land4,
     litigationStatus: 'Clean',
   },
 ];
@@ -72,7 +79,7 @@ const DUMMY_MY_OFFERS = [
     surveyNo: 'PUNE-2024-001',
     offerAmount: '24 ETH',
     timestamp: '2024-02-02 14:30:00',
-    status: 'pending',
+    status: 'accepted',
   },
   {
     id: 2,
@@ -80,7 +87,7 @@ const DUMMY_MY_OFFERS = [
     surveyNo: 'MUMBAI-2024-002',
     offerAmount: '33 ETH',
     timestamp: '2024-02-01 10:15:00',
-    status: 'accepted',
+    status: 'pending',
   },
   {
     id: 3,
@@ -100,6 +107,7 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
     { id: 'marketplace', label: 'Marketplace', icon: MapPin },
     { id: 'verify', label: 'Verify Land', icon: Shield },
     { id: 'offers', label: 'My Offers', icon: FileText },
+    { id: 'land-status', label: 'Land Status', icon: TrendingUp },
   ];
 
   const truncateAddress = (address) => {
@@ -239,6 +247,7 @@ const VerifyLandSection = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [verificationResult, setVerificationResult] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) {
@@ -695,11 +704,11 @@ const handleClaimOwnership = async (offer) => {
   try {
     const provider = new ethers.BrowserProvider(window.ethereum); //
     const signer = await provider.getSigner(); //
-
+    console.log(signer);
     // Trigger a small confirmation transaction to demonstrate blockchain interaction
     const tx = await signer.sendTransaction({
       to: "0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc", // Hardcoded seller or contract address
-      value: ethers.parseEther("0.001"), // Small fee to "seal" the deal
+      value: ethers.parseEther("24"), // Small fee to "seal" the deal
     });
 
     await tx.wait(); //
@@ -747,8 +756,8 @@ const BuyerDashboard = () => {
 
       // Optional: Small transaction to "verify" the claim on-chain
       const tx = await signer.sendTransaction({
-        to: account, // Sending to self to trigger a block update
-        value: ethers.parseEther("0.001"), 
+        to: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266', // Sending to self to trigger a block update
+        value: ethers.parseEther("35"), 
       });
 
       await tx.wait();
@@ -856,6 +865,7 @@ const BuyerDashboard = () => {
         )}
         {activeSection === 'verify' && <VerifyLandSection />}
         {activeSection === 'offers' && <MyOffersSection />}
+        {activeSection === 'land-status' && <Progress />}
       </main>
     </div>
   );

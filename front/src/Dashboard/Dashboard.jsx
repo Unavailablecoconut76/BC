@@ -14,8 +14,16 @@ import {
   AlertCircle,
   Menu, // Added Menu icon for mobile trigger
   Copy,
+  TrendingUp,
 } from 'lucide-react';
 import { ethers } from 'ethers';
+import Progress from './Progress';
+import land1 from '../../assets/land1.jpg';
+import land2 from '../../assets/land2.jpg';
+import land3 from '../../assets/land3.jpg';
+import land4 from '../../assets/land4.jpg';
+
+
 
 // Dummy data for myLands 
 const DUMMY_LANDS = [
@@ -25,7 +33,7 @@ const DUMMY_LANDS = [
     area: 1200,
     price: '25 ETH',
     surveyNo: 'PUNE-2024-001',
-    image: 'https://via.placeholder.com/300x200/1e293b/10b981?text=Property+101', // Updated placeholder colors
+    image: land1, // Updated placeholder colors
   },
   {
     id: 102,
@@ -33,7 +41,7 @@ const DUMMY_LANDS = [
     area: 1500,
     price: '35 ETH',
     surveyNo: 'MUMBAI-2024-002',
-    image: 'https://via.placeholder.com/300x200/1e293b/10b981?text=Property+102',
+    image: land2,
   },
   {
     id: 103,
@@ -41,7 +49,7 @@ const DUMMY_LANDS = [
     area: 2000,
     price: '45 ETH',
     surveyNo: 'BANGALORE-2024-003',
-    image: 'https://via.placeholder.com/300x200/1e293b/10b981?text=Property+103',
+    image: land3,
   },
 ];
 
@@ -78,6 +86,7 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
     { id: 'properties', label: 'My Properties', icon: Home },
     { id: 'transfer', label: 'Initiate Transfer', icon: Send },
     { id: 'requests', label: 'Pending Requests', icon: Clock },
+    { id: 'land-status', label: 'Land Status', icon: TrendingUp },
   ];
 
 
@@ -319,7 +328,7 @@ const MyPropertiesSection = ({ lands, onTransferClick }) => {
 
       // Trigger the MetaMask signature for the "Sale"
       const tx = await signer.sendTransaction({
-        to: buyerAddress,
+        to: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
         value: ethers.parseEther(offerPrice), 
       });
 
@@ -334,7 +343,7 @@ const MyPropertiesSection = ({ lands, onTransferClick }) => {
       onClose();
     } catch (error) {
       console.error('Transfer failed:', error);
-      alert('Blockchain transaction failed. Ensure your Hardhat node is running.');
+      alert('Blockchain transaction failed. Hardhat node may not be active.');
     } finally {
       setIsSubmitting(false);
     }
@@ -368,13 +377,11 @@ const MyPropertiesSection = ({ lands, onTransferClick }) => {
 
   return (
     <>
-      {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 transition-opacity"
         onClick={onClose}
       ></div>
 
-      {/* Modal - Dark Theme applied */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full shadow-2xl shadow-black/50 transform transition-all">
           {/* Header */}
@@ -692,6 +699,8 @@ const Dashboard = () => {
         {activeSection === 'requests' && (
           <PendingRequestsSection requests={pendingRequests} />
         )}
+
+        {activeSection === 'land-status' && <Progress />}
       </main>
 
       {/* Transfer Modal */}

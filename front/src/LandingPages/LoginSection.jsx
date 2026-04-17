@@ -12,6 +12,8 @@ const LoginSection = () => {
       navigate('/dashboardbuyer');
     } else if (userType === 'seller') {
       navigate('/dashboard');
+    } else if (userType === 'govt') {
+      navigate('/dashboardofficial');
     }
   }
 

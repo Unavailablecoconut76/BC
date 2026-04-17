@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Dashboard from './Dashboard/Dashboard';
 import BuyerDashboard from './Dashboard/BuyerDashboard';
+import OfficialDashboard from './Dashboard/OfficialDashboard';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -17,9 +18,13 @@ const router = createBrowserRouter([
     element: <Dashboard />,
   },
   {
-    path:"/dashboardbuyer",
+    path: "/dashboardbuyer",
     element: <BuyerDashboard />,
-  }
+  },
+  {
+    path: "/dashboardofficial",
+    element: <OfficialDashboard />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
