@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GoLand | Enter Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(78, 222, 163, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+        }
+        body {
+            background-color: #0b1326;
+            background-image: radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+                              radial-gradient(circle at 80% 70%, rgba(78, 222, 163, 0.05) 0%, transparent 50%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#45dfa4",
+                      "primary": "#4edea3",
+                      "surface-container-lowest": "#060e20",
+                      "on-error-container": "#ffdad6",
+                      "inverse-primary": "#006c49",
+                      "surface-variant": "#2d3449",
+                      "background": "#0b1326",
+                      "on-primary": "#003824",
+                      "tertiary": "#adc6ff",
+                      "surface-dim": "#0b1326",
+                      "outline-variant": "#3c4a42",
+                      "tertiary-fixed-dim": "#adc6ff",
+                      "on-secondary-container": "#00452e",
+                      "surface-container-high": "#222a3d",
+                      "tertiary-fixed": "#d8e2ff",
+                      "surface-container-highest": "#2d3449",
+                      "on-primary-fixed": "#002113",
+                      "primary-fixed": "#6ffbbe",
+                      "primary-fixed-dim": "#4edea3",
+                      "error-container": "#93000a",
+                      "inverse-surface": "#dae2fd",
+                      "on-surface-variant": "#bbcabf",
+                      "inverse-on-surface": "#283044",
+                      "surface-bright": "#31394d",
+                      "surface-tint": "#4edea3",
+                      "secondary-fixed": "#68fcbf",
+                      "on-secondary": "#003825",
+                      "on-primary-container": "#00422b",
+                      "surface-container": "#171f33",
+                      "secondary-container": "#00bd85",
+                      "error": "#ffb4ab",
+                      "secondary": "#45dfa4",
+                      "on-tertiary-fixed": "#001a42",
+                      "on-background": "#dae2fd",
+                      "surface-container-low": "#131b2e",
+                      "outline": "#86948a",
+                      "on-tertiary-container": "#00367a",
+                      "tertiary-container": "#71a1ff",
+                      "on-tertiary-fixed-variant": "#004395",
+                      "primary-container": "#10b981",
+                      "on-secondary-fixed": "#002114",
+                      "on-tertiary": "#002e6a",
+                      "on-error": "#690005",
+                      "on-secondary-fixed-variant": "#005137",
+                      "surface": "#0b1326",
+                      "on-surface": "#dae2fd",
+                      "on-primary-fixed-variant": "#005236"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "lg": "24px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "xxl": "48px",
+                      "container-max": "1280px",
+                      "xl": "32px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "code-md": ["JetBrains Mono"],
+                      "headline-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="min-h-screen flex flex-col font-body-md text-on-surface selection:bg-primary selection:text-on-primary">
+<!-- Top Navigation (Shell Implementation) -->
+<header class="bg-background dark:bg-background border-b border-outline-variant dark:border-outline-variant h-20 flex items-center w-full sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto">
+<div class="font-headline-md text-headline-md font-bold text-on-surface dark:text-on-surface">GoLand</div>
+<nav class="hidden md:flex gap-xl">
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Home</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">About</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Services</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">FAQs</a>
+</nav>
+<button class="bg-primary text-on-primary px-xl py-sm rounded-lg font-label-md text-label-md hover:bg-primary-container transition-all active:opacity-80">
+                Enter Platform
+            </button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex items-center justify-center py-xxl px-gutter">
+<section class="max-w-container-max w-full flex flex-col items-center">
+<!-- Hero Selection Header -->
+<div class="text-center mb-xl">
+<div class="inline-block px-md py-xs bg-primary-container/20 border border-primary/30 rounded-full mb-md">
+<span class="font-label-md text-label-md text-primary tracking-widest">GET STARTED</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg md:font-display-lg md:text-display-lg text-on-surface mb-sm">Enter the Platform</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Select your role to continue your blockchain journey</p>
+</div>
+<!-- Role Selection Grid (Asymmetric Bento-Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg w-full max-w-5xl mt-md">
+<!-- Seller Card -->
+<div class="glass-card p-xl rounded-xl flex flex-col group relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all"></div>
+<div class="w-14 h-14 bg-primary-container flex items-center justify-center rounded-lg mb-xl shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-on-primary-container text-3xl" data-icon="house">house</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">Seller</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl flex-grow">List your property on the immutable ledger. Secure digital titles and manage sales with transparent smart contracts.</p>
+<button class="w-full flex justify-between items-center bg-primary text-on-primary px-lg py-md rounded-lg font-label-md text-label-md hover:bg-primary-container transition-all active:scale-95">
+                        Enter as Seller
+                        <span class="material-symbols-outlined text-md" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Buyer Card -->
+<div class="glass-card p-xl rounded-xl flex flex-col group relative overflow-hidden border-secondary/20">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-tertiary-container/10 rounded-full blur-2xl group-hover:bg-tertiary-container/20 transition-all"></div>
+<div class="w-14 h-14 bg-tertiary-container flex items-center justify-center rounded-lg mb-xl shadow-lg shadow-tertiary/20">
+<span class="material-symbols-outlined text-on-tertiary-container text-3xl" data-icon="search">search</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">Buyer</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl flex-grow">Browse verified land parcels. Complete transactions with instant verification and government-backed security.</p>
+<button class="w-full flex justify-between items-center bg-tertiary-container text-on-tertiary-container px-lg py-md rounded-lg font-label-md text-label-md hover:brightness-110 transition-all active:scale-95">
+                        Enter as Buyer
+                        <span class="material-symbols-outlined text-md" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Official Card -->
+<div class="glass-card p-xl rounded-xl flex flex-col group relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-error-container/10 rounded-full blur-2xl group-hover:bg-error-container/20 transition-all"></div>
+<div class="w-14 h-14 bg-surface-container-highest flex items-center justify-center rounded-lg mb-xl shadow-lg border border-outline-variant">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="shield">shield</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">Official</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl flex-grow">Validate registrations and oversee the blockchain ecosystem. Access regulatory dashboards and audit trails.</p>
+<button class="w-full flex justify-between items-center border border-primary text-primary px-lg py-md rounded-lg font-label-md text-label-md hover:bg-primary/10 transition-all active:scale-95">
+                        Enter as Official
+                        <span class="material-symbols-outlined text-md" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Trust Badge / Footer Note -->
+<div class="mt-xxl flex items-center gap-sm text-on-surface-variant opacity-70">
+<span class="material-symbols-outlined text-md" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-code-md text-code-md">All sessions secured by MetaMask wallet authentication + JWT</span>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full py-xl px-gutter flex flex-col items-center gap-md bg-surface-container-low dark:bg-surface-container-low border-t border-outline-variant">
+<div class="font-headline-sm text-headline-sm font-bold text-primary">GoLand</div>
+<div class="flex flex-wrap justify-center gap-lg">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors" href="#">Legal</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors" href="#">Contact</a>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-sm">© 2024 GoLand Blockchain Ledger. All rights reserved.</p>
+</footer>
+<!-- Atmosphere Scripts -->
+<script>
+        // Subtle mouse tracking glow effect
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            document.body.style.backgroundImage = `
+                radial-gradient(circle at ${x}% ${y}%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 20% 30%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(78, 222, 163, 0.05) 0%, transparent 50%)
+            `;
+        });
+    </script>
+</body></html>

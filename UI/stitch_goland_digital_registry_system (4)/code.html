@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GoLand | Register New Property</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#45dfa4",
+                        "primary": "#4edea3",
+                        "surface-container-lowest": "#060e20",
+                        "on-error-container": "#ffdad6",
+                        "inverse-primary": "#006c49",
+                        "surface-variant": "#2d3449",
+                        "background": "#0b1326",
+                        "on-primary": "#003824",
+                        "tertiary": "#adc6ff",
+                        "surface-dim": "#0b1326",
+                        "outline-variant": "#3c4a42",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "on-secondary-container": "#00452e",
+                        "surface-container-high": "#222a3d",
+                        "tertiary-fixed": "#d8e2ff",
+                        "surface-container-highest": "#2d3449",
+                        "on-primary-fixed": "#002113",
+                        "primary-fixed": "#6ffbbe",
+                        "primary-fixed-dim": "#4edea3",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#dae2fd",
+                        "on-surface-variant": "#bbcabf",
+                        "inverse-on-surface": "#283044",
+                        "surface-bright": "#31394d",
+                        "surface-tint": "#4edea3",
+                        "secondary-fixed": "#68fcbf",
+                        "on-secondary": "#003825",
+                        "on-primary-container": "#00422b",
+                        "surface-container": "#171f33",
+                        "secondary-container": "#00bd85",
+                        "error": "#ffb4ab",
+                        "secondary": "#45dfa4",
+                        "on-tertiary-fixed": "#001a42",
+                        "on-background": "#dae2fd",
+                        "surface-container-low": "#131b2e",
+                        "outline": "#86948a",
+                        "on-tertiary-container": "#00367a",
+                        "tertiary-container": "#71a1ff",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "primary-container": "#10b981",
+                        "on-secondary-fixed": "#002114",
+                        "on-tertiary": "#002e6a",
+                        "on-error": "#690005",
+                        "on-secondary-fixed-variant": "#005137",
+                        "surface": "#0b1326",
+                        "on-surface": "#dae2fd",
+                        "on-primary-fixed-variant": "#005236"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "xl": "32px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #060e20;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d3449;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3c4a42;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- SideNavBar (Authority Source: Shared Components JSON) -->
+<aside class="hidden md:flex flex-col h-full py-md bg-surface-container-lowest fixed left-0 top-0 w-[280px] border-r border-outline-variant z-50">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">GoLand Ledger</h1>
+<p class="text-on-surface-variant font-label-md text-label-md mt-xs">0x71C...4E21</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-md px-lg py-md text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 transition-all" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-md text-label-md">My Properties</span>
+</a>
+<!-- Active State: Register -->
+<a class="flex items-center gap-md px-lg py-md bg-secondary-container text-on-secondary-container rounded-lg mx-2 my-1 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_box</span>
+<span class="font-label-md text-label-md">Register</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 transition-all" href="#">
+<span class="material-symbols-outlined">swap_horiz</span>
+<span class="font-label-md text-label-md">Active Transfers</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 transition-all" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Documents</span>
+</a>
+<a class="flex items-center gap-md px-lg py-md text-on-surface-variant hover:bg-surface-variant rounded-lg mx-2 my-1 transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-lg pt-md border-t border-outline-variant">
+<a class="flex items-center gap-md py-md text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-lg py-md ml-0 md:ml-[280px] bg-surface border-b border-outline-variant md:border-b-0 sticky top-0 z-40">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Register Property</h2>
+<div class="flex items-center gap-md">
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-sm bg-surface-container px-sm py-xs rounded-full border border-outline-variant">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-primary-container flex items-center justify-center">
+<img alt="MetaMask Wallet" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqy3D8wqgHv0HIPqaqqRR8RW_KXuFtNuAajLj58eNFL-Fs3PmiRImW2rlONBeBpCjTUttkpGRmv5y2tks0pAOcPWwpupvdCg-eA3tc4Ho65TPfO60V2rt2c2cyNlKJzgsOqZWJWpMcGl0nvrVDH_a0ZW1jAbd_Q-llxfC3IY24LNdLOcrR1ndDNrgMM5yUWsPLlbQ4dgfWnd8vNJN5tQ5NtD4NlOyTfQLmfN-fl38cSwu6urMxv4hO_5bgcQBM4YI1HbLi2ER8yBw"/>
+</div>
+<span class="text-on-surface font-label-md text-label-md pr-sm">0x71C...4E21</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-0 md:ml-[280px] p-gutter md:p-xxl max-w-container-max mx-auto min-h-screen">
+<header class="mb-xl">
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Register New Property</h1>
+<div class="flex items-center gap-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<p class="text-on-surface-variant font-body-md">Property details recorded on Polygon blockchain</p>
+</div>
+</header>
+<section class="grid grid-cols-1 gap-xl">
+<!-- Form Card -->
+<div class="bg-[#1E293B] rounded-xl p-xl border border-[#334155] shadow-xl">
+<form class="space-y-xl">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-xl">
+<!-- Left Column -->
+<div class="space-y-md">
+<h3 class="font-headline-sm text-on-surface border-b border-outline-variant pb-xs mb-md">General Details</h3>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Land ID</label>
+<input class="w-full bg-[#334155] border-[#475569] text-on-surface rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-code-md" placeholder="e.g., LAND-BR-2024-001" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Survey Number</label>
+<input class="w-full bg-[#334155] border-[#475569] text-on-surface rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" placeholder="Official Survey No." type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Property Type</label>
+<select class="w-full bg-[#334155] border-[#475569] text-on-surface rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all">
+<option>Residential</option>
+<option>Commercial</option>
+<option>Agricultural</option>
+<option>Industrial</option>
+</select>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Area (Sq. Ft)</label>
+<input class="w-full bg-[#334155] border-[#475569] text-on-surface rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" placeholder="Total Area" type="number"/>
+</div>
+</div>
+<!-- Right Column -->
+<div class="space-y-md">
+<h3 class="font-headline-sm text-on-surface border-b border-outline-variant pb-xs mb-md">Location Details</h3>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Address</label>
+<textarea class="w-full bg-[#334155] border-[#475569] text-on-surface rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" placeholder="Full street address" rows="3"></textarea>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">City</label>
+<input class="w-full bg-[#334155] border-[#475569] text-on-surface rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" placeholder="City Name" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">State</label>
+<input class="w-full bg-[#334155] border-[#475569] text-on-surface rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" placeholder="State" type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-xs">Pincode</label>
+<input class="w-full bg-[#334155] border-[#475569] text-on-surface rounded-lg focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all" placeholder="6-digit Pincode" type="text"/>
+</div>
+</div>
+</div>
+<!-- Upload Box -->
+<div class="mt-xl">
+<label class="block font-label-md text-on-surface-variant mb-xs">Verification Documents</label>
+<div class="relative group cursor-pointer border-2 border-dashed border-[#34D399]/40 hover:border-[#34D399] bg-[#34D399]/5 rounded-xl p-xxl text-center transition-all">
+<input class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" type="file"/>
+<div class="flex flex-col items-center gap-md">
+<div class="w-16 h-16 bg-primary-container/20 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[40px]">cloud_upload</span>
+</div>
+<div>
+<p class="font-headline-sm text-primary">Click or Drag &amp; Drop to Upload</p>
+<p class="text-on-surface-variant font-body-sm mt-xs">PDF, JPG or PNG (Max 10MB per file). Upload Title Deed, Tax Receipts, and Encumbrance Certificate.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Action -->
+<div class="pt-xl border-t border-outline-variant">
+<button class="w-full py-md bg-primary hover:bg-[#059669] text-on-primary font-headline-sm rounded-lg flex items-center justify-center gap-md shadow-lg shadow-primary/20 transition-all active:scale-[0.98]" type="submit">
+<span class="material-symbols-outlined">shield</span>
+                            Register Property on Blockchain
+                        </button>
+</div>
+<!-- Transaction Warning -->
+<div class="flex gap-md bg-surface-container-low p-md rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-secondary">info</span>
+<div>
+<p class="font-label-md text-on-surface font-bold">MetaMask Transaction Required</p>
+<p class="text-on-surface-variant font-body-sm">Clicking register will trigger a smart contract transaction on the Polygon network. Please ensure your wallet has sufficient POL (MATIC) for gas fees. This action is immutable.</p>
+</div>
+</div>
+</form>
+</div>
+</section>
+<!-- Background Atmospheric Element (Subtle Gradient) -->
+<div class="fixed bottom-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full -z-10 pointer-events-none"></div>
+</main>
+<!-- Footer -->
+<footer class="ml-0 md:ml-[280px] w-full py-xl px-gutter flex flex-col items-center gap-md bg-surface-container-low border-t border-outline-variant">
+<h3 class="font-headline-sm text-headline-sm font-bold text-primary">GoLand</h3>
+<div class="flex flex-wrap justify-center gap-xl">
+<a class="text-on-surface-variant font-body-sm hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-body-sm hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant font-body-sm hover:text-secondary transition-colors" href="#">Legal</a>
+<a class="text-on-surface-variant font-body-sm hover:text-secondary transition-colors" href="#">Contact</a>
+</div>
+<p class="text-on-surface-variant font-body-sm text-center">© 2024 GoLand Blockchain Ledger. All rights reserved.</p>
+</footer>
+<!-- BottomNavBar (Authority Source: Shared Components JSON) - Mobile Only -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 bg-surface-container-lowest border-t border-outline-variant shadow-lg md:hidden z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-[10px]">Overview</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">location_city</span>
+<span class="font-label-md text-[10px]">Properties</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 shadow-lg transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="font-label-md text-[10px]">Add</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">sync_alt</span>
+<span class="font-label-md text-[10px]">Transfers</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined">folder</span>
+<span class="font-label-md text-[10px]">Docs</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for form focus
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label')?.classList.add('text-primary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label')?.classList.remove('text-primary');
+            });
+        });
+
+        // Simple feedback for file drop
+        const uploadBox = document.querySelector('.relative.group.cursor-pointer');
+        const fileInput = uploadBox.querySelector('input[type="file"]');
+        
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const text = uploadBox.querySelector('p.font-headline-sm');
+                text.textContent = `${e.target.files.length} File(s) Ready to Upload`;
+                uploadBox.classList.add('bg-primary/10', 'border-solid');
+            }
+        });
+    </script>
+</body></html>

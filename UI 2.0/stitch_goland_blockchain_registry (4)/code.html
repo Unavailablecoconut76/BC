@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GoLand | Land Status &amp; Progress</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        /* Document-centric spacing and grid logic from Style Guidance */
+        body {
+            background-color: #F7F5F2; /* Level 0 Background from Style Guidance */
+            font-family: 'Inter', sans-serif;
+        }
+        .canvas-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .card-shadow {
+            box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#752d06",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#294678",
+                        "on-surface": "#1a1a2e",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#89a5dd",
+                        "outline": "#747780",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#002c16",
+                        "on-background": "#1a1a2e",
+                        "primary-fixed": "#d7e2ff",
+                        "on-primary-fixed": "#001a40",
+                        "inverse-surface": "#2f2e43",
+                        "background": "#fcf8ff",
+                        "on-surface-variant": "#44474f",
+                        "secondary-container": "#fd9668",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#98471f",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#8ad7a4",
+                        "surface-dim": "#dad7f3",
+                        "surface-container-highest": "#e2e0fc",
+                        "on-secondary-fixed": "#360f00",
+                        "on-secondary-fixed-variant": "#793009",
+                        "inverse-primary": "#acc7ff",
+                        "surface-bright": "#fcf8ff",
+                        "on-error": "#ffffff",
+                        "primary": "#002452",
+                        "surface-tint": "#425e91",
+                        "inverse-on-surface": "#f2efff",
+                        "on-tertiary-container": "#68b484",
+                        "tertiary-fixed": "#a5f4bf",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e8e5ff",
+                        "surface-container": "#efecff",
+                        "primary-container": "#1b3a6b",
+                        "tertiary-container": "#004425",
+                        "surface": "#fcf8ff",
+                        "primary-fixed-dim": "#acc7ff",
+                        "surface-container-low": "#f5f2ff",
+                        "outline-variant": "#c4c6d0",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdbcd",
+                        "on-tertiary-fixed": "#00210f",
+                        "surface-variant": "#e2e0fc",
+                        "on-tertiary-fixed-variant": "#00522e",
+                        "secondary-fixed-dim": "#ffb596"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "16px",
+                        "gutter": "24px",
+                        "xl": "48px",
+                        "md": "24px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "64px",
+                        "lg": "32px",
+                        "xs": "8px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface-container-lowest">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-[72px] bg-surface-container-lowest border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-xl">
+<span class="text-headline-md font-headline-md font-bold text-primary">GoLand</span>
+<div class="hidden md:flex gap-md">
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-200" href="#">Marketplace</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-200" href="#">Verification</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1" href="#">History</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-200" href="#">Support</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="bg-primary text-on-primary px-gutter py-xs rounded-lg font-label-sm hover:opacity-90 transition-all">Connect Wallet</button>
+</div>
+</nav>
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-md border-r border-outline-variant w-[280px] z-40 pt-[96px] bg-surface-container-lowest">
+<div class="mb-xl px-xs">
+<h2 class="font-headline-md text-headline-md font-bold text-primary">GoLand Registry</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Official Node</p>
+</div>
+<nav class="flex-grow space-y-base">
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm p-sm bg-primary-container text-on-primary-container font-bold rounded-lg scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-label-sm">My Properties</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-sm">Transactions</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-sm">Registry Search</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm">Settings</span>
+</a>
+</nav>
+<div class="pt-xl space-y-base border-t border-outline-variant">
+<button class="w-full mb-md bg-primary text-on-primary py-sm rounded-lg font-label-sm">New Registration</button>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-sm">Help Center</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-[72px] min-h-screen">
+<div class="px-margin-desktop py-xl canvas-container">
+<!-- Page Header -->
+<header class="mb-xl">
+<div class="flex items-center gap-xs text-on-surface-variant font-label-sm mb-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_back">arrow_back</span>
+<span>Back to Registry</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary">Registration Progress: Parcel #4829-X</h1>
+<p class="font-body-md text-on-surface-variant mt-xs">Update and verify your land records to finalize blockchain anchoring.</p>
+</header>
+<!-- 6-Stage Stepper -->
+<div class="relative flex items-center justify-between mb-xl px-gutter">
+<!-- Background Line -->
+<div class="absolute top-[20px] left-gutter right-gutter h-[2px] bg-outline-variant z-0"></div>
+<!-- Step 1: Completed -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-10 h-10 rounded-full bg-[#E8F5E9] border-2 border-[#4CAF50] flex items-center justify-center text-[#4CAF50]">
+<span class="material-symbols-outlined text-[20px]" data-icon="check">check</span>
+</div>
+<span class="font-label-sm text-on-surface-variant">Application</span>
+</div>
+<!-- Step 2: Completed -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-10 h-10 rounded-full bg-[#E8F5E9] border-2 border-[#4CAF50] flex items-center justify-center text-[#4CAF50]">
+<span class="material-symbols-outlined text-[20px]" data-icon="check">check</span>
+</div>
+<span class="font-label-sm text-on-surface-variant">Initial Review</span>
+</div>
+<!-- Step 3: Current -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary ring-4 ring-primary-container">
+<span class="font-label-sm">03</span>
+</div>
+<span class="font-label-sm text-primary font-bold">Document Upload</span>
+</div>
+<!-- Step 4: Upcoming -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-10 h-10 rounded-full bg-surface-container border-2 border-outline-variant flex items-center justify-center text-on-surface-variant">
+<span class="font-label-sm">04</span>
+</div>
+<span class="font-label-sm text-on-surface-variant">Legal Verification</span>
+</div>
+<!-- Step 5: Upcoming -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-10 h-10 rounded-full bg-surface-container border-2 border-outline-variant flex items-center justify-center text-on-surface-variant">
+<span class="font-label-sm">05</span>
+</div>
+<span class="font-label-sm text-on-surface-variant">Node Consensus</span>
+</div>
+<!-- Step 6: Upcoming -->
+<div class="relative z-10 flex flex-col items-center gap-xs">
+<div class="w-10 h-10 rounded-full bg-surface-container border-2 border-outline-variant flex items-center justify-center text-on-surface-variant">
+<span class="font-label-sm">06</span>
+</div>
+<span class="font-label-sm text-on-surface-variant">Final Anchoring</span>
+</div>
+</div>
+<!-- Main Content Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl card-shadow overflow-hidden">
+<div class="p-xl border-b border-outline-variant">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-headline-md text-headline-md text-primary mb-xs">Stage 3: Document Upload</h2>
+<p class="font-body-md text-on-surface-variant max-w-2xl">Please upload high-resolution digital copies of the following legal documents. Ensure all signatures are clearly visible and no information is obscured.</p>
+</div>
+<div class="flex items-center gap-xs bg-surface-container-low px-sm py-xs rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="info">info</span>
+<span class="font-label-sm text-primary">Pending 2/4 Files</span>
+</div>
+</div>
+</div>
+<div class="p-xl grid grid-cols-1 lg:grid-cols-2 gap-xl">
+<!-- Upload Zones -->
+<div class="space-y-gutter">
+<div class="group relative border-2 border-dashed border-outline-variant bg-surface-container-low rounded-lg p-xl text-center hover:bg-surface-container transition-colors cursor-pointer">
+<input class="absolute inset-0 opacity-0 cursor-pointer" type="file"/>
+<span class="material-symbols-outlined text-primary text-[48px] mb-sm" data-icon="cloud_upload">cloud_upload</span>
+<h3 class="font-headline-md text-primary mb-xs">Deed of Transfer</h3>
+<p class="font-label-sm text-on-surface-variant">Drag and drop or click to upload PDF/JPG (Max 15MB)</p>
+</div>
+<div class="group relative border-2 border-dashed border-outline-variant bg-surface-container-low rounded-lg p-xl text-center hover:bg-surface-container transition-colors cursor-pointer">
+<input class="absolute inset-0 opacity-0 cursor-pointer" type="file"/>
+<span class="material-symbols-outlined text-primary text-[48px] mb-sm" data-icon="add_a_photo">add_a_photo</span>
+<h3 class="font-headline-md text-primary mb-xs">Site Boundary Map</h3>
+<p class="font-label-sm text-on-surface-variant">Geospatial data or verified surveyor plot</p>
+</div>
+</div>
+<!-- DocChecklistRow Section -->
+<div class="bg-surface-container-low rounded-lg p-md border border-outline-variant h-fit">
+<h3 class="font-label-sm text-primary mb-md uppercase tracking-wider">Required Documentation Checklist</h3>
+<div class="space-y-1">
+<!-- Row 1: Completed -->
+<div class="flex items-center justify-between p-sm bg-surface-container-lowest rounded-md border border-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-[#4CAF50]" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-md text-on-surface font-medium">Owner Identification (KYC)</span>
+</div>
+<div class="flex items-center gap-xs">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Row 2: In Review (Clock) -->
+<div class="flex items-center justify-between p-sm bg-surface-container-lowest/50 rounded-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="schedule">schedule</span>
+<span class="font-body-md text-on-surface-variant">Property Tax Clearance</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="font-label-sm text-secondary-container bg-on-secondary-container px-xs rounded text-[10px]">VERIFYING</span>
+<button class="text-on-surface-variant opacity-30 cursor-not-allowed">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+</div>
+</div>
+<!-- Row 3: Missing (X) -->
+<div class="flex items-center justify-between p-sm bg-surface-container-lowest rounded-md border border-outline-variant">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-error" data-icon="cancel">cancel</span>
+<span class="font-body-md text-on-surface">Deed of Transfer</span>
+</div>
+<button class="font-label-sm text-primary hover:underline transition-all">Upload Now</button>
+</div>
+<!-- Row 4: Missing (X) -->
+<div class="flex items-center justify-between p-sm bg-surface-container-lowest/50 rounded-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant opacity-40" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+<span class="font-body-md text-on-surface-variant">Site Boundary Map</span>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+</div>
+<!-- Info Area -->
+<div class="mt-xl flex gap-sm items-start bg-primary-container/10 p-sm rounded-lg border border-primary-container/20">
+<span class="material-symbols-outlined text-primary" data-icon="lock">lock</span>
+<div class="space-y-base">
+<p class="font-label-sm text-primary font-bold">Secured by GoLand Node-Sync</p>
+<p class="text-[11px] font-body-md text-primary/80">All uploaded documents are encrypted and hashed before being committed to the registry ledger.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Navigation -->
+<div class="p-gutter bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<button class="flex items-center gap-xs px-gutter py-sm rounded-lg border border-outline-variant text-on-surface-variant font-label-sm hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+                        Previous Step
+                    </button>
+<div class="flex items-center gap-md">
+<span class="font-label-sm text-on-surface-variant italic">2 files remain to be uploaded</span>
+<button class="flex items-center gap-xs px-gutter py-sm rounded-lg bg-primary text-on-primary font-label-sm hover:opacity-90 transition-all shadow-md">
+                            Save and Continue
+                            <span class="material-symbols-outlined text-[18px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Image/Visual Representation of Land (Bento Style) -->
+<div class="mt-xl grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="md:col-span-2 relative h-[240px] rounded-xl overflow-hidden group">
+<img alt="Aerial Land View" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A sprawling, lush green farmland captured from a high-angle aerial view during the golden hour. The landscape is segmented into neat rectangular parcels by natural stone walls and hedgerows, showcasing an organized agricultural layout. The lighting is warm and cinematic, casting long, soft shadows. The overall aesthetic is professional and clean, reflecting a modern light-mode UI style with deep green and earthy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDujcJs1RFvXUAwCG5UToRnmSqeYzv1RGqo7gDXMjMbc49zwVbyJxRsaj-o8YRu4NMPEM-QFku7e0KkJJyN0tlzb1I9j_clnHfAyvSLCY3tF0XQ1fx1btua7XIUqFXMWnZgcgvPGnVCObVpWInWK4uUx3mQnYKScXUepV_NxzykIFyJSaWmIzT5fZ2Uj16vYfrD6O11x3SkHiJunwpGhn3qpe9yJxDVysKyxurOKenWIC6p1lEbZ7DQ_PsBVeulrO9bpsscw00I7Eo"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent"></div>
+<div class="absolute bottom-md left-md">
+<span class="font-label-sm bg-primary/80 text-on-primary px-sm py-1 rounded-full mb-xs inline-block">Registered Area</span>
+<h4 class="font-headline-md text-on-primary">12.4 Acres - Plot Alpha</h4>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md flex flex-col justify-center gap-md card-shadow">
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase mb-base">Hash Identifier</p>
+<p class="font-code-md text-code-md text-primary bg-surface-container p-xs rounded break-all">0x48f2...9a21</p>
+</div>
+<div>
+<p class="font-label-sm text-on-surface-variant uppercase mb-base">Global Coordinates</p>
+<p class="font-code-md text-code-md text-primary">52.3765° N, 4.8949° E</p>
+</div>
+<div class="flex items-center gap-sm mt-xs">
+<div class="w-2 h-2 rounded-full bg-[#4CAF50] animate-pulse"></div>
+<span class="font-label-sm text-[#4CAF50]">Active Blockchain Sync</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center bg-surface-container border-t border-outline-variant ml-[280px] w-[calc(100%-280px)]">
+<div>
+<span class="font-headline-md text-primary font-bold">GoLand</span>
+<p class="font-body-md text-on-surface-variant mt-xs">© 2024 GoLand Blockchain Registry. All legal records secured.</p>
+</div>
+<div class="flex gap-md mt-md md:mt-0">
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Blockchain Explorer</a>
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Node Status</a>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for upload zones
+        const uploadZones = document.querySelectorAll('.border-dashed');
+        uploadZones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('bg-primary-container/10', 'border-primary');
+            });
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('bg-primary-container/10', 'border-primary');
+            });
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('bg-primary-container/10', 'border-primary');
+                // Logic for handling file would go here
+            });
+        });
+
+        // Simulating interactive side nav clicks
+        const navItems = document.querySelectorAll('aside nav a');
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                // In a real app, this would route
+            });
+        });
+    </script>
+</body></html>

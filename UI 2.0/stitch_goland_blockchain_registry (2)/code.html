@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GoLand | Official Registry Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#752d06",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#294678",
+                    "on-surface": "#1a1a2e",
+                    "on-error-container": "#93000a",
+                    "on-primary-container": "#89a5dd",
+                    "outline": "#747780",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#002c16",
+                    "on-background": "#1a1a2e",
+                    "primary-fixed": "#d7e2ff",
+                    "on-primary-fixed": "#001a40",
+                    "inverse-surface": "#2f2e43",
+                    "background": "#F7F5F2", /* Updated to match Style Guidance background Level 0 */
+                    "on-surface-variant": "#44474f",
+                    "secondary-container": "#fd9668",
+                    "on-secondary": "#ffffff",
+                    "secondary": "#98471f",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#8ad7a4",
+                    "surface-dim": "#dad7f3",
+                    "surface-container-highest": "#e2e0fc",
+                    "on-secondary-fixed": "#360f00",
+                    "on-secondary-fixed-variant": "#793009",
+                    "inverse-primary": "#acc7ff",
+                    "surface-bright": "#fcf8ff",
+                    "on-error": "#ffffff",
+                    "primary": "#1B3A6B", /* Updated to match primary navy button color */
+                    "surface-tint": "#425e91",
+                    "inverse-on-surface": "#f2efff",
+                    "on-tertiary-container": "#68b484",
+                    "tertiary-fixed": "#a5f4bf",
+                    "on-primary": "#ffffff",
+                    "surface-container-high": "#e8e5ff",
+                    "surface-container": "#efecff",
+                    "primary-container": "#1B3A6B",
+                    "tertiary-container": "#004425",
+                    "surface": "#fcf8ff",
+                    "primary-fixed-dim": "#acc7ff",
+                    "surface-container-low": "#f5f2ff",
+                    "outline-variant": "#E0D9D0", /* Matched to Level 1 border */
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#ffdbcd",
+                    "on-tertiary-fixed": "#00210f",
+                    "surface-variant": "#e2e0fc",
+                    "on-tertiary-fixed-variant": "#00522e",
+                    "secondary-fixed-dim": "#ffb596"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "16px",
+                    "gutter": "24px",
+                    "xl": "48px",
+                    "md": "24px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "64px",
+                    "lg": "32px",
+                    "xs": "8px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "code-md": ["JetBrains Mono"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .bg-sage-10 { background-color: rgba(104, 180, 132, 0.1); }
+        .text-sage { color: #2D5A27; }
+        .bg-amber-10 { background-color: rgba(253, 150, 104, 0.1); }
+        .text-amber { color: #98471F; }
+        .bg-red-10 { background-color: rgba(186, 26, 26, 0.1); }
+        .text-red { color: #BA1A1A; }
+        
+        .card-shadow { box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05); }
+        .modal-overlay { background: rgba(26, 26, 46, 0.6); backdrop-filter: blur(4px); }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-surface">
+<!-- Sidebar Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-md border-r border-outline-variant w-[280px] z-40 bg-surface-container-lowest">
+<div class="mb-xl">
+<h1 class="text-headline-md font-headline-md font-bold text-primary">GoLand Registry</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Official Node</p>
+</div>
+<nav class="flex-1 space-y-base">
+<!-- Overview (Active) -->
+<a class="flex items-center gap-sm p-sm bg-primary-container text-on-primary-container font-bold rounded-lg scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<!-- Pending Activities -->
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+<span class="font-label-sm text-label-sm">Pending Activities</span>
+</a>
+<!-- Land Status -->
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-label-sm text-label-sm">Land Status</span>
+</a>
+<!-- Registry Search -->
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-sm text-label-sm">Registry Search</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-base pt-xl border-t border-outline-variant">
+<button class="w-full flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-sm text-label-sm">Help Center</span>
+</button>
+<button class="w-full flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-sm text-label-sm">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] p-margin-desktop min-h-screen">
+<header class="mb-lg flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Overview</h2>
+<p class="text-on-surface-variant mt-xs">Official Node Management System</p>
+</div>
+<button class="bg-primary text-on-primary px-lg py-sm font-label-sm text-label-sm rounded-lg hover:opacity-90 transition-opacity">
+                New Registration
+            </button>
+</header>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg card-shadow">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-sm">Pending Approval</p>
+<div class="flex items-center justify-between">
+<span class="text-[48px] font-bold text-primary">24</span>
+<div class="w-12 h-12 rounded-full bg-amber-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-amber" data-icon="hourglass_empty">hourglass_empty</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg card-shadow">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-sm">Total Approved</p>
+<div class="flex items-center justify-between">
+<span class="text-[48px] font-bold text-primary">1,482</span>
+<div class="w-12 h-12 rounded-full bg-sage-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-sage" data-icon="check_circle">check_circle</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-md rounded-lg card-shadow">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-sm">Rejected Filings</p>
+<div class="flex items-center justify-between">
+<span class="text-[48px] font-bold text-primary">89</span>
+<div class="w-12 h-12 rounded-full bg-red-10 flex items-center justify-center">
+<span class="material-symbols-outlined text-red" data-icon="cancel">cancel</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Dashboard Purpose Summary -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-lg mb-gutter card-shadow flex flex-col md:flex-row gap-lg items-center">
+<div class="w-full md:w-1/3">
+<img alt="Land registry visualization" class="w-full h-48 object-cover rounded-lg" data-alt="A macro photograph of an official government seal embossed onto high-quality textured cream paper. The lighting is soft and cinematic, highlighting the intricate details of the emblem. The composition is clean and minimalist, conveying a sense of authority, tradition, and absolute legal certainty within a modern digital infrastructure context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuARgbSMXDwCu1Z36Lkm9C7QeY5ev5vNECJuLcjSm-RHBRhBQaKie71sENkvaxbrjDjLHDPfM_xSXswDFkhVFMP-75OOGiG-zI-EFZnrnHFFaPFt8_7f6injX3PEP1PLpennHulkkocEPJynTR_i3EtBCFHFCmBenwEWH7YnIbzei2KXUi4rtIQSNpg-hFBxXRP1qbTVPfurlMA012I6DMp5irzdwY7dts-wQ839wOiL42yLUi58eTq5pQmGNsg5QI3MTMd226KMf4Y"/>
+</div>
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-md text-primary mb-sm">Official Governance Interface</h3>
+<p class="text-on-surface-variant leading-relaxed">
+                    Welcome to the GoLand Registry Official Node. This dashboard is the authoritative interface for reviewing blockchain-backed land transactions, managing parcel statuses, and executing secure property transfers. Every action taken here is cryptographically signed and permanently recorded in the public registry.
+                </p>
+<div class="mt-md flex gap-sm">
+<div class="flex items-center gap-xs text-label-sm font-label-sm text-primary">
+<span class="material-symbols-outlined text-[18px]" data-icon="security">security</span>
+                        Blockchain Secured
+                    </div>
+<div class="flex items-center gap-xs text-label-sm font-label-sm text-primary border-l border-outline-variant pl-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified_user">verified_user</span>
+                        Authorized Access Only
+                    </div>
+</div>
+</div>
+</div>
+<!-- Activity List -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg card-shadow overflow-hidden">
+<div class="p-md border-b border-outline-variant flex justify-between items-center">
+<h4 class="font-headline-md text-headline-md">Recent Activities</h4>
+<div class="flex gap-sm">
+<button class="text-label-sm font-label-sm text-on-surface-variant flex items-center gap-xs border border-outline-variant px-sm py-xs rounded">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                        Filter
+                    </button>
+</div>
+</div>
+<div class="divide-y divide-outline-variant">
+<!-- Activity Row 1 -->
+<div class="p-md hover:bg-surface-container-low transition-colors flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container rounded overflow-hidden">
+<img alt="Parcel 1" class="w-full h-full object-cover" data-alt="A clean, top-down satellite view of a lush green suburban residential land parcel. The image is rendered with a high-fidelity digital map aesthetic, featuring crisp lot boundaries in a subtle primary navy color. The lighting is bright and clear, reflecting a professional survey-grade visualization for official land registration purposes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCanz6WjZHqOeKZTXIobpg5Fztassdc2whvbBZ0Gdzxzqlrn3XYeXqlY8MJyi6P9RDhcjFnzoszn1UUolhdpj22AbkYV--DJCdmUoVE3C_O2qAqCxCYuPomhYA3luBZR7dmB1bv33YPKBqWxtSEKtscL30J_JL0nw4fC3hvHRmjZzCocCGFyfk-BD4BdpEayyDW2riFl3hw4kFuIx8eURMOm8CKv6l2GVUYKuEpQit4M9jG-z1uGyIbLmpn-q76j26p4HCOy-7NSQ"/>
+</div>
+<div>
+<p class="font-headline-sm text-primary font-bold">Parcel #GL-88219</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">North Highlands District, Block 4A</p>
+</div>
+</div>
+<div class="text-center">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase mb-xs">Offer Amount</p>
+<p class="font-code-md text-code-md bg-surface-container-low px-sm py-xs rounded">420,000 GLD</p>
+</div>
+<div class="flex items-center gap-md">
+<span class="px-sm py-xs bg-amber-10 text-amber font-label-sm text-label-sm rounded-full">Pending Review</span>
+<div class="flex gap-sm">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors border border-outline-variant rounded">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="bg-[#68B484] text-white px-md py-xs rounded font-label-sm text-label-sm hover:opacity-90" onclick="showSuccess()">Initiate Transfer</button>
+<button class="bg-red-10 text-red px-md py-xs rounded font-label-sm text-label-sm hover:bg-red-20">Reject</button>
+</div>
+</div>
+</div>
+<!-- Activity Row 2 -->
+<div class="p-md hover:bg-surface-container-low transition-colors flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container rounded overflow-hidden">
+<img alt="Parcel 2" class="w-full h-full object-cover" data-alt="A professional architectural site plan shown on a high-resolution digital tablet. The plan shows a clean, modern commercial development site with sharp white lines on a subtle warm gray background. The scene is lit by professional studio lighting, emphasizing a high-tech, legal, and formal digital documentation environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiTiJktQ7c_-dH_mAtWwdkWronFXSJKU7F9w0RxLkm8u7ZTTOJjDcNti3n69_0emS8pF5x2lgKgvAGcOC4I0jQL2JuMqPPe66NMxsRhgEcCvcb0wjVCSljbZ3Oq96RJjr7cpbM071Um_MdGzav47-VrCMnuhlsg87_Zp6XS25o6Di_GRXRBsA5PDRBa78lD2zxr58-VufeGq50Ti_sQIo4KXF81gy-6Z6B6hC0h9cJWj7-1G7RO_1rDmQ-sxOevSwQrZP9Mp-vX-I"/>
+</div>
+<div>
+<p class="font-headline-sm text-primary font-bold">Parcel #GL-99302</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Sunset Ridge Commercial Zone</p>
+</div>
+</div>
+<div class="text-center">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase mb-xs">Offer Amount</p>
+<p class="font-code-md text-code-md bg-surface-container-low px-sm py-xs rounded">1,250,000 GLD</p>
+</div>
+<div class="flex items-center gap-md">
+<span class="px-sm py-xs bg-sage-10 text-sage font-label-sm text-label-sm rounded-full">Approved</span>
+<div class="flex gap-sm">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors border border-outline-variant rounded">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="text-on-surface-variant opacity-50 px-md py-xs rounded font-label-sm text-label-sm cursor-not-allowed border border-outline-variant">Complete</button>
+</div>
+</div>
+</div>
+<!-- Activity Row 3 -->
+<div class="p-md hover:bg-surface-container-low transition-colors flex items-center justify-between">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 bg-surface-container rounded overflow-hidden">
+<img alt="Parcel 3" class="w-full h-full object-cover" data-alt="A wide-angle aerial photo of a serene coastal land plot at golden hour. The land is bordered by a clear blue shoreline and a clean white fence line. The lighting is warm and inviting, representing a high-value real estate asset. The overall aesthetic is one of prestige and meticulous digital record keeping in a corporate modern style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgwBJHHmeYBZG9y2sQR-9Y6STHpRXuBBsRvXeXABmkS99AbBbjuZ66wVhEO8zT3m3-Rgl3M64UltjPlEa8P12kt_wEP0AWmcDHXMeAJ5QcsDEObIVRtajU9F4VT1wCW-od6jBW-gYTn6ioBKW5zxNpd1xp_-RrIjn3AAynOG5OuvGrBHdZ7RTydTtz16YPo3i67-f5RhG-L3awYkMdOJwIl1qzhe86eeoTTpXGEwLt___qZk8Dx_FGiBEykhrc6t0VVNG4FQ6P4TE"/>
+</div>
+<div>
+<p class="font-headline-sm text-primary font-bold">Parcel #GL-10443</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Ocean View Estates, Lot 12</p>
+</div>
+</div>
+<div class="text-center">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase mb-xs">Offer Amount</p>
+<p class="font-code-md text-code-md bg-surface-container-low px-sm py-xs rounded">980,000 GLD</p>
+</div>
+<div class="flex items-center gap-md">
+<span class="px-sm py-xs bg-red-10 text-red font-label-sm text-label-sm rounded-full">Flagged Review</span>
+<div class="flex gap-sm">
+<button class="p-xs text-on-surface-variant hover:text-primary transition-colors border border-outline-variant rounded">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+</button>
+<button class="bg-[#68B484] text-white px-md py-xs rounded font-label-sm text-label-sm hover:opacity-90">Resolve</button>
+<button class="bg-red-10 text-red px-md py-xs rounded font-label-sm text-label-sm">Void</button>
+</div>
+</div>
+</div>
+</div>
+<div class="p-sm bg-surface-container-low text-center">
+<button class="text-label-sm font-label-sm text-primary hover:underline">View All Registry Activity</button>
+</div>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="ml-[280px] w-[calc(100%-280px)] py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center bg-surface-container border-t border-outline-variant">
+<div>
+<span class="font-headline-md text-primary font-bold">GoLand</span>
+<p class="text-on-surface-variant text-label-sm mt-xs">© 2024 GoLand Blockchain Registry. All legal records secured.</p>
+</div>
+<div class="flex gap-lg mt-md md:mt-0">
+<a class="text-on-surface-variant hover:text-secondary transition-colors text-label-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors text-label-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors text-label-sm" href="#">Blockchain Explorer</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors text-label-sm" href="#">Node Status</a>
+</div>
+</footer>
+<!-- Transfer Success Screen Variant (Hidden by default) -->
+<div class="fixed inset-0 z-[100] modal-overlay flex items-center justify-center hidden" id="successModal">
+<div class="bg-surface-container-lowest p-xl rounded-lg border border-outline-variant max-w-md w-full text-center card-shadow">
+<div class="w-24 h-24 bg-sage-10 rounded-full flex items-center justify-center mx-auto mb-lg">
+<span class="material-symbols-outlined text-[64px] text-sage" data-icon="check_circle">check_circle</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-primary mb-sm">Transfer Complete</h3>
+<p class="text-on-surface-variant mb-xl">The cryptographic transfer of Parcel #GL-88219 has been successfully broadcast and confirmed on the GoLand Ledger.</p>
+<div class="bg-surface-container-low p-md rounded mb-xl text-left border border-outline-variant">
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-xs">Transaction Hash</p>
+<p class="font-code-md text-code-md text-primary break-all">0x7d9f...a4e21c88</p>
+</div>
+<button class="w-full bg-primary text-on-primary py-sm font-label-sm text-label-sm rounded-lg hover:opacity-90 transition-opacity" onclick="hideSuccess()">
+                Back to Dashboard
+            </button>
+</div>
+</div>
+<script>
+        function showSuccess() {
+            document.getElementById('successModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideSuccess() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Slight atmospheric effect on cards
+        document.querySelectorAll('.card-shadow').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'transform 0.2s ease-out';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

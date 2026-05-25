@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GoLand Seller Dashboard</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#752d06",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#294678",
+                        "on-surface": "#1a1a2e",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#89a5dd",
+                        "outline": "#747780",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#002c16",
+                        "on-background": "#1a1a2e",
+                        "primary-fixed": "#d7e2ff",
+                        "on-primary-fixed": "#001a40",
+                        "inverse-surface": "#2f2e43",
+                        "background": "#F7F5F2", /* Overridden per Brand Style Guidance: warm paper-like */
+                        "on-surface-variant": "#44474f",
+                        "secondary-container": "#fd9668",
+                        "on-secondary": "#ffffff",
+                        "secondary": "#98471f",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#8ad7a4",
+                        "surface-dim": "#dad7f3",
+                        "surface-container-highest": "#e2e0fc",
+                        "on-secondary-fixed": "#360f00",
+                        "on-secondary-fixed-variant": "#793009",
+                        "inverse-primary": "#acc7ff",
+                        "surface-bright": "#fcf8ff",
+                        "on-error": "#ffffff",
+                        "primary": "#1B3A6B", /* Overridden per Brand Style Guidance: navy accents */
+                        "surface-tint": "#425e91",
+                        "inverse-on-surface": "#f2efff",
+                        "on-tertiary-container": "#68b484",
+                        "tertiary-fixed": "#a5f4bf",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e8e5ff",
+                        "surface-container": "#efecff",
+                        "primary-container": "#1b3a6b",
+                        "tertiary-container": "#004425",
+                        "surface": "#fcf8ff",
+                        "primary-fixed-dim": "#acc7ff",
+                        "surface-container-low": "#f5f2ff",
+                        "outline-variant": "#E0D9D0", /* Mapped to brand border color */
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffdbcd",
+                        "on-tertiary-fixed": "#00210f",
+                        "surface-variant": "#e2e0fc",
+                        "on-tertiary-fixed-variant": "#00522e",
+                        "secondary-fixed-dim": "#ffb596"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "4px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "16px",
+                        "gutter": "24px",
+                        "xl": "48px",
+                        "md": "24px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "64px",
+                        "lg": "32px",
+                        "xs": "8px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #F7F5F2; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .sage-pulse {
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0px rgba(104, 180, 132, 0.4); }
+            100% { box-shadow: 0 0 0 8px rgba(104, 180, 132, 0); }
+        }
+        .property-card-shadow {
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="text-on-surface overflow-x-hidden">
+<!-- SideNavBar (Shared Component Identity) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-md border-r border-outline-variant w-[280px] z-40 bg-surface-container-lowest">
+<div class="mb-xl">
+<h1 class="text-headline-md font-headline-md font-bold text-primary mb-xs">GoLand</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Land Owner Portal</p>
+<!-- Wallet Chip -->
+<div class="mt-lg flex items-center gap-base p-xs bg-surface-container-low border border-outline-variant rounded-lg">
+<div class="w-2 h-2 rounded-full bg-on-tertiary-container sage-pulse ml-base"></div>
+<span class="font-code-md text-code-md text-on-surface-variant px-xs">0x71...F4e2</span>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-xs">
+<!-- Active Tab: My Properties -->
+<a class="flex items-center gap-sm px-sm py-md bg-primary-container text-on-primary-container font-bold rounded-lg transition-all scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span class="font-label-sm text-label-sm">My Properties</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">pending_actions</span>
+<span class="font-label-sm text-label-sm">Pending Requests</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined">rule_folder</span>
+<span class="font-label-sm text-label-sm">Land Status</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-xl pt-md border-t border-outline-variant">
+<a class="flex items-center gap-sm px-sm py-xs text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-sm text-label-sm">Help Center</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-xs text-on-surface-variant hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-sm text-label-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] min-h-screen p-margin-desktop bg-background">
+<!-- Header Section -->
+<header class="flex justify-between items-center mb-xl">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">My Properties</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage and monitor your registered land parcels.</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-[44px] pr-md py-sm border border-outline-variant rounded-lg bg-surface-container-lowest w-[320px] focus:outline-none focus:ring-2 focus:ring-primary transition-all font-body-md text-body-md" placeholder="Search by ID or Location..." type="text"/>
+</div>
+</div>
+</header>
+<!-- Bento-style Stats Strip (Extra Value) -->
+<div class="grid grid-cols-4 gap-gutter mb-xl">
+<div class="bg-surface-container-lowest p-md border border-outline-variant rounded-xl property-card-shadow">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase">Total Holdings</p>
+<p class="text-headline-md font-headline-md text-primary mt-base">12 Parcels</p>
+</div>
+<div class="bg-surface-container-lowest p-md border border-outline-variant rounded-xl property-card-shadow">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase">Total Area</p>
+<p class="text-headline-md font-headline-md text-primary mt-base">45.2 Hectares</p>
+</div>
+<div class="bg-surface-container-lowest p-md border border-outline-variant rounded-xl property-card-shadow border-l-4 border-l-on-tertiary-container">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase">Verified Status</p>
+<p class="text-headline-md font-headline-md text-on-tertiary-container mt-base">100% Secured</p>
+</div>
+<div class="bg-surface-container-lowest p-md border border-outline-variant rounded-xl property-card-shadow">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase">Market Value</p>
+<p class="text-headline-md font-headline-md text-primary mt-base">$2.4M USD</p>
+</div>
+</div>
+<!-- Property Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Property Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden property-card-shadow group transition-transform hover:-translate-y-1">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A cinematic overhead shot of a lush, sprawling green farmland in early morning light, showcasing neat rows of crops and a small farmhouse. The color palette is natural and earthy, dominated by rich greens and warm morning yellows, maintaining the professional corporate modern aesthetic of the GoLand registry platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5pN87-hfFtczczrKr3010etIixyZiCHZnx75lexOTUjmOqwGiqMaoKJk9Cc4bbl37GnDgHXNi99Gn22Gqc_iIkJNwHc3-ylv7sc4OoSxw7A-F24CpwrJdK2H_ILDOKaOYPNQ-uRZJLi3durEIRyryssREvDRMKCt3gSFHC0xDa2mlMydFNBXUTBkvSc_BPXdFccYZVo3jGUqLlbzyATq-jlMa7y3nwsZWhnqE_iS5VHoQne8hRjDJy6Ef3jtZMI8JFTEFXsouOy4"/>
+<div class="absolute top-sm right-sm bg-primary text-on-primary font-bold px-sm py-xs rounded-lg shadow-lg">
+                        $450,000
+                    </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">Oakwood Ridge Estates</h3>
+<span class="bg-surface-container-low text-on-surface-variant font-code-md text-code-md px-xs py-base rounded border border-outline-variant">SN: 882-X9</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md font-bold">Block 14, Sector C, Metropolis North</span>
+</div>
+<div class="flex gap-md py-sm border-y border-outline-variant mb-md">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Area</span>
+<span class="font-body-md text-body-md font-bold">1.2 Hectares</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Land ID</span>
+<span class="font-body-md text-body-md font-bold text-primary">GL-0029348</span>
+</div>
+</div>
+<button class="w-full py-sm bg-secondary hover:bg-on-secondary-container text-white rounded-lg transition-colors font-bold uppercase tracking-wide" onclick="openModal('Oakwood Ridge Estates', 'GL-0029348', '1.2 Hectares')">
+                        Initiate Transfer
+                    </button>
+</div>
+</div>
+<!-- Property Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden property-card-shadow group transition-transform hover:-translate-y-1">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="A professional high-angle wide shot of a pristine coastal land parcel under a clear blue sky, featuring rocky cliffs meeting the azure ocean. The image is bright and airy with high-key lighting, emphasizing a sense of premium value and secure ownership, perfectly aligned with the authoritative corporate navy and white design system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCn5LegbRuaoJqmV38JEA3kgmW6pBbIyDzf_xueXX8fi5wiJks8x5m4789Tp8f78cSrCmbrD_CKduIysiiHrTOcGtHomo5jw7XtNfNridzNBXbuGmhyEcG2hk__Ls09bi1BSNjc-kQcduQD9_xBOu-tP1tl8h6vKIxIBh3A4Y4KmpVSt5FgIyHUCJmjXOdD8MnVRnmmhqXtwwl4kYo7eT4zMPssqDKdZnNBzjf6zVZFpHJaU30ps3PVHL1RMP4OB05gxU1VjW1cP70"/>
+<div class="absolute top-sm right-sm bg-primary text-on-primary font-bold px-sm py-xs rounded-lg shadow-lg">
+                        $890,000
+                    </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">Azure Bay Coastline</h3>
+<span class="bg-surface-container-low text-on-surface-variant font-code-md text-code-md px-xs py-base rounded border border-outline-variant">SN: 114-K2</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md font-bold">Bayfront District, Plot 09</span>
+</div>
+<div class="flex gap-md py-sm border-y border-outline-variant mb-md">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Area</span>
+<span class="font-body-md text-body-md font-bold">0.85 Hectares</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Land ID</span>
+<span class="font-body-md text-body-md font-bold text-primary">GL-0012554</span>
+</div>
+</div>
+<button class="w-full py-sm bg-secondary hover:bg-on-secondary-container text-white rounded-lg transition-colors font-bold uppercase tracking-wide" onclick="openModal('Azure Bay Coastline', 'GL-0012554', '0.85 Hectares')">
+                        Initiate Transfer
+                    </button>
+</div>
+</div>
+<!-- Property Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden property-card-shadow group transition-transform hover:-translate-y-1">
+<div class="h-48 overflow-hidden relative">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="An expansive industrial-zoned land lot viewed from a low angle, showing flattened terrain ready for construction with a modern skyline in the distant horizon. The lighting is crisp and midday, utilizing a professional palette of cool grays, deep blues, and structural whites to mirror the technical precision of a blockchain-based land registry system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm7zVLkeRvfHiOKPHlKwaLQ2DvCyaLoRrkDEJ1iieNz2hdEDAar929PyeyygecTGgS26YoBq2V_68V1ckwZy_i3-OSoK8_HUOo_pOzR6nodkughZcx4eXButoFm9Li9R7C1iJ10kUWDWWnatsi2OPyknNbtH6vWMndpfUoyBxZBzDOAkPzHlwQKp5-WkOKW9Y6nGjqGdQc-V1G66S_RP4pbs-ck_IEIs14c2zAJ9LMPZIQXYiTvzT4a7z-tgI4WP-NUJdwJ6SYObg"/>
+<div class="absolute top-sm right-sm bg-primary text-on-primary font-bold px-sm py-xs rounded-lg shadow-lg">
+                        $1,200,000
+                    </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">Iron Gate Logistics</h3>
+<span class="bg-surface-container-low text-on-surface-variant font-code-md text-code-md px-xs py-base rounded border border-outline-variant">SN: 443-P0</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant mb-md">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-body-md text-body-md font-bold">Industrial Hub 2, Port Zone</span>
+</div>
+<div class="flex gap-md py-sm border-y border-outline-variant mb-md">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Area</span>
+<span class="font-body-md text-body-md font-bold">3.4 Hectares</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase">Land ID</span>
+<span class="font-body-md text-body-md font-bold text-primary">GL-0088192</span>
+</div>
+</div>
+<button class="w-full py-sm bg-secondary hover:bg-on-secondary-container text-white rounded-lg transition-colors font-bold uppercase tracking-wide" onclick="openModal('Iron Gate Logistics', 'GL-0088192', '3.4 Hectares')">
+                        Initiate Transfer
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Modal Overlay: Initiate Transfer -->
+<div class="hidden fixed inset-0 z-[100] flex items-center justify-center" id="transferModal">
+<!-- Backdrop -->
+<div class="absolute inset-0 bg-[#1A1A2E]/60 backdrop-blur-[4px]" onclick="closeModal()"></div>
+<!-- Modal Card -->
+<div class="relative bg-white w-full max-w-[480px] rounded-xl overflow-hidden shadow-2xl border border-outline-variant">
+<div class="p-md border-b border-outline-variant flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-primary">Initiate Transfer</h2>
+<button class="text-on-surface-variant hover:text-on-surface" onclick="closeModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-md space-y-md">
+<!-- Summary Box -->
+<div class="bg-surface-container-low p-md rounded-lg border border-outline-variant">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase mb-xs">Property for Transfer</p>
+<p class="font-body-lg text-body-lg font-bold text-primary" id="modalPropName"></p>
+<div class="flex justify-between mt-sm">
+<span class="font-code-md text-code-md text-on-surface-variant" id="modalPropId"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant" id="modalPropArea"></span>
+</div>
+</div>
+<!-- Form Fields -->
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant uppercase mb-xs">Buyer Wallet Address</label>
+<input class="w-full p-sm border border-outline-variant rounded-lg font-code-md text-code-md focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-surface-container-lowest" placeholder="0x..." type="text"/>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant uppercase mb-xs">Agreed Sale Price (USD)</label>
+<div class="relative">
+<span class="absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">$</span>
+<input class="w-full p-sm pl-md border border-outline-variant rounded-lg font-body-md text-body-md focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-surface-container-lowest" placeholder="0.00" type="number"/>
+</div>
+</div>
+<!-- Blue Info Warning -->
+<div class="bg-on-primary-fixed-variant/10 p-sm rounded-lg border border-on-primary-fixed-variant/20 flex gap-sm items-start">
+<span class="material-symbols-outlined text-on-primary-fixed-variant" style="font-variation-settings: 'FILL' 1;">info</span>
+<p class="text-label-sm font-label-sm text-on-primary-fixed-variant">Initiating a transfer will lock this parcel until the buyer confirms or the request expires (48h). Blockchain network fees apply.</p>
+</div>
+</div>
+<div class="p-md bg-surface-container-low border-t border-outline-variant flex gap-md">
+<button class="flex-1 py-sm border border-outline-variant text-primary font-bold rounded-lg hover:bg-surface-container-high transition-colors" onclick="closeModal()">
+                    Cancel
+                </button>
+<button class="flex-1 py-sm bg-primary text-white font-bold rounded-lg hover:opacity-90 transition-opacity">
+                    Confirm &amp; Sign
+                </button>
+</div>
+</div>
+</div>
+<!-- Micro-interactions Script -->
+<script>
+        function openModal(name, id, area) {
+            document.getElementById('modalPropName').innerText = name;
+            document.getElementById('modalPropId').innerText = id;
+            document.getElementById('modalPropArea').innerText = area;
+            
+            const modal = document.getElementById('transferModal');
+            modal.classList.remove('hidden');
+            // Small timeout for entry animation if needed
+        }
+
+        function closeModal() {
+            document.getElementById('transferModal').classList.add('hidden');
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body></html>

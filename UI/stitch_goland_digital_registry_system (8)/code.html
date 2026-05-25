@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GoLand | Government Official Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#45dfa4",
+                    "primary": "#4edea3",
+                    "surface-container-lowest": "#060e20",
+                    "on-error-container": "#ffdad6",
+                    "inverse-primary": "#006c49",
+                    "surface-variant": "#2d3449",
+                    "background": "#0b1326",
+                    "on-primary": "#003824",
+                    "tertiary": "#adc6ff",
+                    "surface-dim": "#0b1326",
+                    "outline-variant": "#3c4a42",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "on-secondary-container": "#00452e",
+                    "surface-container-high": "#222a3d",
+                    "tertiary-fixed": "#d8e2ff",
+                    "surface-container-highest": "#2d3449",
+                    "on-primary-fixed": "#002113",
+                    "primary-fixed": "#6ffbbe",
+                    "primary-fixed-dim": "#4edea3",
+                    "error-container": "#93000a",
+                    "inverse-surface": "#dae2fd",
+                    "on-surface-variant": "#bbcabf",
+                    "inverse-on-surface": "#283044",
+                    "surface-bright": "#31394d",
+                    "surface-tint": "#4edea3",
+                    "secondary-fixed": "#68fcbf",
+                    "on-secondary": "#003825",
+                    "on-primary-container": "#00422b",
+                    "surface-container": "#171f33",
+                    "secondary-container": "#00bd85",
+                    "error": "#ffb4ab",
+                    "secondary": "#45dfa4",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-background": "#dae2fd",
+                    "surface-container-low": "#131b2e",
+                    "outline": "#86948a",
+                    "on-tertiary-container": "#00367a",
+                    "tertiary-container": "#71a1ff",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "primary-container": "#10b981",
+                    "on-secondary-fixed": "#002114",
+                    "on-tertiary": "#002e6a",
+                    "on-error": "#690005",
+                    "on-secondary-fixed-variant": "#005137",
+                    "surface": "#0b1326",
+                    "on-surface": "#dae2fd",
+                    "on-primary-fixed-variant": "#005236"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "lg": "24px",
+                    "sm": "8px",
+                    "md": "16px",
+                    "xs": "4px",
+                    "xxl": "48px",
+                    "container-max": "1280px",
+                    "xl": "32px",
+                    "base": "4px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "code-md": ["JetBrains Mono"],
+                    "headline-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid #334155;
+        }
+        .emerald-glow:hover {
+            border-color: #34D399;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="dark selection:bg-primary selection:text-on-primary">
+<!-- Sidebar Navigation Shell -->
+<aside class="fixed left-0 top-0 h-full w-[280px] bg-surface-container-lowest border-r border-outline-variant flex flex-col py-md z-50 hidden md:flex">
+<div class="px-lg mb-xl">
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">GoLand Ledger</h1>
+<div class="flex items-center gap-sm mt-md p-sm bg-surface-container rounded-lg">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px] text-on-primary-container">account_balance</span>
+</div>
+<div class="overflow-hidden">
+<p class="font-label-md text-label-md text-on-surface truncate">GoLand Ledger</p>
+<p class="text-[10px] text-on-surface-variant truncate">0x71C...4E21</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-2 space-y-1 overflow-y-auto custom-scrollbar">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">domain</span>
+<span class="font-label-md text-label-md">My Properties</span>
+</a>
+<a class="flex items-center justify-between px-md py-sm bg-secondary-container text-on-secondary-container rounded-lg mx-2 my-1 transition-all" href="#">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined">swap_horiz</span>
+<span class="font-label-md text-label-md">Active Transfers</span>
+</div>
+<span class="bg-error text-on-error rounded-full px-2 py-0.5 text-[10px] font-bold">3</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">add_box</span>
+<span class="font-label-md text-label-md">Register</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">description</span>
+<span class="font-label-md text-label-md">Documents</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-2 mt-auto">
+<button class="w-full flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-error-container hover:text-on-error-container rounded-lg transition-all">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-md text-label-md">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 left-0 md:left-[280px] bg-surface h-16 flex items-center justify-between px-lg z-40">
+<div class="flex items-center gap-md">
+<button class="md:hidden text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Dashboard</h2>
+</div>
+<div class="flex items-center gap-lg">
+<button class="relative text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="flex items-center gap-sm">
+<div class="text-right hidden sm:block">
+<p class="font-label-md text-label-md text-on-surface leading-none">Registrar General</p>
+<p class="text-[10px] text-on-surface-variant">District Zone 04</p>
+</div>
+<img alt="Official Profile" class="w-10 h-10 rounded-full border-2 border-primary-container" data-alt="A professional portrait of a government official in a sharp, modern office setting. The individual has a confident and authoritative expression, wearing formal business attire. The lighting is soft but professional, with a background consisting of high-tech digital displays showing land mapping data in emerald and slate colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo4ABoKX86eCgG_wFyVp0gwnzg6XDFPkb1HM57VfoUHLLhhM1kOAzYiQxBnI-0Iq3qFlGyGg1OgGVLdpursngp3jbvKRKeJrigIiOJbmaefmUlwu15rGfPU7imJZuCd2_sk5GHBPpCu1Z4rSfWNkTH-5-FZjDz7Tk_tnZPpJjrnOP8pgIioLL8rrgfbT3M0R3_ENH9wJ8uI52GJO81In_cewlM1yFqNgE6FvXLnp6IIVUcXHACYpxAgoHCJ1-Oa9Olx0GpxGBYWkA"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pb-12 px-lg md:ml-[280px] max-w-container-max mx-auto">
+<!-- Page Header -->
+<section class="mb-xl">
+<div class="flex items-center gap-sm mb-xs">
+<span class="material-symbols-outlined text-primary-fixed text-sm">verified_user</span>
+<span class="font-label-md text-label-md text-primary tracking-widest">OFFICIAL GOVERNMENT REVIEW</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Pending Document Reviews</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">There are <span class="text-secondary font-bold">3 transfers</span> currently awaiting legal verification in your district queue.</p>
+</section>
+<!-- Transfer Review Card (Bento Layout) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- LEFT: Metadata & Tracker -->
+<div class="lg:col-span-4 flex flex-col gap-lg">
+<!-- ID Card -->
+<div class="glass-panel rounded-xl p-lg">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant mb-1">TRANSACTION ID</p>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">#TXN-2024-001</h3>
+</div>
+<span class="bg-yellow-500/20 text-yellow-500 px-3 py-1 rounded-full text-[10px] font-bold tracking-wider">PENDING REVIEW</span>
+</div>
+<div class="space-y-md mb-lg">
+<div class="flex items-center justify-between p-md bg-surface-container rounded-lg border border-outline-variant">
+<div>
+<p class="text-[10px] text-on-surface-variant">SELLER (GRANTOR)</p>
+<p class="font-body-md text-body-md font-bold text-on-surface">Suresh Kumar</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">arrow_forward</span>
+<div class="text-right">
+<p class="text-[10px] text-on-surface-variant">BUYER (GRANTEE)</p>
+<p class="font-body-md text-body-md font-bold text-on-surface">Ramesh Singh</p>
+</div>
+</div>
+<div class="flex justify-between items-center px-sm">
+<span class="font-label-md text-label-md text-on-surface-variant">Consideration Value</span>
+<span class="font-headline-sm text-headline-sm text-secondary font-bold">₹50,00,000</span>
+</div>
+</div>
+<div class="border-t border-outline-variant pt-lg">
+<p class="font-label-md text-label-md text-on-surface mb-md">Review Progress</p>
+<div class="space-y-md">
+<!-- Tracker Item -->
+<div class="flex items-start gap-md">
+<div class="flex flex-col items-center">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-primary" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="w-0.5 h-8 bg-primary"></div>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Identity KYC</p>
+<p class="text-[10px] text-on-surface-variant">Verified via Biometrics</p>
+</div>
+</div>
+<!-- Tracker Item Active -->
+<div class="flex items-start gap-md">
+<div class="flex flex-col items-center">
+<div class="w-6 h-6 rounded-full border-2 border-primary animate-pulse flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+</div>
+<div class="w-0.5 h-8 bg-outline-variant"></div>
+</div>
+<div>
+<p class="text-xs font-bold text-primary">Documents Review</p>
+<p class="text-[10px] text-primary/80">Currently Under Audit</p>
+</div>
+</div>
+<!-- Tracker Item Pending -->
+<div class="flex items-start gap-md opacity-40">
+<div class="flex flex-col items-center">
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+<div class="w-0.5 h-8 bg-outline-variant"></div>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Stamp Duty Clearance</p>
+<p class="text-[10px] text-on-surface-variant">Awaiting Step 2</p>
+</div>
+</div>
+<!-- Additional steps shortened for space -->
+<div class="flex items-start gap-md opacity-40">
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+<p class="text-xs font-bold text-on-surface">Final Encumbrance Check</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Hash Box -->
+<div class="bg-[#020617] rounded-xl p-lg border border-primary/20">
+<div class="flex items-center gap-sm mb-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">lock</span>
+<p class="font-label-md text-label-md text-primary font-bold">SHA-256 BLOCKCHAIN INTEGRITY</p>
+</div>
+<div class="bg-surface-container-lowest p-md rounded border border-outline-variant/50 font-code-md text-code-md text-primary overflow-x-auto">
+<span class="text-on-surface-variant">Last verified hash:</span> <span class="break-all">a3f8b92d1c6e4e5f8a92b7c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4a3f89f2a</span>
+</div>
+</div>
+</div>
+<!-- RIGHT: Verify Document Set -->
+<div class="lg:col-span-8">
+<div class="glass-panel rounded-xl flex flex-col h-full overflow-hidden">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Verify Document Set</h3>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface-variant">Audit Progress</p>
+<div class="w-32 h-2 bg-surface-container rounded-full mt-1 overflow-hidden">
+<div class="h-full bg-primary w-[57%]"></div>
+</div>
+<p class="text-[10px] text-primary mt-1">4 of 7 Verified</p>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container text-on-surface-variant">
+<tr>
+<th class="px-lg py-md font-label-md text-label-md">Document Name</th>
+<th class="px-lg py-md font-label-md text-label-md text-center">Action</th>
+<th class="px-lg py-md font-label-md text-label-md text-right">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1: Verified -->
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">description</span>
+<span class="font-body-sm text-body-sm text-on-surface">Sale Deed (Draft)</span>
+</div>
+</td>
+<td class="px-lg py-md text-center">
+<button class="text-primary hover:underline text-xs font-bold">Download &amp; View</button>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check_circle</span> VERIFIED
+                                        </span>
+</td>
+</tr>
+<!-- Row 2: Verified -->
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">badge</span>
+<span class="font-body-sm text-body-sm text-on-surface">Seller Identity Proof</span>
+</div>
+</td>
+<td class="px-lg py-md text-center">
+<button class="text-primary hover:underline text-xs font-bold">Download &amp; View</button>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check_circle</span> VERIFIED
+                                        </span>
+</td>
+</tr>
+<!-- Row 3: Verified -->
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">home_work</span>
+<span class="font-body-sm text-body-sm text-on-surface">Property Tax Receipts (3 Yrs)</span>
+</div>
+</td>
+<td class="px-lg py-md text-center">
+<button class="text-primary hover:underline text-xs font-bold">Download &amp; View</button>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check_circle</span> VERIFIED
+                                        </span>
+</td>
+</tr>
+<!-- Row 4: Verified -->
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">history</span>
+<span class="font-body-sm text-body-sm text-on-surface">Encumbrance Certificate</span>
+</div>
+</td>
+<td class="px-lg py-md text-center">
+<button class="text-primary hover:underline text-xs font-bold">Download &amp; View</button>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center gap-1 bg-primary/10 text-primary px-2 py-0.5 rounded-full text-[10px] font-bold">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check_circle</span> VERIFIED
+                                        </span>
+</td>
+</tr>
+<!-- Row 5: Pending -->
+<tr class="bg-primary/5 hover:bg-primary/10 transition-colors">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">description</span>
+<span class="font-body-sm text-body-sm text-on-surface font-bold">No Objection Certificate (NOC)</span>
+</div>
+</td>
+<td class="px-lg py-md text-center">
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg text-xs font-bold hover:shadow-lg transition-shadow">Download &amp; Verify</button>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center gap-1 bg-yellow-500/10 text-yellow-500 px-2 py-0.5 rounded-full text-[10px] font-bold">
+<span class="material-symbols-outlined text-[12px] animate-spin">sync</span> PENDING
+                                        </span>
+</td>
+</tr>
+<!-- Row 6: Pending -->
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">draw</span>
+<span class="font-body-sm text-body-sm text-on-surface">Mutation Document</span>
+</div>
+</td>
+<td class="px-lg py-md text-center">
+<button class="text-on-surface-variant opacity-50 cursor-not-allowed text-xs font-bold">Waiting...</button>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center gap-1 bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded-full text-[10px] font-bold">
+                                             PENDING
+                                        </span>
+</td>
+</tr>
+<!-- Row 7: Pending -->
+<tr class="hover:bg-surface-variant/30 transition-colors">
+<td class="px-lg py-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">map</span>
+<span class="font-body-sm text-body-sm text-on-surface">Sub-division Sketch (Form 11-E)</span>
+</div>
+</td>
+<td class="px-lg py-md text-center">
+<button class="text-on-surface-variant opacity-50 cursor-not-allowed text-xs font-bold">Waiting...</button>
+</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center gap-1 bg-surface-variant text-on-surface-variant px-2 py-0.5 rounded-full text-[10px] font-bold">
+                                             PENDING
+                                        </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Footer Actions -->
+<div class="p-lg bg-surface-container-low border-t border-outline-variant flex justify-end items-center gap-lg">
+<button class="px-xl py-md border border-error text-error font-bold rounded-lg hover:bg-error/10 transition-colors">
+                            Reject Transfer
+                        </button>
+<div class="relative group">
+<button class="px-xl py-md bg-primary/20 text-on-surface-variant/40 font-bold rounded-lg cursor-not-allowed flex items-center gap-md" disabled="">
+<span class="material-symbols-outlined">lock</span> Approve Transfer
+                            </button>
+<div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-48 bg-surface-container-highest p-sm rounded text-[10px] text-center invisible group-hover:visible shadow-xl border border-outline-variant">
+                                Verify all documents to enable approval action.
+                            </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Branding -->
+<footer class="md:ml-[280px] w-full py-xl px-gutter flex flex-col items-center gap-md border-t border-outline-variant bg-surface-container-low">
+<h2 class="font-headline-sm text-headline-sm font-bold text-primary">GoLand</h2>
+<div class="flex flex-wrap justify-center gap-xl text-on-surface-variant font-body-sm text-body-sm">
+<a class="hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-secondary transition-colors" href="#">Legal</a>
+<a class="hover:text-secondary transition-colors" href="#">Contact</a>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-70">© 2024 GoLand Blockchain Ledger. All rights reserved.</p>
+</footer>
+<!-- Mobile Bottom Nav (The Filter) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 bg-surface-container-lowest border-t border-outline-variant shadow-lg md:hidden z-50">
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2">
+<span class="material-symbols-outlined">sync_alt</span>
+<span class="font-label-md text-label-md">Transfers</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-label-md text-label-md">Add</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2">
+<span class="material-symbols-outlined">folder</span>
+<span class="font-label-md text-label-md">Docs</span>
+</div>
+</nav>
+<script>
+        // Micro-interaction: Simulation of hash verification "pulse"
+        const hashDisplay = document.querySelector('.font-code-md');
+        if(hashDisplay) {
+            setInterval(() => {
+                hashDisplay.style.opacity = '0.8';
+                setTimeout(() => { hashDisplay.style.opacity = '1'; }, 200);
+            }, 5000);
+        }
+
+        // Hover effect for table rows
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.querySelector('.material-symbols-outlined')?.classList.add('scale-110', 'transition-transform');
+            });
+            row.addEventListener('mouseleave', () => {
+                row.querySelector('.material-symbols-outlined')?.classList.remove('scale-110');
+            });
+        });
+    </script>
+</body></html>

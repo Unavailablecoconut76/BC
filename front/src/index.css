@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #f7f5f2;
+  color: #1a1a2e;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code,
+.font-code-md {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+
+.material-symbols-outlined.filled {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+@layer components {
+  .input-field {
+    @apply w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-sm py-xs font-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all;
+  }
+
+  .glass-card {
+    @apply bg-surface-container-lowest border border-outline-variant shadow-card;
+  }
+
+  .landing-grid-pattern {
+    background-image:
+      linear-gradient(rgba(0, 36, 82, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 36, 82, 0.05) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .landing-ornament-line {
+    height: 4px;
+    width: 56px;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #98471f 0%, #002452 100%);
+  }
+
+  .landing-card {
+    @apply bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-300;
+    box-shadow: 0 4px 16px -4px rgba(0, 36, 82, 0.08);
+  }
+
+  .landing-card:hover {
+    box-shadow: 0 12px 32px -8px rgba(0, 36, 82, 0.14);
+    @apply border-primary/25;
+  }
+
+  .landing-portal-card {
+    @apply landing-card p-md text-left relative overflow-hidden;
+  }
+
+  .landing-portal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #98471f, #002452);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .landing-portal-card:hover::before {
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .shadow-card {
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05);
+  }
+
+  .landing-section-anchor {
+    scroll-margin-top: 5rem;
+  }
+
+  .text-gradient-hero {
+    background: linear-gradient(135deg, #002452 0%, #1b3a6b 55%, #98471f 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}

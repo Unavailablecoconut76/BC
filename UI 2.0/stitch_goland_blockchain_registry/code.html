@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>GoLand | Secure Land Ownership on Blockchain</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #F7F5F2; /* Style Guidance: Level 0 Background */
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #E0D9D0;
+        }
+        .document-shadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#752d06",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#294678",
+                      "on-surface": "#1a1a2e",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#89a5dd",
+                      "outline": "#747780",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#002c16",
+                      "on-background": "#1a1a2e",
+                      "primary-fixed": "#d7e2ff",
+                      "on-primary-fixed": "#001a40",
+                      "inverse-surface": "#2f2e43",
+                      "background": "#fcf8ff",
+                      "on-surface-variant": "#44474f",
+                      "secondary-container": "#fd9668",
+                      "on-secondary": "#ffffff",
+                      "secondary": "#98471f",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#8ad7a4",
+                      "surface-dim": "#dad7f3",
+                      "surface-container-highest": "#e2e0fc",
+                      "on-secondary-fixed": "#360f00",
+                      "on-secondary-fixed-variant": "#793009",
+                      "inverse-primary": "#acc7ff",
+                      "surface-bright": "#fcf8ff",
+                      "on-error": "#ffffff",
+                      "primary": "#002452",
+                      "surface-tint": "#425e91",
+                      "inverse-on-surface": "#f2efff",
+                      "on-tertiary-container": "#68b484",
+                      "tertiary-fixed": "#a5f4bf",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#e8e5ff",
+                      "surface-container": "#efecff",
+                      "primary-container": "#1b3a6b",
+                      "tertiary-container": "#004425",
+                      "surface": "#fcf8ff",
+                      "primary-fixed-dim": "#acc7ff",
+                      "surface-container-low": "#f5f2ff",
+                      "outline-variant": "#c4c6d0",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#ffdbcd",
+                      "on-tertiary-fixed": "#00210f",
+                      "surface-variant": "#e2e0fc",
+                      "on-tertiary-fixed-variant": "#00522e",
+                      "secondary-fixed-dim": "#ffb596"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "16px",
+                      "gutter": "24px",
+                      "xl": "48px",
+                      "md": "24px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "64px",
+                      "lg": "32px",
+                      "xs": "8px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "code-md": ["JetBrains Mono"],
+                      "headline-md": ["Inter"],
+                      "headline-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="font-body-md text-on-surface">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-[72px] bg-surface-container-lowest border-b border-outline-variant shadow-sm">
+<div class="text-headline-md font-headline-md font-bold text-primary">GoLand</div>
+<div class="hidden md:flex items-center gap-lg">
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-200" href="#marketplace">Marketplace</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-200" href="#verification">Verification</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-200" href="#history">History</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-200" href="#support">Support</a>
+</div>
+<button class="bg-primary-container text-on-primary-container font-label-sm px-md py-xs rounded-lg active:opacity-80 transition-opacity">Connect Wallet</button>
+</nav>
+<main class="mt-[72px] max-w-[1280px] mx-auto px-margin-desktop">
+<!-- Hero Section -->
+<section class="min-h-[819px] flex flex-col md:flex-row items-center justify-between py-xl" id="home">
+<div class="w-full md:w-1/2 space-y-lg">
+<h1 class="font-display-lg text-display-lg text-primary max-w-xl">Secure Land Ownership. On the Blockchain.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">Eliminate fraud and streamline property transfers with an immutable, transparent registry built for the next generation of real estate.</p>
+<div class="flex items-center gap-md">
+<button class="h-[44px] px-lg bg-secondary text-white font-label-sm rounded-lg hover:brightness-110 transition-all">Get Started</button>
+<button class="h-[44px] px-lg border border-outline-variant text-primary font-label-sm rounded-lg hover:bg-surface-container-low transition-all">Verify a Property</button>
+</div>
+</div>
+<div class="w-full md:w-1/2 mt-xl md:mt-0 relative">
+<div class="aspect-square rounded-xl overflow-hidden shadow-lg border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A sophisticated abstract 3D visualization of a digital grid map representating land ownership parcels. The scene is illuminated with a soft navy and terracotta glow, reflecting a modern fintech aesthetic. Minimalist architectural lines intersect over a clean off-white background, creating a sense of secure, interconnected digital infrastructure. High-key lighting highlights the precision of the blockchain registry technology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvUHs_idFm-ohIV6wvCml0u3Ei5aAlDSqOEikJuLDUwyE_Xr5PhqDcCZZe07v6rBMwnR7-f2tbVkPwzcX1R30KYaVBC3LmWBC4XLfdcaB_VcZ3-xUZcNxskSn6HinWfvSpr1XbmbEAFtkftJGMbLo-fhFr4PT1e07j2CgHJKeUVXZbaZ0otGhe5_FUGDNyyJ3ZKsZQPRvRDtUwjfJxQo0OMym3KbwsbaRHMhh08ErGWN_UEJl1FuvFdJ8UGwJ-HHvhosmB8ZHJsZk"/>
+</div>
+<!-- Decorative elements -->
+<div class="absolute -bottom-xs -right-xs w-24 h-24 bg-secondary-container opacity-20 rounded-full blur-xl"></div>
+</div>
+</section>
+<!-- About Section -->
+<section class="py-xl space-y-xl" id="about">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- The Problem -->
+<div class="p-lg bg-error-container/10 border border-error/20 rounded-xl space-y-md">
+<div class="flex items-center gap-sm text-error">
+<span class="material-symbols-outlined">warning</span>
+<h3 class="font-headline-md text-headline-md">The Problem</h3>
+</div>
+<ul class="space-y-sm">
+<li class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-error">close</span>
+                            Double Title Deeds &amp; Fraud
+                        </li>
+<li class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-error">close</span>
+                            Slow, Manual Paper Processes
+                        </li>
+<li class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-error">close</span>
+                            High Legal Intermediary Costs
+                        </li>
+<li class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-error">close</span>
+                            Risk of Physical Record Loss
+                        </li>
+<li class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-error">close</span>
+                            Lack of Public Transparency
+                        </li>
+</ul>
+</div>
+<!-- Our Solution -->
+<div class="p-lg bg-tertiary-fixed/10 border border-tertiary-fixed-dim/30 rounded-xl space-y-md">
+<div class="flex items-center gap-sm text-tertiary-container">
+<span class="material-symbols-outlined">verified</span>
+<h3 class="font-headline-md text-headline-md">Our Solution</h3>
+</div>
+<ul class="space-y-sm">
+<li class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Immutable Ownership History
+                        </li>
+<li class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Instant Digital Verification
+                        </li>
+<li class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Lower Transaction Fees
+                        </li>
+<li class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            Encrypted Data Redundancy
+                        </li>
+<li class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                            24/7 Global Accessibility
+                        </li>
+</ul>
+</div>
+</div>
+<!-- How It Works Stepper -->
+<div class="pt-lg">
+<h3 class="font-headline-md text-headline-md text-primary mb-lg text-center">Transparent Registration Process</h3>
+<div class="flex flex-col md:flex-row justify-between items-start gap-gutter relative">
+<!-- Connector line -->
+<div class="hidden md:block absolute top-6 left-0 w-full h-[2px] bg-outline-variant -z-10"></div>
+<div class="flex flex-col items-center md:items-start text-center md:text-left gap-sm w-full md:w-1/4">
+<div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</div>
+<h4 class="font-label-sm text-primary uppercase tracking-wider">Identity KYC</h4>
+<p class="text-on-surface-variant text-sm">Secure biometric and government ID verification for all parties.</p>
+</div>
+<div class="flex flex-col items-center md:items-start text-center md:text-left gap-sm w-full md:w-1/4">
+<div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold">2</div>
+<h4 class="font-label-sm text-primary uppercase tracking-wider">Deed Tokenization</h4>
+<p class="text-on-surface-variant text-sm">Physical land titles are converted into unique digital assets.</p>
+</div>
+<div class="flex flex-col items-center md:items-start text-center md:text-left gap-sm w-full md:w-1/4">
+<div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold">3</div>
+<h4 class="font-label-sm text-primary uppercase tracking-wider">Node Validation</h4>
+<p class="text-on-surface-variant text-sm">Government and legal nodes verify the transaction validity.</p>
+</div>
+<div class="flex flex-col items-center md:items-start text-center md:text-left gap-sm w-full md:w-1/4">
+<div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-bold">4</div>
+<h4 class="font-label-sm text-primary uppercase tracking-wider">Blockchain Entry</h4>
+<p class="text-on-surface-variant text-sm">Permanent record is written to the ledger for eternity.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Services Section -->
+<section class="py-xl" id="services">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-primary">Core Services</h2>
+<p class="text-on-surface-variant max-w-2xl mx-auto">Access a full suite of blockchain land management tools designed for legal compliance.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<div class="p-lg bg-white border border-outline-variant rounded-xl flex items-start gap-md document-shadow hover:scale-[1.01] transition-transform">
+<span class="material-symbols-outlined text-primary text-4xl">domain</span>
+<div>
+<h3 class="font-headline-md text-headline-md mb-xs">Registry Portal</h3>
+<p class="text-on-surface-variant">A decentralized database for searching, filing, and managing property titles in real-time.</p>
+</div>
+</div>
+<div class="p-lg bg-white border border-outline-variant rounded-xl flex items-start gap-md document-shadow hover:scale-[1.01] transition-transform">
+<span class="material-symbols-outlined text-primary text-4xl">history_edu</span>
+<div>
+<h3 class="font-headline-md text-headline-md mb-xs">Smart Contracts</h3>
+<p class="text-on-surface-variant">Automated escrow and transfer agreements that execute only when conditions are met.</p>
+</div>
+</div>
+<div class="p-lg bg-white border border-outline-variant rounded-xl flex items-start gap-md document-shadow hover:scale-[1.01] transition-transform">
+<span class="material-symbols-outlined text-primary text-4xl">account_balance_wallet</span>
+<div>
+<h3 class="font-headline-md text-headline-md mb-xs">Title Custody</h3>
+<p class="text-on-surface-variant">Secure, multi-signature storage for institutional and private digital land assets.</p>
+</div>
+</div>
+<div class="p-lg bg-white border border-outline-variant rounded-xl flex items-start gap-md document-shadow hover:scale-[1.01] transition-transform">
+<span class="material-symbols-outlined text-primary text-4xl">policy</span>
+<div>
+<h3 class="font-headline-md text-headline-md mb-xs">Node Governance</h3>
+<p class="text-on-surface-variant">Custom consensus mechanisms for government bodies to maintain regulatory control.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- FAQ Section -->
+<section class="py-xl" id="faq">
+<div class="max-w-3xl mx-auto space-y-md">
+<h2 class="font-headline-lg text-headline-lg text-primary text-center mb-lg">Frequently Asked Questions</h2>
+<div class="bg-white border border-outline-variant rounded-lg overflow-hidden document-shadow">
+<button class="w-full flex items-center justify-between p-md text-left font-headline-md hover:bg-surface-container-low transition-colors" onclick="toggleFaq(1)">
+<span>How is land legally recognized on-chain?</span>
+<span class="material-symbols-outlined transition-transform" id="icon-1">expand_more</span>
+</button>
+<div class="hidden p-md pt-0 text-on-surface-variant border-t border-outline-variant" id="faq-1">
+                        Our system bridges legal frameworks with digital hashes. Each on-chain record references a specific legal decree, creating a dual-binding validation that is recognized by local land bureaus.
+                    </div>
+</div>
+<div class="bg-white border border-outline-variant rounded-lg overflow-hidden document-shadow">
+<button class="w-full flex items-center justify-between p-md text-left font-headline-md hover:bg-surface-container-low transition-colors" onclick="toggleFaq(2)">
+<span>What happens if I lose my private keys?</span>
+<span class="material-symbols-outlined transition-transform" id="icon-2">expand_more</span>
+</button>
+<div class="hidden p-md pt-0 text-on-surface-variant border-t border-outline-variant" id="faq-2">
+                        We offer institutional-grade recovery services through a multi-signature social recovery process involving designated government authority nodes and legal witnesses.
+                    </div>
+</div>
+<div class="bg-white border border-outline-variant rounded-lg overflow-hidden document-shadow">
+<button class="w-full flex items-center justify-between p-md text-left font-headline-md hover:bg-surface-container-low transition-colors" onclick="toggleFaq(3)">
+<span>Is GoLand decentralized?</span>
+<span class="material-symbols-outlined transition-transform" id="icon-3">expand_more</span>
+</button>
+<div class="hidden p-md pt-0 text-on-surface-variant border-t border-outline-variant" id="faq-3">
+                        GoLand operates on a consortium blockchain where consensus is shared between government departments, banks, and legal institutions to ensure authority without single points of failure.
+                    </div>
+</div>
+</div>
+</section>
+<!-- Login Section -->
+<section class="py-xl flex items-center justify-center" id="login">
+<div class="w-full max-w-[480px] bg-white border border-outline-variant rounded-xl document-shadow p-lg space-y-lg">
+<!-- Tabs -->
+<div class="flex border-b border-outline-variant">
+<button class="flex-1 pb-sm text-primary font-bold border-b-2 border-primary" id="tab-login" onclick="switchTab('login')">Login</button>
+<button class="flex-1 pb-sm text-on-surface-variant hover:text-primary transition-colors" id="tab-register" onclick="switchTab('register')">Register</button>
+</div>
+<!-- Role Selector -->
+<div class="space-y-sm">
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Select Access Role</p>
+<div class="grid grid-cols-3 gap-xs">
+<button class="role-btn active py-xs border rounded-lg font-label-sm border-primary bg-primary-container text-on-primary-container">Buyer</button>
+<button class="role-btn py-xs border border-outline-variant rounded-lg font-label-sm hover:bg-surface-container-low">Seller</button>
+<button class="role-btn py-xs border border-outline-variant rounded-lg font-label-sm hover:bg-surface-container-low">Govt.</button>
+</div>
+</div>
+<!-- Fields -->
+<form class="space-y-md">
+<div class="space-y-xs">
+<label class="font-label-sm">Email Address</label>
+<input class="w-full h-11 bg-white border border-outline-variant rounded-lg px-md focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="name@landregistry.gov" type="email"/>
+</div>
+<div class="space-y-xs">
+<label class="font-label-sm">Password</label>
+<input class="w-full h-11 bg-white border border-outline-variant rounded-lg px-md focus:ring-2 focus:ring-primary focus:border-primary transition-all" placeholder="••••••••" type="password"/>
+</div>
+<button class="w-full h-11 bg-primary text-white font-bold rounded-lg hover:brightness-125 active:scale-[0.98] transition-all" type="submit">Sign In to Dashboard</button>
+</form>
+<div class="text-center">
+<a class="text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Forgot your password?</a>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center bg-surface-container border-t border-outline-variant">
+<div class="flex flex-col items-center md:items-start gap-sm mb-lg md:mb-0">
+<span class="font-headline-md text-primary font-bold">GoLand</span>
+<p class="font-label-sm text-on-surface-variant">© 2024 GoLand Blockchain Registry. All legal records secured.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-md">
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Blockchain Explorer</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-body-md" href="#">Node Status</a>
+</div>
+</footer>
+<script>
+        function toggleFaq(id) {
+            const content = document.getElementById(`faq-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            const isHidden = content.classList.contains('hidden');
+            
+            // Close all first
+            document.querySelectorAll('[id^="faq-"]').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('[id^="icon-"]').forEach(el => el.classList.remove('rotate-180'));
+
+            if (isHidden) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            }
+        }
+
+        function switchTab(type) {
+            const loginTab = document.getElementById('tab-login');
+            const regTab = document.getElementById('tab-register');
+            
+            if (type === 'login') {
+                loginTab.className = "flex-1 pb-sm text-primary font-bold border-b-2 border-primary";
+                regTab.className = "flex-1 pb-sm text-on-surface-variant hover:text-primary transition-colors";
+            } else {
+                regTab.className = "flex-1 pb-sm text-primary font-bold border-b-2 border-primary";
+                loginTab.className = "flex-1 pb-sm text-on-surface-variant hover:text-primary transition-colors";
+            }
+        }
+
+        // Role selector logic
+        const roleBtns = document.querySelectorAll('.role-btn');
+        roleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                roleBtns.forEach(b => {
+                    b.className = "role-btn py-xs border border-outline-variant rounded-lg font-label-sm hover:bg-surface-container-low";
+                });
+                btn.className = "role-btn active py-xs border rounded-lg font-label-sm border-primary bg-primary-container text-on-primary-container";
+            });
+        });
+
+        // Micro-interactions: Intersection Observer for fade-ins
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+    </script>
+</body></html>

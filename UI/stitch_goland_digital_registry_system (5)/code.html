@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#45dfa4",
+                        "primary": "#4edea3",
+                        "surface-container-lowest": "#060e20",
+                        "on-error-container": "#ffdad6",
+                        "inverse-primary": "#006c49",
+                        "surface-variant": "#2d3449",
+                        "background": "#0b1326",
+                        "on-primary": "#003824",
+                        "tertiary": "#adc6ff",
+                        "surface-dim": "#0b1326",
+                        "outline-variant": "#3c4a42",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "on-secondary-container": "#00452e",
+                        "surface-container-high": "#222a3d",
+                        "tertiary-fixed": "#d8e2ff",
+                        "surface-container-highest": "#2d3449",
+                        "on-primary-fixed": "#002113",
+                        "primary-fixed": "#6ffbbe",
+                        "primary-fixed-dim": "#4edea3",
+                        "error-container": "#93000a",
+                        "inverse-surface": "#dae2fd",
+                        "on-surface-variant": "#bbcabf",
+                        "inverse-on-surface": "#283044",
+                        "surface-bright": "#31394d",
+                        "surface-tint": "#4edea3",
+                        "secondary-fixed": "#68fcbf",
+                        "on-secondary": "#003825",
+                        "on-primary-container": "#00422b",
+                        "surface-container": "#171f33",
+                        "secondary-container": "#00bd85",
+                        "error": "#ffb4ab",
+                        "secondary": "#45dfa4",
+                        "on-tertiary-fixed": "#001a42",
+                        "on-background": "#dae2fd",
+                        "surface-container-low": "#131b2e",
+                        "outline": "#86948a",
+                        "on-tertiary-container": "#00367a",
+                        "tertiary-container": "#71a1ff",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "primary-container": "#10b981",
+                        "on-secondary-fixed": "#002114",
+                        "on-tertiary": "#002e6a",
+                        "on-error": "#690005",
+                        "on-secondary-fixed-variant": "#005137",
+                        "surface": "#0b1326",
+                        "on-surface": "#dae2fd",
+                        "on-primary-fixed-variant": "#005236"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "lg": "24px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "xxl": "48px",
+                        "container-max": "1280px",
+                        "xl": "32px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0b1326;
+            color: #dae2fd;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-background dark:bg-background border-b border-outline-variant dark:border-outline-variant fixed top-0 w-full z-50">
+<nav class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-20">
+<div class="font-headline-md text-headline-md font-bold text-on-surface dark:text-on-surface">GoLand</div>
+<div class="hidden md:flex gap-xl">
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">Home</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">About</a>
+<a class="font-body-md text-body-md text-primary font-bold border-b-2 border-primary pb-1" href="#">Services</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors duration-200" href="#">FAQs</a>
+</div>
+<button class="bg-primary-container text-on-primary-container px-lg py-sm rounded-lg font-bold hover:bg-opacity-90 transition-all active:opacity-80">
+                Enter Platform
+            </button>
+</nav>
+</header>
+<main class="pt-20">
+<!-- Services Section Canvas -->
+<section class="bg-[#1E293B] py-xxl px-gutter">
+<div class="max-w-container-max mx-auto">
+<!-- Section Header -->
+<div class="flex flex-col items-center text-center mb-xxl">
+<span class="inline-flex items-center px-md py-xs rounded-full bg-primary/10 border border-primary/30 text-primary font-label-md text-label-md mb-md uppercase tracking-widest">
+                        What We Do
+                    </span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-sm">
+                        What GoLand Does
+                    </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                        Four smart contracts. One unified platform. Decentralizing land governance for a faster, safer, and more transparent future.
+                    </p>
+</div>
+<!-- Bento Grid (3x2) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg mb-xxl">
+<!-- Card 1: Tamper-Proof Land Registry -->
+<div class="bg-[#0F172A] rounded-xl border-t-[3px] border-primary p-xl glow-hover transition-all duration-300 border-x border-b border-outline-variant/30 flex flex-col gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px]">shield</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">Tamper-Proof Land Registry</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm">
+                                Immutable ledger entries ensuring that land records remain unalterable and protected against fraudulent modifications.
+                            </p>
+</div>
+</div>
+<!-- Card 2: Automated Ownership Transfer -->
+<div class="bg-[#0F172A] rounded-xl border-t-[3px] border-primary p-xl glow-hover transition-all duration-300 border-x border-b border-outline-variant/30 flex flex-col gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px]">swap_horiz</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">Automated Ownership Transfer</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm">
+                                Smart contract execution triggers instant ownership updates upon successful payment verification and legal clearance.
+                            </p>
+</div>
+</div>
+<!-- Card 3: Document Vault -->
+<div class="bg-[#0F172A] rounded-xl border-t-[3px] border-primary p-xl glow-hover transition-all duration-300 border-x border-b border-outline-variant/30 flex flex-col gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px]">description</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">Document Vault</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm">
+                                Secure, encrypted storage for deed scans, tax receipts, and identity proofs, linked directly to blockchain assets.
+                            </p>
+</div>
+</div>
+<!-- Card 4: Role-Based Access Control -->
+<div class="bg-[#0F172A] rounded-xl border-t-[3px] border-primary p-xl glow-hover transition-all duration-300 border-x border-b border-outline-variant/30 flex flex-col gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px]">lock</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">Role-Based Access Control</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm">
+                                Granular permissions for citizens, registrars, and government auditors to maintain strict data privacy standards.
+                            </p>
+</div>
+</div>
+<!-- Card 5: Public Verification -->
+<div class="bg-[#0F172A] rounded-xl border-t-[3px] border-primary p-xl glow-hover transition-all duration-300 border-x border-b border-outline-variant/30 flex flex-col gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px]">visibility</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">Public Verification</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm">
+                                Real-time verification portal allowing any stakeholder to confirm property status using public cryptographic keys.
+                            </p>
+</div>
+</div>
+<!-- Card 6: 83% Faster Transactions -->
+<div class="bg-[#0F172A] rounded-xl border-t-[3px] border-primary p-xl glow-hover transition-all duration-300 border-x border-b border-outline-variant/30 flex flex-col gap-md">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px]">bolt</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">83% Faster Transactions</h3>
+<p class="text-on-surface-variant font-body-sm text-body-sm">
+                                Dramatic reduction in processing time by eliminating middle-men and physical paperwork through digital workflows.
+                            </p>
+</div>
+</div>
+</div>
+<!-- Process Flow Section -->
+<div class="mt-xxl">
+<h3 class="font-headline-md text-headline-md text-center mb-xl">The Immutable Workflow</h3>
+<div class="relative overflow-x-auto pb-lg hide-scrollbar">
+<div class="flex items-center min-w-[1200px] justify-between px-md">
+<!-- Step 1 -->
+<div class="flex flex-col items-center group w-40">
+<div class="bg-[#0F172A] border border-slate-700 w-full p-md rounded-lg text-center font-label-md text-label-md group-hover:border-primary transition-colors">
+                                    1 Property Listed
+                                </div>
+</div>
+<span class="material-symbols-outlined text-outline">trending_flat</span>
+<!-- Step 2 -->
+<div class="flex flex-col items-center group w-40">
+<div class="bg-[#0F172A] border border-slate-700 w-full p-md rounded-lg text-center font-label-md text-label-md group-hover:border-primary transition-colors">
+                                    2 Documents Uploaded
+                                </div>
+</div>
+<span class="material-symbols-outlined text-outline">trending_flat</span>
+<!-- Step 3 -->
+<div class="flex flex-col items-center group w-40">
+<div class="bg-[#0F172A] border border-slate-700 w-full p-md rounded-lg text-center font-label-md text-label-md group-hover:border-primary transition-colors">
+                                    3 Docs Verified
+                                </div>
+</div>
+<span class="material-symbols-outlined text-outline">trending_flat</span>
+<!-- Step 4 -->
+<div class="flex flex-col items-center group w-40">
+<div class="bg-[#0F172A] border border-slate-700 w-full p-md rounded-lg text-center font-label-md text-label-md group-hover:border-primary transition-colors">
+                                    4 Govt Approved
+                                </div>
+</div>
+<span class="material-symbols-outlined text-outline">trending_flat</span>
+<!-- Step 5 -->
+<div class="flex flex-col items-center group w-40">
+<div class="bg-[#0F172A] border border-slate-700 w-full p-md rounded-lg text-center font-label-md text-label-md group-hover:border-primary transition-colors">
+                                    5 Transfer Executed
+                                </div>
+</div>
+<span class="material-symbols-outlined text-outline">trending_flat</span>
+<!-- Step 6 -->
+<div class="flex flex-col items-center group w-40">
+<div class="bg-[#0F172A] border border-slate-700 w-full p-md rounded-lg text-center font-label-md text-label-md group-hover:border-primary transition-colors">
+                                    6 Certificate Issued
+                                </div>
+</div>
+<span class="material-symbols-outlined text-outline">trending_flat</span>
+<!-- Step 7 -->
+<div class="flex flex-col items-center group w-40">
+<div class="bg-primary/20 border border-primary w-full p-md rounded-lg text-center font-label-md text-label-md text-primary font-bold">
+                                    7 Mutation Complete
+                                </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Informational Section with Illustration -->
+<section class="bg-background py-xxl px-gutter border-t border-outline-variant/30">
+<div class="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-2 gap-xxl items-center">
+<div class="order-2 lg:order-1">
+<img alt="Blockchain Server Infrastructure" class="rounded-xl shadow-2xl border border-outline-variant/50" data-alt="A macro shot of a futuristic data center with glowing emerald green fiber optic cables weaving through sleek dark slate server racks. The lighting is moody and cinematic, highlighting the intricate technological details and cold metal textures. The overall atmosphere emphasizes heavy data security, blockchain permanence, and advanced legal technology within a high-stakes government infrastructure environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVk2yTnn9U9c5Rbbwhfyg5CoFfiQaOsls1kFxI0Y9paS-K568kOv0kRM64y-JK6e83CcKVa9MvKlD93UUJ4NMARBsSSdS4FoeO1dEX-iz3LCsChNznym1tbg04AD8M0FCOfX8HtVbJN9cjLRCWyLFrFYCc5cKMHh9-eem1rTRrYrD3BUfaqQPYLQEHN_Nc8QQTKRR71rovcIaWBdf70vZvcsi6MxfTw3jCgvRJhWlsaXODAzRk-j7puDA49J7rl8rbGtD3wS7kW0c"/>
+</div>
+<div class="order-1 lg:order-2">
+<h3 class="font-headline-lg text-headline-lg mb-md text-on-surface">The Infrastructure of Trust</h3>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-lg">
+                        GoLand isn't just a software layer; it's a fundamental reimagining of how property rights are recorded. By utilizing a hybrid consensus mechanism, we ensure that every square inch of land is accounted for in a ledger that cannot be corrupted, lost, or silenced.
+                    </p>
+<ul class="space-y-md">
+<li class="flex items-start gap-md">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface">99.9% uptime guaranteed by distributed node clusters across India.</span>
+</li>
+<li class="flex items-start gap-md">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface">End-to-end encryption for all sensitive legal documentation.</span>
+</li>
+<li class="flex items-start gap-md">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-on-surface">Direct integration with existing government Aadhaar and PAN systems.</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="w-full py-xl px-gutter flex flex-col items-center gap-md bg-surface-container-low dark:bg-surface-container-low border-t border-outline-variant">
+<div class="font-headline-sm text-headline-sm font-bold text-primary">GoLand</div>
+<div class="flex gap-lg flex-wrap justify-center">
+<a class="text-on-surface-variant font-body-sm text-body-sm hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-body-sm text-body-sm hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant font-body-sm text-body-sm hover:text-secondary transition-colors" href="#">Legal</a>
+<a class="text-on-surface-variant font-body-sm text-body-sm hover:text-secondary transition-colors" href="#">Contact</a>
+</div>
+<p class="text-on-surface-variant font-body-sm text-body-sm">© 2024 GoLand Blockchain Ledger. All rights reserved.</p>
+</footer>
+<!-- BottomNavBar (Mobile Only Shared Component) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-2 md:hidden bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant shadow-lg z-50">
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl transition-all active:scale-90">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl transition-all active:scale-90">
+<span class="material-symbols-outlined">location_city</span>
+<span class="font-label-md text-label-md">Properties</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl p-2 transition-all active:scale-90">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-label-md text-label-md">Add</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl transition-all active:scale-90">
+<span class="material-symbols-outlined">sync_alt</span>
+<span class="font-label-md text-label-md">Transfers</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container rounded-xl transition-all active:scale-90">
+<span class="material-symbols-outlined">folder</span>
+<span class="font-label-md text-label-md">Docs</span>
+</div>
+</nav>
+<script>
+        // Micro-interactions for process flow scroll
+        const scrollContainer = document.querySelector('.hide-scrollbar');
+        if (scrollContainer) {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            scrollContainer.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - scrollContainer.offsetLeft;
+                scrollLeft = scrollContainer.scrollLeft;
+            });
+            scrollContainer.addEventListener('mouseleave', () => {
+                isDown = false;
+            });
+            scrollContainer.addEventListener('mouseup', () => {
+                isDown = false;
+            });
+            scrollContainer.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - scrollContainer.offsetLeft;
+                const walk = (x - startX) * 2;
+                scrollContainer.scrollLeft = scrollLeft - walk;
+            });
+        }
+    </script>
+</body></html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-pattern {
+            background-color: #F7F5F2;
+            background-image: radial-gradient(#E0D9D0 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+        }
+        .modal-overlay {
+            backdrop-filter: blur(4px);
+            background-color: rgba(26, 26, 46, 0.6);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#752d06",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#294678",
+                      "on-surface": "#1a1a2e",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#89a5dd",
+                      "outline": "#747780",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#002c16",
+                      "on-background": "#1a1a2e",
+                      "primary-fixed": "#d7e2ff",
+                      "on-primary-fixed": "#001a40",
+                      "inverse-surface": "#2f2e43",
+                      "background": "#F7F5F2",
+                      "on-surface-variant": "#44474f",
+                      "secondary-container": "#fd9668",
+                      "on-secondary": "#ffffff",
+                      "secondary": "#98471f",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#8ad7a4",
+                      "surface-dim": "#dad7f3",
+                      "surface-container-highest": "#e2e0fc",
+                      "on-secondary-fixed": "#360f00",
+                      "on-secondary-fixed-variant": "#793009",
+                      "inverse-primary": "#acc7ff",
+                      "surface-bright": "#fcf8ff",
+                      "on-error": "#ffffff",
+                      "primary": "#1B3A6B",
+                      "surface-tint": "#425e91",
+                      "inverse-on-surface": "#f2efff",
+                      "on-tertiary-container": "#68b484",
+                      "tertiary-fixed": "#a5f4bf",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#e8e5ff",
+                      "surface-container": "#efecff",
+                      "primary-container": "#1b3a6b",
+                      "tertiary-container": "#004425",
+                      "surface": "#fcf8ff",
+                      "primary-fixed-dim": "#acc7ff",
+                      "surface-container-low": "#f5f2ff",
+                      "outline-variant": "#E0D9D0",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed": "#ffdbcd",
+                      "on-tertiary-fixed": "#00210f",
+                      "surface-variant": "#e2e0fc",
+                      "on-tertiary-fixed-variant": "#00522e",
+                      "secondary-fixed-dim": "#ffb596"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sm": "16px",
+                      "gutter": "24px",
+                      "xl": "48px",
+                      "md": "24px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "64px",
+                      "lg": "32px",
+                      "xs": "8px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "code-md": ["JetBrains Mono"],
+                      "headline-md": ["Inter"],
+                      "headline-lg": ["Inter"]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md bg-pattern">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-[72px] bg-surface-container-lowest border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-md">
+<span class="text-headline-md font-headline-md font-bold text-primary">GoLand</span>
+<nav class="hidden md:flex gap-lg items-center ml-lg">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-body-md hover:text-primary transition-colors duration-200" href="#">Marketplace</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-200" href="#">Verification</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-200" href="#">History</a>
+<a class="text-on-surface-variant font-body-md hover:text-primary transition-colors duration-200" href="#">Support</a>
+</nav>
+</div>
+<button class="bg-primary text-on-primary px-lg py-sm rounded-lg font-label-sm hover:opacity-80 transition-opacity">
+            Connect Wallet
+        </button>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-[72px] h-[calc(100vh-72px)] flex flex-col p-md border-r border-outline-variant w-[280px] z-40 bg-surface-container-lowest">
+<div class="mb-xl px-xs">
+<div class="flex items-center gap-sm mb-lg">
+<img alt="User Portrait" class="w-12 h-12 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0AwRj5ZV0ZVZh9rh-Plymub-GzvfswQsq2Yu4XMumLabu28_-HQ_kHy0dpduPfHGVqOEmEeIJM6re5ifNsngoV9apYsq9_Q-lJawCPN2JJBIjb0IjSqhanQ0KogP-nQZKn8oSE0BuAnfrxYbTdMQtMR4v5vRwe7rjkADq6SYE4dqp4-hwdijrWMJCNT13kmf7pzCkjBT7g64pYWLZULK-W_Y8SgwDLwy45z_-1X96VHNGRuj3tM44qxwPMke-EGtRvoAx2DVa2Vk"/>
+<div>
+<h3 class="font-headline-md text-[18px] text-primary">GoLand Registry</h3>
+<p class="font-label-sm text-on-surface-variant">Official Node</p>
+</div>
+</div>
+<button class="w-full bg-secondary text-on-tertiary py-sm rounded-lg font-label-sm flex items-center justify-center gap-xs hover:opacity-90 active:scale-[0.98] duration-150">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                New Registration
+            </button>
+</div>
+<nav class="flex-1 space-y-base">
+<a class="flex items-center gap-sm px-sm py-md bg-primary-container text-on-primary-container font-bold rounded-lg active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="domain">domain</span>
+<span class="font-label-sm">My Properties</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-sm">Transactions</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-sm">Registry Search</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-md text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg active:scale-[0.98] duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-md border-t border-outline-variant space-y-base">
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-sm">Help Center</span>
+</a>
+<a class="flex items-center gap-sm px-sm py-sm text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-label-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-[280px] pt-[104px] pb-xl px-margin-desktop max-w-[1280px]">
+<!-- Marketplace Header -->
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary mb-xs">Real Estate Marketplace</h1>
+<p class="text-on-surface-variant font-body-md">Verified digital land records secured by blockchain technology.</p>
+</div>
+<div class="flex gap-sm">
+<button class="bg-surface-container-lowest border border-outline-variant px-md py-sm rounded-lg flex items-center gap-xs font-label-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="filter_list">filter_list</span>
+                    Filter
+                </button>
+<button class="bg-surface-container-lowest border border-outline-variant px-md py-sm rounded-lg flex items-center gap-xs font-label-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="sort">sort</span>
+                    Sort
+                </button>
+</div>
+</div>
+<!-- Property Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden group">
+<div class="relative h-[180px]">
+<img class="w-full h-full object-cover" data-alt="A serene landscape of vast green meadows under a bright, high-key sun. The lighting is soft and natural, emphasizing the peaceful and secure nature of the land. The aesthetic is clean and modern, following a light-mode color palette with subtle warm tones that evoke a sense of prestigious real estate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAleqabK3qZ7svqqey-YinTGPwHHC0P6p0TSVBx02-Ks-FvXco7Js-N54ZXGDTEgJObLqNzJOAC-zIsXhPR32Eva2-BQ2jgI2KCh8-pv-2xgfIPYdc0SnjXwJbLy9p8_bi8va57p9Fl1cO4jo_a1BX9EzoGxCTU5CF8LuqJdqkFTuuEFEffHvJUyWjE422HS6q4n6kXhvlj_szs4ja4TkDTYs3pkLlcb6kjD6x0HIjk-hTgyO0PsS5I2K5wN7fLYK02_EGKBJaAnY"/>
+<div class="absolute top-sm right-sm bg-primary text-on-primary px-sm py-xs rounded font-label-sm shadow-md">
+                        $245,000
+                    </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h3 class="font-headline-md text-[18px] text-primary truncate">Sunrise Valley Lot 42</h3>
+<p class="text-on-surface-variant text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="location_on">location_on</span>
+                                Nairobi, Kenya
+                            </p>
+</div>
+</div>
+<div class="space-y-xs mb-md">
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Survey No.</span>
+<span class="font-code-md text-code-md">KY/NRB/4209</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Area</span>
+<span class="font-body-md">0.52 Acres</span>
+</div>
+<div class="flex justify-between text-label-sm items-center">
+<span class="text-on-surface-variant">Status</span>
+<span class="px-sm py-base rounded-full bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider">Clean</span>
+</div>
+</div>
+<button class="w-full bg-secondary text-on-tertiary py-sm rounded-lg font-label-sm hover:opacity-90 transition-all" onclick="openModal('Sunrise Valley Lot 42', '245,000')">
+                        Make Offer
+                    </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden group">
+<div class="relative h-[180px]">
+<img class="w-full h-full object-cover" data-alt="Modern minimalist architecture plot in an urban development area. The image is brightly lit with high contrast between the pristine white concrete structures and the blue sky. The mood is professional and permanent, suggesting a high-value digital asset in a modern city registry." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxQfYg3b70sTvWX9j7UA0en2kybE12WHi-D_gdOcrOsJeXzCo4t4l-ZFTTMwMNYNHrn5_gBpFNu3-Llzwz5OeG_0RGm5T4uFUQSwdELCTE9g6QOWLEMW7TzDrEd6s5ps9iWrcwhKYw2MyQkbQXTMztgX9DPflphLofLWApkbINb8s4eUfJBHivwOi3j1u2ixEp5mbvymoAhpiq5D8lAnVxT9Jc8GYWhqydJbOmBkpF2QfhEP_gdneukMnOldnHpoTnUT77jmz0MXg"/>
+<div class="absolute top-sm right-sm bg-primary text-on-primary px-sm py-xs rounded font-label-sm shadow-md">
+                        $512,000
+                    </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h3 class="font-headline-md text-[18px] text-primary truncate">Riverside Commercial Zone</h3>
+<p class="text-on-surface-variant text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="location_on">location_on</span>
+                                Lagos, Nigeria
+                            </p>
+</div>
+</div>
+<div class="space-y-xs mb-md">
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Survey No.</span>
+<span class="font-code-md text-code-md">NG/LOS/7712</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Area</span>
+<span class="font-body-md">1.15 Acres</span>
+</div>
+<div class="flex justify-between text-label-sm items-center">
+<span class="text-on-surface-variant">Status</span>
+<span class="px-sm py-base rounded-full bg-amber-100 text-amber-700 text-[10px] font-bold uppercase tracking-wider">Disputed</span>
+</div>
+</div>
+<button class="w-full bg-secondary text-on-tertiary py-sm rounded-lg font-label-sm hover:opacity-90 transition-all" onclick="openModal('Riverside Commercial Zone', '512,000')">
+                        Make Offer
+                    </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden group">
+<div class="relative h-[180px]">
+<img class="w-full h-full object-cover" data-alt="An expansive aerial view of a lush forest and meadow plot. The lighting is the golden hour, providing a rich, warm glow that aligns with the corporate yet document-centric philosophy of the brand. The visual style is crisp and detailed, showcasing the absolute transparency and security of the land records." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeiu1ufcj2zLNwI5DCJ-09vbquwxumWBVVmZC4eOxpSD7zoo-K5FJulyj8eDnIFZb8qVuk_M1GxIKuVDtSVEcDFCwLJxiy76FFpMlwox84bZ9YlwC5TOVXc98G4tgLdiRc6PM3hS0qe8jL5R6qCIiVovvPp-NRuK77Gu0R69eve876oYDsnTRDLeHCV0rKCWcQoiTojD9J6XYfDPU2JSU-fYqC439t4GFa9OIABMz6iXnzsWbAp7dJVYUqz_E1YxlSzZ1lisqoTO8"/>
+<div class="absolute top-sm right-sm bg-primary text-on-primary px-sm py-xs rounded font-label-sm shadow-md">
+                        $128,000
+                    </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h3 class="font-headline-md text-[18px] text-primary truncate">Greenfield Township II</h3>
+<p class="text-on-surface-variant text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="location_on">location_on</span>
+                                Accra, Ghana
+                            </p>
+</div>
+</div>
+<div class="space-y-xs mb-md">
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Survey No.</span>
+<span class="font-code-md text-code-md">GH/ACC/0023</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Area</span>
+<span class="font-body-md">0.25 Acres</span>
+</div>
+<div class="flex justify-between text-label-sm items-center">
+<span class="text-on-surface-variant">Status</span>
+<span class="px-sm py-base rounded-full bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider">Clean</span>
+</div>
+</div>
+<button class="w-full bg-secondary text-on-tertiary py-sm rounded-lg font-label-sm hover:opacity-90 transition-all" onclick="openModal('Greenfield Township II', '128,000')">
+                        Make Offer
+                    </button>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm overflow-hidden group">
+<div class="relative h-[180px]">
+<img class="w-full h-full object-cover" data-alt="A scenic mountain-side plot with clear boundaries. The image uses a cool, professional palette of navy and whites with realistic shadows. The atmosphere is authoritative and secure, perfect for a high-stakes digital land registry. The lighting is daylight high-key, emphasizing transparency." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGjETOy_whGiWJiKpJGUZLkebJLITZJOwemWE2AY-nMAX2JT40sESCKbxKTf2H_PZWzGyqus1S2dPmegbGDUpLN10I9Tvd56KG3EnmsqeUiWZQEqL0SmMKcuSZCcPXnouhA6jz8hJK89HrAK2X90HV69NMT21TAZRVd5N-OiwNP1pw2H8f0PtZd9i7GnJZqRFI1PBek6gb6AZsXotaGqzZS5g8QNLyVwaeGMeMrd63omAZuzEDBvlWkLmLzX3IaYIh6-0GHUuE7q8"/>
+<div class="absolute top-sm right-sm bg-primary text-on-primary px-sm py-xs rounded font-label-sm shadow-md">
+                        $890,000
+                    </div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h3 class="font-headline-md text-[18px] text-primary truncate">Blue Ridge Heights</h3>
+<p class="text-on-surface-variant text-label-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="location_on">location_on</span>
+                                Cape Town, SA
+                            </p>
+</div>
+</div>
+<div class="space-y-xs mb-md">
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Survey No.</span>
+<span class="font-code-md text-code-md">ZA/CPT/8890</span>
+</div>
+<div class="flex justify-between text-label-sm">
+<span class="text-on-surface-variant">Area</span>
+<span class="font-body-md">2.40 Acres</span>
+</div>
+<div class="flex justify-between text-label-sm items-center">
+<span class="text-on-surface-variant">Status</span>
+<span class="px-sm py-base rounded-full bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wider">Clean</span>
+</div>
+</div>
+<button class="w-full bg-secondary text-on-tertiary py-sm rounded-lg font-label-sm hover:opacity-90 transition-all" onclick="openModal('Blue Ridge Heights', '890,000')">
+                        Make Offer
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="ml-[280px] w-[calc(100%-280px)] py-xl px-margin-desktop flex flex-col md:flex-row justify-between items-center bg-surface-container border-t border-outline-variant">
+<div class="mb-md md:mb-0">
+<span class="font-headline-md text-primary font-bold">GoLand</span>
+<p class="text-on-surface-variant font-label-sm mt-xs">© 2024 GoLand Blockchain Registry. All legal records secured.</p>
+</div>
+<div class="flex gap-lg">
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Blockchain Explorer</a>
+<a class="text-on-surface-variant font-label-sm hover:text-secondary transition-colors" href="#">Node Status</a>
+</div>
+</footer>
+<!-- Make Offer Modal -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center hidden" id="offerModal">
+<div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
+<div class="bg-surface-container-lowest w-full max-w-[500px] rounded-xl shadow-2xl relative z-10 overflow-hidden border border-outline-variant">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h2 class="font-headline-md text-primary">Make Official Offer</h2>
+<button class="text-on-surface-variant hover:text-primary transition-colors" onclick="closeModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-lg">
+<div class="bg-surface-container-low p-md rounded-lg mb-lg border border-outline-variant">
+<p class="text-label-sm text-on-surface-variant uppercase tracking-widest mb-xs">Property</p>
+<h4 class="font-headline-md text-[18px] text-primary" id="modalPropertyTitle">Property Name</h4>
+<div class="flex justify-between mt-sm items-center">
+<span class="text-label-sm text-on-surface-variant">Listing Price</span>
+<span class="font-bold text-primary" id="modalPropertyPrice">$0.00</span>
+</div>
+</div>
+<form class="space-y-md" onsubmit="event.preventDefault(); alert('Offer Submitted and Recorded on Blockchain'); closeModal();">
+<div>
+<label class="block text-label-sm text-on-surface-variant mb-xs">Offer Amount (USD)</label>
+<div class="relative">
+<span class="absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant">$</span>
+<input class="w-full pl-lg pr-md py-sm bg-surface-container-lowest border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="0.00" required="" type="number"/>
+</div>
+</div>
+<div>
+<label class="block text-label-sm text-on-surface-variant mb-xs">Remarks / Conditions</label>
+<textarea class="w-full px-md py-sm bg-surface-container-lowest border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:outline-none transition-all" placeholder="Additional terms for the purchase..." rows="3"></textarea>
+</div>
+<div class="pt-sm">
+<button class="w-full bg-secondary text-on-tertiary py-md rounded-lg font-bold flex items-center justify-center gap-sm hover:opacity-90 active:scale-[0.98] transition-all" type="submit">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+                            Sign &amp; Send Offer
+                        </button>
+<p class="text-[11px] text-on-surface-variant mt-sm text-center">
+                            By clicking Sign &amp; Send, you authorize a cryptographic signature on this offer. This action is recorded on the GoLand distributed ledger.
+                        </p>
+</div>
+</form>
+</div>
+</div>
+</div>
+<script>
+        function openModal(title, price) {
+            document.getElementById('modalPropertyTitle').textContent = title;
+            document.getElementById('modalPropertyPrice').textContent = '$' + price;
+            const modal = document.getElementById('offerModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('offerModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body></html>
