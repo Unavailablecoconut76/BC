@@ -1,0 +1,58 @@
+.login-section {
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 1rem;
+}
+
+.login-section__bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #f9f9ff 0%, #f7f5f2 50%, #f9f9ff 100%);
+}
+
+.login-section__glow {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 300px;
+  border-radius: 9999px;
+  background: rgba(0, 36, 82, 0.05);
+  filter: blur(48px);
+}
+
+.login-section__container {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.login-section__panel-wrap {
+  width: 100%;
+  max-width: 440px;
+}
+
+.login-section__panel {
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 24px 48px -16px rgba(0, 36, 82, 0.15);
+}
+
+@media (min-width: 1024px) {
+  .login-section {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  .login-section__container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+  }
+}

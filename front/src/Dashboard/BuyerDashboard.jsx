@@ -9,6 +9,7 @@ import land4 from '../../assets/land4.jpg';
 import DashboardShell from '../components/DashboardShell';
 import MaterialIcon from '../components/MaterialIcon';
 import { formatDemoValue } from '../utils/demoLabels';
+import './DashboardPages.css';
 
 const DUMMY_MARKETPLACE_DATA = [
   { id: 101, location: 'Pune, Maharashtra', area: 1200, price: '25 ETH', surveyNo: 'PUNE-2024-001', owner: '0x742d35Cc6634C0532925a3b844Bc622e4A8a4C0f', image: land1, litigationStatus: 'Clean' },
@@ -23,8 +24,7 @@ const DUMMY_MY_OFFERS = [
   { id: 3, propertyLocation: 'Bangalore, Karnataka', surveyNo: 'BANGALORE-2024-003', offerAmount: '42 ETH', timestamp: '2024-01-31 09:45:00', status: 'rejected', landId: 103 },
 ];
 
-const inputClass =
-  'w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-sm py-xs font-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all';
+const inputClass = 'input-field';
 
 const VerifyLandSection = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,8 +50,8 @@ const VerifyLandSection = () => {
   };
 
   return (
-    <section className="space-y-lg">
-      <div className="bg-gradient-to-br from-surface-container-lowest to-surface-container-low border border-outline-variant rounded-xl p-xl shadow-card">
+    <section className="dashboard-section space-y-lg">
+      <div className="dashboard-card p-xl bg-gradient-to-br from-surface-container-lowest to-surface-container-low">
         <div className="text-center mb-lg">
           <h1 className="font-headline-lg text-primary mb-sm">Verify Property Ownership</h1>
           <p className="font-body-md text-on-surface-variant">
@@ -85,7 +85,7 @@ const VerifyLandSection = () => {
           </button>
         </div>
         {verificationResult && (
-          <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg mt-xl shadow-card">
+          <div className="dashboard-card p-lg mt-xl">
             <div className="flex items-center gap-sm mb-md">
               <MaterialIcon name="check_circle" className="text-success" fill size={28} />
               <h2 className="font-headline-md text-primary">Verification Result</h2>
@@ -120,17 +120,14 @@ const VerifyLandSection = () => {
 };
 
 const MarketplaceSection = ({ onMakeOfferClick }) => (
-  <section className="space-y-lg">
+  <section className="dashboard-section space-y-lg">
     <div>
       <h1 className="font-headline-lg text-primary mb-xs">Marketplace</h1>
       <p className="font-body-md text-on-surface-variant">Browse and make offers on available properties</p>
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-md">
       {DUMMY_MARKETPLACE_DATA.map((property) => (
-        <div
-          key={property.id}
-          className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-card hover:border-primary-container transition-all group"
-        >
+        <div key={property.id} className="dashboard-card dashboard-card--interactive group">
           <div className="relative h-[160px] overflow-hidden">
             <img src={property.image} alt={property.location} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             <span className="absolute top-sm right-sm bg-primary text-on-primary px-xs py-[2px] rounded-full text-label-sm">{formatDemoValue(property.price)}</span>
@@ -184,7 +181,7 @@ const MyOffersSection = ({ onClaimOwnership, claimingId }) => {
   };
 
   return (
-    <section className="space-y-lg">
+    <section className="dashboard-section space-y-lg">
       <div>
         <h1 className="font-headline-lg text-primary mb-xs">My Offers</h1>
         <p className="font-body-md text-on-surface-variant">Track offers you&apos;ve sent to property sellers</p>
@@ -192,7 +189,7 @@ const MyOffersSection = ({ onClaimOwnership, claimingId }) => {
       {DUMMY_MY_OFFERS.length > 0 ? (
         <div className="space-y-md">
           {DUMMY_MY_OFFERS.map((offer) => (
-            <div key={offer.id} className="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-card">
+            <div key={offer.id} className="dashboard-card p-md">
               <div className="grid grid-cols-1 md:grid-cols-5 gap-md items-center">
                 <div>
                   <p className="text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Property</p>
@@ -231,7 +228,7 @@ const MyOffersSection = ({ onClaimOwnership, claimingId }) => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-xl border border-dashed border-outline-variant rounded-xl">
+        <div className="dashboard-empty-state">
           <MaterialIcon name="send" className="text-on-surface-variant mx-auto mb-sm" size={64} />
           <p className="font-body-md text-on-surface-variant">You haven&apos;t made any offers yet</p>
         </div>
@@ -263,18 +260,30 @@ const MakeOfferModal = ({ isOpen, property, onClose }) => {
 
   return (
     <>
-      <div className="fixed inset-0 bg-[#1a1a2e]/60 backdrop-blur-sm z-50" onClick={onClose} aria-hidden />
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-sm">
-        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl max-w-md w-full shadow-card max-h-[90vh] overflow-y-auto">
+      <div className="fixed inset-0 bg-[#1a1a2e]/60 backdrop-blur-sm z-[70]" onClick={onClose} aria-hidden />
+      <div className="fixed inset-0 z-[80] flex items-center justify-center p-sm">
+        <div
+          className="dashboard-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="offer-modal-title"
+        >
           <div className="flex justify-between items-start p-md border-b border-outline-variant">
             <div>
-              <h2 className="font-headline-md text-primary">Make an Offer</h2>
+              <h2 id="offer-modal-title" className="font-headline-md text-primary">
+                Make an Offer
+              </h2>
               <p className="text-label-sm text-on-surface-variant flex items-center gap-xs mt-xs">
                 <MaterialIcon name="place" size={16} />
                 {property.location}
               </p>
             </div>
-            <button type="button" onClick={onClose} className="text-on-surface-variant hover:bg-surface-container rounded-lg p-xs">
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-on-surface-variant hover:bg-surface-container rounded-lg p-xs"
+              aria-label="Close offer modal"
+            >
               <MaterialIcon name="close" size={20} />
             </button>
           </div>

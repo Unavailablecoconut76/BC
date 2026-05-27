@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MaterialIcon from './MaterialIcon';
 import HelpPanel from './HelpPanel';
+import './DashboardShell.css';
 
 const DashboardShell = ({
   portalTitle = 'GoLand Registry',
@@ -27,8 +28,8 @@ const DashboardShell = ({
   const activeLabel = navItems.find((i) => i.id === activeSection)?.label;
 
   return (
-    <div className="min-h-screen bg-[#F7F5F2] font-sans">
-      <header className="fixed top-0 left-0 right-0 h-[72px] z-50 bg-surface-container-lowest border-b border-outline-variant px-4 md:px-margin-desktop flex items-center justify-between">
+    <div className="dashboard-shell">
+      <header className="dashboard-shell__header">
         <div className="flex items-center gap-md min-w-0">
           <button
             type="button"
@@ -75,6 +76,8 @@ const DashboardShell = ({
             className="md:hidden p-xs text-on-surface-variant focus-visible:ring-2 focus-visible:ring-primary/20 rounded-lg"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Menu"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="dashboard-mobile-menu"
           >
             <MaterialIcon name={mobileMenuOpen ? 'close' : 'menu'} size={28} />
           </button>
@@ -82,7 +85,10 @@ const DashboardShell = ({
       </header>
 
       {mobileMenuOpen && (
-        <div className="md:hidden fixed top-[72px] left-0 right-0 z-40 bg-surface-container-lowest border-b border-outline-variant p-sm space-y-1 max-h-[60vh] overflow-y-auto">
+        <div
+          id="dashboard-mobile-menu"
+          className="md:hidden fixed top-[72px] left-0 right-0 z-40 bg-surface-container-lowest border-b border-outline-variant p-sm space-y-1 max-h-[60vh] overflow-y-auto"
+        >
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -109,7 +115,7 @@ const DashboardShell = ({
         </div>
       )}
 
-      <aside className="hidden md:flex fixed left-0 top-0 w-[280px] h-full z-40 flex-col pt-[96px] bg-surface-container-lowest border-r border-outline-variant">
+      <aside className="dashboard-shell__sidebar">
         <div className="px-xs mb-xl">
           <h2 className="font-headline-md font-bold text-primary">{portalTitle}</h2>
           <p className="text-on-surface-variant text-label-sm mt-xs">{portalSubtitle}</p>
@@ -157,13 +163,13 @@ const DashboardShell = ({
         </div>
       </aside>
 
-      <main className="md:ml-[280px] pt-[72px] min-h-screen bg-[#F7F5F2]">
-        <div className="px-4 md:px-margin-desktop py-xl max-w-container-max mx-auto">{children}</div>
+      <main className="dashboard-shell__main">
+        <div className="dashboard-shell__content">{children}</div>
       </main>
 
       <HelpPanel isOpen={helpOpen} onClose={() => setHelpOpen(false)} />
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-surface-container-lowest border-t border-outline-variant flex justify-around items-center py-xs px-1">
+      <nav className="dashboard-shell__mobile-nav">
         {navItems.slice(0, 5).map((item) => (
           <button
             key={item.id}

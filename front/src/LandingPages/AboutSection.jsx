@@ -1,6 +1,7 @@
 import React from 'react';
 import MaterialIcon from '../components/MaterialIcon';
 import LandingSectionHeader from '../components/LandingSectionHeader';
+import './AboutSection.css';
 
 const AboutSection = () => {
   const problems = [
@@ -27,17 +28,17 @@ const AboutSection = () => {
   ];
 
   return (
-    <section id="about" className="landing-section-anchor relative py-16 md:py-24 px-gutter overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#F7F5F2] via-surface-container-low/30 to-[#F7F5F2]" />
-      <div className="relative max-w-container-max mx-auto">
+    <section id="about" className="landing-section-anchor about-section">
+      <div className="about-section__bg" />
+      <div className="about-section__container">
         <LandingSectionHeader
           label="Why GoLand"
           title="Land records should be clear, not confusing"
           subtitle="Citizens, sellers, and officials all need the same truth about who owns what — without months of paperwork."
         />
 
-        <div className="grid md:grid-cols-2 gap-lg mb-xl">
-          <div className="rounded-2xl border border-[#f5c6c6] bg-gradient-to-br from-[#fdf0f0] to-surface-container-lowest p-lg shadow-[0_12px_32px_-12px_rgba(186,26,26,0.12)]">
+        <div className="about-section__compare-grid">
+          <div className="about-section__panel about-section__panel--problem">
             <div className="flex items-center gap-sm mb-md">
               <span className="w-11 h-11 rounded-xl bg-error/10 flex items-center justify-center">
                 <MaterialIcon name="cancel" className="text-error" fill size={26} />
@@ -54,7 +55,7 @@ const AboutSection = () => {
             </ul>
           </div>
 
-          <div className="rounded-2xl border border-[#c6e8d0] bg-gradient-to-br from-[#f0faf3] to-surface-container-lowest p-lg shadow-[0_12px_32px_-12px_rgba(45,122,79,0.12)]">
+          <div className="about-section__panel about-section__panel--solution">
             <div className="flex items-center gap-sm mb-md">
               <span className="w-11 h-11 rounded-xl bg-[#e8f5e9] flex items-center justify-center">
                 <MaterialIcon name="check_circle" className="text-[#2D7A4F]" fill size={26} />
@@ -72,7 +73,7 @@ const AboutSection = () => {
           </div>
         </div>
 
-        <div className="landing-card rounded-2xl p-lg md:p-xl">
+        <div className="landing-card about-section__timeline">
           <h3 className="font-headline-md text-primary text-center mb-xl">How it works</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-md relative">
             <div className="hidden md:block absolute top-7 left-[14%] right-[14%] h-0.5 bg-gradient-to-r from-primary/20 via-secondary/40 to-primary/20" />

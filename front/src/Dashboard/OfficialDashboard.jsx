@@ -6,6 +6,7 @@ import DashboardShell from '../components/DashboardShell';
 import StatCard from '../components/StatCard';
 import MaterialIcon from '../components/MaterialIcon';
 import { formatDemoValue } from '../utils/demoLabels';
+import './DashboardPages.css';
 
 const DEMO_DOC_HASH = 'a3f5c8e2b91d0476f8e3c2a1b9d4e7f0c6a8b2d5e9f1a4c7b3d6e8f0a2c5b8d1';
 
@@ -60,13 +61,13 @@ const getStatusBadge = (status) => {
 };
 
 const OverviewSection = ({ totals }) => (
-  <section className="space-y-lg">
+  <section className="dashboard-section space-y-lg">
     <div className="grid grid-cols-1 md:grid-cols-3 gap-md">
       <StatCard icon="schedule" label="Pending Approvals" value={totals.pending} iconBg="bg-secondary/10" iconColor="text-secondary" />
       <StatCard icon="check_circle" label="Approved Parcels" value={totals.accepted} iconBg="bg-[#e8f5e9]" iconColor="text-[#2D7A4F]" />
       <StatCard icon="cancel" label="Rejected Requests" value={totals.rejected} iconBg="bg-error-container" iconColor="text-error" />
     </div>
-    <div className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-card flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
+    <div className="dashboard-card p-lg flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
       <div>
         <p className="text-label-sm text-on-surface-variant uppercase tracking-wider">Recent activity summary</p>
         <h2 className="font-headline-md text-on-surface mt-xs">Government approval dashboard</h2>
@@ -80,14 +81,14 @@ const OverviewSection = ({ totals }) => (
 );
 
 const PendingActivitiesSection = ({ activities, onReview, onApprove, onReject, onInitiate }) => (
-  <section className="space-y-lg">
+  <section className="dashboard-section space-y-lg">
     <div>
       <h2 className="font-headline-lg text-primary">Pending Activities</h2>
       <p className="font-body-md text-on-surface-variant">Review incoming requests and approve or reject them.</p>
     </div>
     <div className="grid gap-md">
       {activities.map((activity) => (
-        <div key={activity.id} className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-card">
+        <div key={activity.id} className="dashboard-card p-lg">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-md items-start">
             <div className="lg:col-span-2">
               <p className="text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Parcel</p>
@@ -159,8 +160,8 @@ const PendingActivitiesSection = ({ activities, onReview, onApprove, onReject, o
 );
 
 const TransferCompleteScreen = ({ onExit }) => (
-  <div className="min-h-[60vh] flex items-center justify-center">
-    <div className="bg-surface-container-lowest border border-success/30 rounded-xl p-xl max-w-[480px] w-full text-center shadow-card">
+  <div className="dashboard-complete-wrap">
+    <div className="dashboard-card dashboard-card--success p-xl max-w-[480px] w-full text-center">
       <div className="mx-auto mb-lg w-20 h-20 rounded-full bg-[#e8f5e9] flex items-center justify-center">
         <MaterialIcon name="check_circle" className="text-success" fill size={48} />
       </div>

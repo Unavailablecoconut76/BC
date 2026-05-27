@@ -8,6 +8,7 @@ import LoginSection from './LandingPages/LoginSection';
 import LandingNav from './components/LandingNav';
 import MaterialIcon from './components/MaterialIcon';
 import HeroVisual from './components/HeroVisual';
+import './App.css';
 
 const LANDING_HEADER_OFFSET = 80;
 const SECTION_IDS = ['home', 'about', 'services', 'faq', 'login'];
@@ -49,38 +50,38 @@ const HeroSection = ({ scrollToSection }) => {
   const navigate = useNavigate();
 
   return (
-    <section id="home" className="landing-section-anchor relative overflow-hidden">
-      <div className="absolute inset-0 bg-[#F7F5F2]" />
+    <section id="home" className="landing-section-anchor landing-hero">
+      <div className="landing-hero__base" />
       <div
-        className="pointer-events-none absolute inset-0 opacity-90"
+        className="landing-hero__glow"
         style={{
           background:
             'radial-gradient(ellipse 90% 60% at 10% 0%, rgba(0,36,82,0.09) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 95% 20%, rgba(152,71,31,0.08) 0%, transparent 50%)',
         }}
         aria-hidden
       />
-      <div className="landing-grid-pattern pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden />
+      <div className="landing-grid-pattern landing-hero__pattern" aria-hidden />
 
-      <div className="relative max-w-container-max mx-auto px-gutter py-14 md:py-20 lg:py-24">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-xl xl:gap-2xl items-center">
-          <motion.div {...fadeUp} className="max-w-xl">
-            <p className="inline-flex items-center gap-xs text-label-sm font-bold text-primary uppercase tracking-[0.14em] mb-md bg-surface-container-lowest/80 backdrop-blur-sm border border-primary/15 rounded-full px-md py-xs shadow-sm">
+      <div className="landing-hero__container">
+        <div className="landing-hero__layout">
+          <motion.div {...fadeUp} className="landing-hero__content">
+            <p className="landing-hero__tag">
               <MaterialIcon name="account_balance" size={18} className="text-primary" fill />
               Digital land registry
             </p>
-            <h1 className="font-serif text-[2.5rem] md:text-[3rem] lg:text-[3.25rem] leading-[1.1] tracking-tight mb-md">
+            <h1 className="landing-hero__title">
               <span className="text-gradient-hero">Secure land</span>
               <span className="block text-on-surface mt-1">ownership for every citizen.</span>
             </h1>
-            <p className="font-body-lg text-on-surface-variant mb-lg leading-relaxed max-w-lg">
+            <p className="landing-hero__subtitle">
               One portal for buyers, sellers, and officials — track documents, approvals, and transfers
               without getting lost in paper files.
             </p>
-            <div className="flex flex-col sm:flex-row gap-sm mb-xl">
+            <div className="landing-hero__actions">
               <button
                 type="button"
                 onClick={() => scrollToSection('login')}
-                className="inline-flex items-center justify-center gap-xs bg-gradient-to-r from-secondary to-[#7a3517] text-on-secondary px-xl py-sm rounded-xl font-bold hover:brightness-105 transition-all focus-visible:ring-2 focus-visible:ring-secondary/40 shadow-[0_8px_24px_-4px_rgba(152,71,31,0.45)]"
+                className="landing-hero__primary-btn"
               >
                 Get Started
                 <MaterialIcon name="arrow_forward" size={20} />
@@ -88,7 +89,7 @@ const HeroSection = ({ scrollToSection }) => {
               <button
                 type="button"
                 onClick={() => scrollToSection('services')}
-                className="inline-flex items-center justify-center gap-xs border-2 border-primary/20 bg-surface-container-lowest/90 text-primary px-xl py-sm rounded-xl font-semibold hover:border-primary/40 hover:bg-white transition-all focus-visible:ring-2 focus-visible:ring-primary/20"
+                className="landing-hero__secondary-btn"
               >
                 <MaterialIcon name="play_circle" size={20} />
                 How it works
@@ -109,15 +110,15 @@ const HeroSection = ({ scrollToSection }) => {
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.25 }}
-          className="grid sm:grid-cols-3 gap-md mt-12 md:mt-16"
+          className="landing-hero__feature-grid"
         >
           {FEATURES.map((item, i) => (
             <div
               key={item.title}
-              className={`landing-card border-t-[3px] border-t-primary p-md bg-gradient-to-b ${item.accent}`}
+              className={`landing-card landing-hero__feature-card bg-gradient-to-b ${item.accent}`}
               style={{ transitionDelay: `${i * 50}ms` }}
             >
-              <div className="w-11 h-11 rounded-xl bg-surface-container-lowest border border-outline-variant flex items-center justify-center mb-sm shadow-sm">
+              <div className="landing-hero__feature-icon">
                 <MaterialIcon name={item.icon} className="text-primary" size={24} />
               </div>
               <h3 className="font-body-md font-bold text-on-surface mb-xs">{item.title}</h3>
@@ -130,11 +131,11 @@ const HeroSection = ({ scrollToSection }) => {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.35 }}
-          className="mt-xl"
+          className="landing-hero__portal-wrap"
         >
-          <div className="flex items-end justify-between gap-md mb-md flex-wrap">
+          <div className="landing-hero__portal-head">
             <div>
-              <p className="text-label-sm font-bold text-secondary uppercase tracking-[0.12em] mb-xs">
+              <p className="landing-hero__portal-kicker">
                 Quick access
               </p>
               <p className="font-headline-sm text-on-surface">Choose your portal</p>
@@ -142,13 +143,13 @@ const HeroSection = ({ scrollToSection }) => {
             <button
               type="button"
               onClick={() => scrollToSection('login')}
-              className="text-body-sm text-primary font-semibold hover:underline flex items-center gap-1"
+              className="landing-hero__portal-link"
             >
               Or sign in below
               <MaterialIcon name="south" size={18} />
             </button>
           </div>
-          <div className="grid sm:grid-cols-3 gap-md">
+          <div className="landing-hero__portal-grid">
             {PORTALS.map((portal) => (
               <button
                 key={portal.path}
@@ -218,12 +219,12 @@ const App = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#F7F5F2]">
-      <header className="fixed top-0 left-0 right-0 z-[100] border-b border-outline-variant/80 bg-surface-container-lowest/90 backdrop-blur-md shadow-[0_1px_0_rgba(0,36,82,0.06)]">
+    <div className="landing-page">
+      <header className="landing-page__header">
         <LandingNav currentSection={currentSection} scrollToSection={scrollToSection} embedded />
       </header>
 
-      <main className="pt-[72px]">
+      <main className="landing-page__main">
         <HeroSection scrollToSection={scrollToSection} />
         <AboutSection />
         <ServicesSection />

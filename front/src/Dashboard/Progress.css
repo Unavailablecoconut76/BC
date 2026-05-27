@@ -1,0 +1,26 @@
+.progress-page {
+  color: var(--theme-text);
+}
+
+.progress-edit-modal {
+  background: var(--theme-surface);
+  border: 1px solid var(--theme-border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  max-width: 28rem;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.05);
+}
+
+.progress-header {
+  border-left: 4px solid rgba(0, 36, 82, 0.2);
+  padding-left: 0.75rem;
+}
+
+.progress-stage-card {
+  border: 1px solid var(--theme-border);
+  border-radius: 0.75rem;
+  background: var(--theme-surface);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.05);
+}

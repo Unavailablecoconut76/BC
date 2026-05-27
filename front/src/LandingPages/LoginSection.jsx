@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MaterialIcon from '../components/MaterialIcon';
 import LandingSectionHeader from '../components/LandingSectionHeader';
+import './LoginSection.css';
 
 const inputClass =
   'w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-md py-sm font-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all';
@@ -24,17 +25,14 @@ const LoginSection = () => {
   ];
 
   return (
-    <section
-      id="login"
-      className="landing-section-anchor relative px-gutter py-16 md:py-24 overflow-hidden"
-    >
-      <div className="absolute inset-0 bg-gradient-to-b from-surface-container-lowest via-[#F7F5F2] to-surface-container-lowest" />
+    <section id="login" className="landing-section-anchor login-section">
+      <div className="login-section__bg" />
       <div
-        className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 w-[600px] h-[300px] rounded-full bg-primary/5 blur-3xl"
+        className="login-section__glow"
         aria-hidden
       />
 
-      <div className="relative max-w-container-max mx-auto flex flex-col lg:flex-row lg:items-center lg:gap-2xl">
+      <div className="login-section__container">
         <div className="lg:flex-1 mb-xl lg:mb-0">
           <LandingSectionHeader
             label="Sign in"
@@ -58,8 +56,8 @@ const LoginSection = () => {
           </ul>
         </div>
 
-        <div className="w-full max-w-[440px] lg:shrink-0">
-          <div className="landing-card rounded-2xl overflow-hidden shadow-[0_24px_48px_-16px_rgba(0,36,82,0.15)]">
+        <div className="login-section__panel-wrap">
+          <div className="landing-card login-section__panel">
             <div className="h-1.5 bg-gradient-to-r from-secondary via-primary to-primary-container" />
             <div className="p-lg md:p-xl">
               <div className="flex rounded-xl bg-surface-container-low p-1 mb-lg">

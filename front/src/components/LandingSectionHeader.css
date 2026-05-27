@@ -1,0 +1,39 @@
+.landing-section-header {
+  margin-bottom: 2rem;
+  max-width: 42rem;
+}
+
+.landing-section-header--center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.landing-section-header__label {
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  color: #98471f;
+}
+
+.landing-section-header__ornament {
+  margin-bottom: 1rem;
+}
+
+.landing-section-header__title {
+  margin-bottom: 0.75rem;
+  color: #002452;
+  letter-spacing: -0.01em;
+}
+
+.landing-section-header__subtitle {
+  color: #3f4754;
+  line-height: 1.65;
+}
+
+@media (min-width: 768px) {
+  .landing-section-header {
+    margin-bottom: 3rem;
+  }
+}

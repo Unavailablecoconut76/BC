@@ -2,11 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --theme-bg: #f7f5f2;
+  --theme-surface: #f9f9ff;
+  --theme-surface-soft: #f1ede9;
+  --theme-border: #c3c7cf;
+  --theme-text: #1a1a2e;
+  --theme-text-muted: #3f4754;
+  --theme-primary: #002452;
+  --theme-secondary: #98471f;
+  --theme-success: #2d7a4f;
+}
+
 body {
   margin: 0;
   font-family: 'Inter', system-ui, sans-serif;
-  background-color: #f7f5f2;
-  color: #1a1a2e;
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -27,11 +39,31 @@ code,
 
 @layer components {
   .input-field {
-    @apply w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-sm py-xs font-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all;
+    width: 100%;
+    border: 1px solid var(--theme-border);
+    border-radius: 0.5rem;
+    background: var(--theme-surface);
+    color: var(--theme-text);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    padding: 0.625rem 0.75rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .input-field::placeholder {
+    color: var(--theme-text-muted);
+  }
+
+  .input-field:focus {
+    outline: none;
+    border-color: var(--theme-primary);
+    box-shadow: 0 0 0 2px rgba(0, 36, 82, 0.2);
   }
 
   .glass-card {
-    @apply bg-surface-container-lowest border border-outline-variant shadow-card;
+    background: var(--theme-surface);
+    border: 1px solid var(--theme-border);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.05);
   }
 
   .landing-grid-pattern {
@@ -49,17 +81,23 @@ code,
   }
 
   .landing-card {
-    @apply bg-surface-container-lowest border border-outline-variant rounded-xl transition-all duration-300;
+    background: var(--theme-surface);
+    border: 1px solid var(--theme-border);
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
     box-shadow: 0 4px 16px -4px rgba(0, 36, 82, 0.08);
   }
 
   .landing-card:hover {
     box-shadow: 0 12px 32px -8px rgba(0, 36, 82, 0.14);
-    @apply border-primary/25;
+    border-color: rgba(0, 36, 82, 0.25);
   }
 
   .landing-portal-card {
-    @apply landing-card p-md text-left relative overflow-hidden;
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    padding: 1rem;
   }
 
   .landing-portal-card::before {

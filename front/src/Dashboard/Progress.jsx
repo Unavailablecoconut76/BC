@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MaterialIcon from '../components/MaterialIcon';
 import DocChecklistRow from '../components/DocChecklistRow';
+import './Progress.css';
 
 // ============================================================================
 // UTILITY FUNCTIONS
@@ -337,16 +338,14 @@ const ImageUpload = ({ label, name, value, onChange, error, required = false }) 
     if (file && file.type.startsWith('image/')) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        compressImage(event.target.result, (compressed) => {
         onChange({
           target: {
             name,
             value: {
               fileName: file.name,
-              data: compressed,
+              data: event.target.result,
             },
           },
-        });
         });
       };
       reader.readAsDataURL(file);
@@ -1028,7 +1027,7 @@ export default function Progress() {
       : 'PUNE-2024-001';
 
   return (
-    <div className="w-full text-on-surface">
+    <div className="progress-page w-full text-on-surface">
       <AnimatePresence>
         {showEditWarning && (
           <motion.div
@@ -1043,10 +1042,15 @@ export default function Progress() {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg max-w-md shadow-card"
+              className="progress-edit-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="edit-stage-warning-title"
             >
               <MaterialIcon name="warning" className="text-secondary mb-3" size={32} />
-              <h3 className="font-headline-md text-on-surface mb-2">Edit Previous Stage?</h3>
+              <h3 id="edit-stage-warning-title" className="font-headline-md text-on-surface mb-2">
+                Edit Previous Stage?
+              </h3>
               <p className="text-on-surface-variant font-body-md mb-lg">
                 Editing a previous stage may affect the data in later stages. Are you sure you want to continue?
               </p>
@@ -1072,7 +1076,7 @@ export default function Progress() {
       </AnimatePresence>
 
       <div className="w-full max-w-container-max mx-auto">
-        <div className="mb-lg">
+        <div className="progress-header mb-lg">
           <p className="text-label-sm text-on-surface-variant mb-xs">
             Dashboard / Land Status / Stage {currentStage}
           </p>
@@ -1096,7 +1100,7 @@ export default function Progress() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-card overflow-hidden mb-lg"
+          className="progress-stage-card"
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-sm p-lg border-b border-outline-variant">
             <div>

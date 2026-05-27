@@ -8,6 +8,7 @@ import land3 from '../../assets/land3.jpg';
 import DashboardShell from '../components/DashboardShell';
 import MaterialIcon from '../components/MaterialIcon';
 import { formatDemoValue } from '../utils/demoLabels';
+import './DashboardPages.css';
 
 const DUMMY_LANDS = [
   { id: 101, location: 'Pune, Maharashtra', area: 1200, price: '25 ETH', surveyNo: 'PUNE-2024-001', image: land1 },
@@ -36,10 +37,9 @@ const DUMMY_PENDING_REQUESTS = [
   },
 ];
 
-const inputClass =
-  'w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-sm py-xs font-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all';
+const inputClass = 'input-field';
 
-const MyPropertiesSection = ({ lands, onTransferClick }) => {
+const MyPropertiesSection = ({ lands, onTransferClick, onBack }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const filteredLands = lands.filter(
     (land) =>
@@ -48,10 +48,14 @@ const MyPropertiesSection = ({ lands, onTransferClick }) => {
   );
 
   return (
-    <section className="space-y-lg">
+    <section className="dashboard-section space-y-lg">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-md">
         <div>
-          <button type="button" className="flex items-center gap-xs text-label-sm text-on-surface-variant mb-sm">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex items-center gap-xs text-label-sm text-on-surface-variant mb-sm hover:text-primary"
+          >
             <MaterialIcon name="arrow_back" size={18} />
             Back to Dashboard
           </button>
@@ -76,10 +80,7 @@ const MyPropertiesSection = ({ lands, onTransferClick }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
         {filteredLands.map((land) => (
-          <div
-            key={land.id}
-            className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-card hover:border-primary-container transition-all group"
-          >
+          <div key={land.id} className="dashboard-card dashboard-card--interactive group">
             <div className="relative h-[180px] overflow-hidden">
               <img
                 src={land.image}
@@ -122,7 +123,7 @@ const MyPropertiesSection = ({ lands, onTransferClick }) => {
       </div>
 
       {filteredLands.length === 0 && (
-        <div className="text-center py-xl border border-dashed border-outline-variant rounded-xl bg-surface-container-lowest">
+        <div className="dashboard-empty-state">
           <MaterialIcon name="domain" className="text-on-surface-variant mx-auto mb-sm" size={64} />
           <p className="font-body-md text-on-surface-variant">No properties found matching your search</p>
         </div>
@@ -141,12 +142,16 @@ const TransferModal = ({ isOpen, land, onClose, setMyLands, myLands }) => {
       toast.info('Please fill in all fields');
       return;
     }
+    if (!ethers.isAddress(buyerAddress.trim())) {
+      toast.info('Enter a valid buyer wallet address');
+      return;
+    }
     setIsSubmitting(true);
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const tx = await signer.sendTransaction({
-        to: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+        to: buyerAddress.trim(),
         value: ethers.parseEther(offerPrice),
       });
       console.log('Transaction sent! Hash:', tx.hash);
@@ -167,12 +172,19 @@ const TransferModal = ({ isOpen, land, onClose, setMyLands, myLands }) => {
 
   return (
     <>
-      <div className="fixed inset-0 bg-[#1a1a2e]/60 backdrop-blur-sm z-50" onClick={onClose} aria-hidden />
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-sm">
-        <div className="bg-surface-container-lowest border border-outline-variant rounded-xl max-w-[448px] w-full shadow-card max-h-[90vh] overflow-y-auto">
+      <div className="fixed inset-0 bg-[#1a1a2e]/60 backdrop-blur-sm z-[70]" onClick={onClose} aria-hidden />
+      <div className="fixed inset-0 z-[80] flex items-center justify-center p-sm">
+        <div
+          className="dashboard-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="transfer-modal-title"
+        >
           <div className="flex justify-between items-start p-md border-b border-outline-variant">
             <div>
-              <h2 className="font-headline-md text-primary">Initiate Transfer</h2>
+              <h2 id="transfer-modal-title" className="font-headline-md text-primary">
+                Initiate Transfer
+              </h2>
               <p className="text-label-sm text-on-surface-variant flex items-center gap-xs mt-xs">
                 <MaterialIcon name="place" size={16} />
                 {land.location}
@@ -182,6 +194,7 @@ const TransferModal = ({ isOpen, land, onClose, setMyLands, myLands }) => {
               type="button"
               onClick={onClose}
               className="text-on-surface-variant hover:bg-surface-container rounded-lg p-xs"
+              aria-label="Close transfer modal"
             >
               <MaterialIcon name="close" size={20} />
             </button>
@@ -256,13 +269,17 @@ const TransferModal = ({ isOpen, land, onClose, setMyLands, myLands }) => {
   );
 };
 
-const PendingRequestsSection = ({ requests, onAccept, onReject }) => {
+const PendingRequestsSection = ({ requests, onAccept, onReject, onBack }) => {
   const truncateAddress = (address) => `${address.slice(0, 6)}...${address.slice(-4)}`;
 
   return (
-    <section className="space-y-lg">
+    <section className="dashboard-section space-y-lg">
       <div>
-        <button type="button" className="flex items-center gap-xs text-label-sm text-on-surface-variant mb-sm">
+        <button
+          type="button"
+          onClick={onBack}
+          className="flex items-center gap-xs text-label-sm text-on-surface-variant mb-sm hover:text-primary"
+        >
           <MaterialIcon name="arrow_back" size={18} />
           Back to Dashboard
         </button>
@@ -273,10 +290,7 @@ const PendingRequestsSection = ({ requests, onAccept, onReject }) => {
       {requests.length > 0 ? (
         <div className="space-y-md">
           {requests.map((request) => (
-            <div
-              key={request.id}
-              className="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-card"
-            >
+            <div key={request.id} className="dashboard-card p-md">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-md mb-md">
                 <div>
                   <p className="text-label-sm text-on-surface-variant uppercase tracking-wider mb-xs">Buyer Address</p>
@@ -325,7 +339,7 @@ const PendingRequestsSection = ({ requests, onAccept, onReject }) => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-xl border border-dashed border-outline-variant rounded-xl">
+        <div className="dashboard-empty-state">
           <MaterialIcon name="schedule" className="text-on-surface-variant mx-auto mb-sm" size={64} />
           <p className="font-body-md text-on-surface font-medium">No pending requests — you are up to date</p>
           <p className="text-body-sm text-on-surface-variant mt-xs">New offers from buyers will appear here.</p>
@@ -446,10 +460,14 @@ const Dashboard = () => {
       copied={copied}
     >
       {activeSection === 'properties' && (
-        <MyPropertiesSection lands={myLands} onTransferClick={handleTransferClick} />
+        <MyPropertiesSection
+          lands={myLands}
+          onTransferClick={handleTransferClick}
+          onBack={() => setActiveSection('transfer')}
+        />
       )}
       {activeSection === 'transfer' && (
-        <div className="text-center py-xl bg-surface-container-lowest border border-outline-variant rounded-xl shadow-card">
+        <div className="dashboard-card text-center py-xl">
           <div className="w-20 h-20 bg-surface-container rounded-full flex items-center justify-center mx-auto mb-md">
             <MaterialIcon name="send" className="text-primary" size={32} />
           </div>
@@ -472,6 +490,7 @@ const Dashboard = () => {
           requests={pendingRequests}
           onAccept={handleAcceptRequest}
           onReject={handleRejectRequest}
+          onBack={() => setActiveSection('properties')}
         />
       )}
       {activeSection === 'land-status' && <Progress />}
