@@ -180,7 +180,7 @@ const StageProgressBar = ({ currentStage, completedStages }) => {
                     ? 'bg-emerald-500 text-white'
                     : isCurrent
                     ? 'bg-emerald-400 text-slate-900 border-2 border-emerald-500'
-                    : 'bg-slate-700 text-slate-300 border-2 border-slate-600'
+                    : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 border-2 border-slate-300 dark:border-slate-600'
                 }`}
               >
                 {isCompleted ? (
@@ -193,7 +193,7 @@ const StageProgressBar = ({ currentStage, completedStages }) => {
               {/* Stage title (mobile: hidden, desktop: visible) */}
               <p
                 className={`text-xs font-medium mt-2 text-center max-w-[100px] hidden sm:block transition-colors ${
-                  isCurrent ? 'text-emerald-400' : 'text-slate-400'
+                  isCurrent ? 'text-emerald-400' : 'text-slate-500 dark:text-slate-400'
                 }`}
               >
                 {stage.title.split(' &')[0]}
@@ -231,7 +231,7 @@ const FormInput = ({
 }) => {
   return (
     <div className={`mb-4 ${className}`}>
-      <label className="block text-sm font-medium text-slate-200 mb-2">
+      <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
         {label}
         {required && <span className="text-emerald-400 ml-1">*</span>}
       </label>
@@ -242,7 +242,7 @@ const FormInput = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full px-4 py-2 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none transition-all ${
+          className={`w-full px-4 py-2 bg-white dark:bg-slate-800 border rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none transition-all ${
             error
               ? 'border-red-500 focus:border-red-600 focus:ring-red-500/20'
               : 'border-slate-700 focus:border-emerald-500 focus:ring-emerald-500/20'
@@ -254,7 +254,7 @@ const FormInput = ({
           name={name}
           value={value}
           onChange={onChange}
-          className={`w-full px-4 py-2 bg-slate-800 border rounded-lg text-white focus:outline-none transition-all appearance-none cursor-pointer ${
+          className={`w-full px-4 py-2 bg-white dark:bg-slate-800 border rounded-lg text-white focus:outline-none transition-all appearance-none cursor-pointer ${
             error
               ? 'border-red-500 focus:border-red-600 focus:ring-red-500/20'
               : 'border-slate-700 focus:border-emerald-500 focus:ring-emerald-500/20'
@@ -273,7 +273,7 @@ const FormInput = ({
           name={name}
           value={value}
           onChange={onChange}
-          className={`w-full px-4 py-2 bg-slate-800 border rounded-lg text-white focus:outline-none transition-all ${
+          className={`w-full px-4 py-2 bg-white dark:bg-slate-800 border rounded-lg text-white focus:outline-none transition-all ${
             error
               ? 'border-red-500 focus:border-red-600 focus:ring-red-500/20'
               : 'border-slate-700 focus:border-emerald-500 focus:ring-emerald-500/20'
@@ -286,7 +286,7 @@ const FormInput = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full px-4 py-2 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none transition-all ${
+          className={`w-full px-4 py-2 bg-white dark:bg-slate-800 border rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none transition-all ${
             error
               ? 'border-red-500 focus:border-red-600 focus:ring-red-500/20'
               : 'border-slate-700 focus:border-emerald-500 focus:ring-emerald-500/20'
@@ -365,7 +365,7 @@ const ImageUpload = ({ label, name, value, onChange, error, required = false }) 
 
   return (
     <div className="mb-4">
-      <label className="block text-sm font-medium text-slate-200 mb-2">
+      <label className="block text-sm font-medium text-slate-700 dark:text-slate-200 mb-2">
         {label}
         {required && <span className="text-emerald-400 ml-1">*</span>}
       </label>
@@ -385,9 +385,9 @@ const ImageUpload = ({ label, name, value, onChange, error, required = false }) 
             }
             className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 rounded-full p-1 transition-colors"
           >
-            <X className="w-4 h-4 text-white" />
+            <X className="w-4 h-4 text-slate-900 dark:text-white" />
           </button>
-          <p className="text-xs text-slate-400 mt-2">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-2">
             {value.fileName || 'Image uploaded'}
           </p>
         </div>
@@ -403,16 +403,16 @@ const ImageUpload = ({ label, name, value, onChange, error, required = false }) 
                 ? 'border-emerald-400 bg-emerald-400/10'
                 : error
                 ? 'border-red-500 bg-red-500/5'
-                : 'border-slate-700 bg-slate-800/50 hover:border-slate-600'
+                : 'border-slate-700 bg-slate-100/80 dark:bg-slate-800/50 hover:border-slate-300 dark:border-slate-600'
             }`}
           >
             <ImageIcon className={`w-8 h-8 mx-auto mb-2 ${
-              dragActive ? 'text-emerald-400' : error ? 'text-red-400' : 'text-slate-400'
+              dragActive ? 'text-emerald-400' : error ? 'text-red-400' : 'text-slate-500 dark:text-slate-400'
             }`} />
-            <p className="text-slate-300 text-sm font-medium mb-1">
+            <p className="text-slate-600 dark:text-slate-300 text-sm font-medium mb-1">
               Drag and drop your image here
             </p>
-            <p className="text-slate-500 text-xs mb-3">or</p>
+            <p className="text-slate-500 dark:text-slate-500 text-xs mb-3">or</p>
             <label className="inline-block">
               <input
                 type="file"
@@ -487,13 +487,13 @@ const Stage1Form = ({ formData, onFieldChange, errors }) => (
       <div className="mt-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
         <div className="flex items-start space-x-3">
           <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-          <div className="text-slate-200">
+          <div className="text-slate-700 dark:text-slate-200">
             <h4 className="font-semibold text-emerald-400 mb-2">Document Upload Complete</h4>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               Your title history document has been successfully uploaded and will be physically verified.
             </p>
-            <div className="mt-3 p-3 bg-slate-800/50 rounded border border-slate-700">
-              <p className="text-xs text-slate-400">
+            <div className="mt-3 p-3 bg-slate-100/80 dark:bg-slate-800/50 rounded border border-slate-700">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 <strong>Next Steps:</strong> Once verified, you can proceed to the Agreement to Sell stage.
                 Please ensure all other required fields in this stage are completed before moving forward.
               </p>
@@ -576,12 +576,12 @@ const Stage2Form = ({ formData, onFieldChange, errors }) => (
       <div className="flex items-start space-x-3">
         <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
 
-        <div className="text-slate-200">
+        <div className="text-slate-700 dark:text-slate-200">
           <h4 className="font-semibold text-emerald-400 mb-2">
             Document Verification Complete
           </h4>
 
-          <p className="text-sm text-slate-300 leading-relaxed">
+          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
             Your agreement document has been successfully uploaded and is being processed.
           </p>
 
@@ -599,8 +599,8 @@ const Stage2Form = ({ formData, onFieldChange, errors }) => (
 
           <br />
 
-          <div className="mt-3 p-3 bg-slate-800/50 rounded border border-slate-700">
-            <p className="text-xs text-slate-400">
+          <div className="mt-3 p-3 bg-slate-100/80 dark:bg-slate-800/50 rounded border border-slate-700">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               <strong>Next Steps:</strong> Once verified, proceed to Agreement to Sell.
             </p>
           </div>
@@ -693,8 +693,8 @@ const Stage3Form = ({ formData, onFieldChange, errors }) => (
 
 const Stage4Form = ({ formData, onFieldChange, errors }) => (
   <div>
-    <div className="border-l-4 border-emerald-500 pl-4 mb-6 bg-slate-800/50 py-3 px-4 rounded">
-      <p className="text-slate-300 text-sm">
+    <div className="border-l-4 border-emerald-500 pl-4 mb-6 bg-slate-100/80 dark:bg-slate-800/50 py-3 px-4 rounded">
+      <p className="text-slate-600 dark:text-slate-300 text-sm">
         <span className="font-semibold text-emerald-400">Witness 1 Details</span>
       </p>
     </div>
@@ -716,8 +716,8 @@ const Stage4Form = ({ formData, onFieldChange, errors }) => (
       required
     />
 
-    <div className="border-l-4 border-emerald-500 pl-4 mb-6 bg-slate-800/50 py-3 px-4 rounded mt-6">
-      <p className="text-slate-300 text-sm">
+    <div className="border-l-4 border-emerald-500 pl-4 mb-6 bg-slate-100/80 dark:bg-slate-800/50 py-3 px-4 rounded mt-6">
+      <p className="text-slate-600 dark:text-slate-300 text-sm">
         <span className="font-semibold text-emerald-400">Witness 2 Details</span>
       </p>
     </div>
@@ -739,8 +739,8 @@ const Stage4Form = ({ formData, onFieldChange, errors }) => (
       required
     />
 
-    <div className="border-l-4 border-emerald-500 pl-4 mb-6 bg-slate-800/50 py-3 px-4 rounded mt-6">
-      <p className="text-slate-300 text-sm">
+    <div className="border-l-4 border-emerald-500 pl-4 mb-6 bg-slate-100/80 dark:bg-slate-800/50 py-3 px-4 rounded mt-6">
+      <p className="text-slate-600 dark:text-slate-300 text-sm">
         <span className="font-semibold text-emerald-400">Biometric & Registration</span>
       </p>
     </div>
@@ -766,9 +766,9 @@ const Stage4Form = ({ formData, onFieldChange, errors }) => (
       <div className="mt-6 p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
         <div className="flex items-start space-x-3">
           <CheckCircle className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
-          <div className="text-slate-200">
+          <div className="text-slate-700 dark:text-slate-200">
             <h4 className="font-semibold text-emerald-400 mb-2">Document Verification Complete</h4>
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
               Your title history document has been successfully uploaded and is being processed.
               Our verification team will review the document within 24-48 hours. You will receive
               a notification once the verification is complete and the property details are confirmed.
@@ -788,8 +788,8 @@ const Stage4Form = ({ formData, onFieldChange, errors }) => (
               </ul>
             </div>
             <br />
-            <div className="mt-3 p-3 bg-slate-800/50 rounded border border-slate-700">
-              <p className="text-xs text-slate-400">
+            <div className="mt-3 p-3 bg-slate-100/80 dark:bg-slate-800/50 rounded border border-slate-700">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 <strong>Next Steps:</strong> Once verified, you can proceed to the Agreement to Sell stage.
                 Please ensure all other required fields in this stage are completed before moving forward.
               </p>
@@ -835,7 +835,7 @@ const Stage5Form = ({ formData, onFieldChange, errors }) => (
           }
           className="w-4 h-4 rounded border-slate-700 text-emerald-500 focus:ring-emerald-500"
         />
-        <span className="ml-2 text-slate-300">
+        <span className="ml-2 text-slate-600 dark:text-slate-300">
           We confirm the property handover has been completed
           <span className="text-emerald-400 ml-1">*</span>
         </span>
@@ -1026,7 +1026,7 @@ export default function Progress({ onGiveApproval }) {
   const stage = STAGES.find((s) => s.id === currentStage);
 
   return (
-    <div className="min-h-screen bg-slate-900 from-slate-900 via-slate-900 to-slate-800 text-white p-4 sm:p-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 bg-gradient-to-br from-slate-100 via-white to-slate-100 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 text-slate-900 dark:text-white p-4 sm:p-8">
       {/* Edit Warning Modal */}
       <AnimatePresence>
         {showEditWarning && (
@@ -1034,7 +1034,7 @@ export default function Progress({ onGiveApproval }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-slate-900/40 dark:bg-black/50 flex items-center justify-center z-50 p-4"
             onClick={() => setShowEditWarning(false)}
           >
             <motion.div
@@ -1042,18 +1042,18 @@ export default function Progress({ onGiveApproval }) {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-slate-800 border border-slate-700 rounded-xl p-6 max-w-md"
+              className="bg-white dark:bg-slate-800 border border-slate-700 rounded-xl p-6 max-w-md"
             >
               <AlertCircle className="w-8 h-8 text-amber-400 mb-3" />
               <h3 className="text-lg font-semibold mb-2">Edit Previous Stage?</h3>
-              <p className="text-slate-300 text-sm mb-6">
+              <p className="text-slate-600 dark:text-slate-300 text-sm mb-6">
                 Editing a previous stage may affect the data in later stages. Are
                 you sure you want to continue?
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowEditWarning(false)}
-                  className="flex-1 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors"
+                  className="flex-1 px-4 py-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors"
                 >
                   Cancel
                 </button>
@@ -1072,10 +1072,10 @@ export default function Progress({ onGiveApproval }) {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold mb-2 text-emerald-400">
+          <h1 className="text-4xl font-bold mb-2 text-emerald-600 dark:text-emerald-400">
             Property Transaction Process
           </h1>
-          <p className="text-slate-400">
+          <p className="text-slate-500 dark:text-slate-400">
             Complete each stage to proceed through the 6-stage property transfer pipeline
           </p>
         </div>
@@ -1090,14 +1090,14 @@ export default function Progress({ onGiveApproval }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-8 mb-8 backdrop-blur-sm"
+          className="bg-slate-100/80 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/50 rounded-xl p-8 mb-8 backdrop-blur-sm"
         >
           {/* Stage Title */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-emerald-400 mb-2">
+            <h2 className="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">
               Stage {stage.id}: {stage.title}
             </h2>
-            <p className="text-slate-400">{stage.description}</p>
+            <p className="text-slate-500 dark:text-slate-400">{stage.description}</p>
           </div>
 
           {/* Form Content */}
@@ -1118,8 +1118,8 @@ export default function Progress({ onGiveApproval }) {
               disabled={currentStage === 1}
               className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
                 currentStage === 1
-                  ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
-                  : 'bg-slate-700 hover:bg-slate-600 text-white'
+                  ? 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-500 cursor-not-allowed'
+                  : 'bg-slate-200 dark:bg-slate-700 hover:bg-slate-600 text-white'
               }`}
             >
               <ChevronLeft className="w-4 h-4" />
@@ -1148,7 +1148,7 @@ export default function Progress({ onGiveApproval }) {
                 className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
                   canGiveApproval()
                     ? 'bg-emerald-500 hover:bg-emerald-600 text-white cursor-pointer'
-                    : 'bg-slate-700 text-slate-500 cursor-not-allowed border border-slate-600'
+                    : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-500 cursor-not-allowed border border-slate-300 dark:border-slate-600'
                 }`}
               >
                 <CheckCircle className="w-5 h-5" />
@@ -1159,7 +1159,7 @@ export default function Progress({ onGiveApproval }) {
         </motion.div>
 
         {/* Stage Summary Footer */}
-        <div className="text-center text-slate-400 text-sm">
+        <div className="text-center text-slate-500 dark:text-slate-400 text-sm">
           <p>
             Stage {currentStage} of {STAGES.length}
             {completedStages.length > 0 && (

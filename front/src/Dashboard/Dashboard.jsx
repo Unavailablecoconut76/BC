@@ -16,11 +16,17 @@ import {
   Menu, // Added Menu icon for mobile trigger
   Copy,
   TrendingUp,
+  FileText,
+  LineChart,
 } from 'lucide-react';
 import { ethers } from 'ethers';
 import Progress from './Progress';
 import { DEMO_SURVEY_NO, initiateDemoTransfer } from './demoTransferStore';
 import { getSellerProperties, getPropertyById, toSellerListItem } from './propertyCatalog';
+import ThemeToggle from '../theme/ThemeToggle';
+import TransactionHistorySection from './TransactionHistorySection';
+import EthInrTrendPanel from './EthInrTrendPanel';
+import { appendTransaction, TX_TYPES, TX_STATUS } from './transactionLogStore';
 
 // Dummy pending requests (Unchanged)
 const DUMMY_PENDING_REQUESTS = [
@@ -56,6 +62,8 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
     { id: 'transfer', label: 'Initiate Transfer', icon: Send },
     { id: 'requests', label: 'Pending Requests', icon: Clock },
     { id: 'land-status', label: 'Land Status', icon: TrendingUp },
+    { id: 'transactions', label: 'Transactions', icon: FileText },
+    { id: 'market-insights', label: 'Market Insights', icon: LineChart },
   ];
 
 
@@ -64,7 +72,7 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
   };
 
   return (
-    <header className="sticky top-0 w-full bg-slate-900 border-b border-slate-800 z-40 shadow-lg shadow-black/20">
+    <header className="sticky top-0 w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-40 shadow-lg shadow-slate-200/70 dark:shadow-black/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo & Title */}
@@ -73,13 +81,13 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
               <Home className="w-6 h-6 text-emerald-400" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white tracking-tight">Go<span className="text-emerald-400">Land</span></h1>
-              <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Land Owner Dashboard</p>
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Go<span className="text-emerald-400">Land</span></h1>
+              <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Land Owner Dashboard</p>
             </div>
           </div>
 
           {/* Navigation Tabs (Desktop) */}
-          <nav className="hidden md:flex space-x-1 bg-slate-800/50 p-1 rounded-xl border border-slate-700/50">
+          <nav className="hidden md:flex space-x-1 bg-slate-100/80 dark:bg-slate-800/50 p-1 rounded-xl border border-slate-200 dark:border-slate-700/50">
             {sections.map((section) => {
               const Icon = section.icon;
               const isActive = activeSection === section.id;
@@ -89,11 +97,11 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
                   onClick={() => setActiveSection(section.id)}
                   className={`flex items-center space-x-2 px-4 py-2.5 rounded-lg transition-all duration-200 text-sm font-medium ${
                     isActive
-                      ? 'bg-slate-700 text-emerald-400 shadow-sm'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                      ? 'bg-slate-200 dark:bg-slate-700 text-emerald-400 shadow-sm'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-400' : 'text-slate-500'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-400' : 'text-slate-500 dark:text-slate-500'}`} />
                   <span>{section.label}</span>
                 </button>
               );
@@ -102,18 +110,19 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
 
           {/* Account Info */}
           <div className="flex items-center space-x-4">
-            <div className="hidden sm:flex items-center space-x-3 bg-slate-950 px-4 py-2 rounded-full border border-slate-800">
+            <ThemeToggle />
+            <div className="hidden sm:flex items-center space-x-3 bg-slate-100 dark:bg-slate-950 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-800">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 {account ? (
                   <div className="flex items-center space-x-2">
-                    <span className="text-xs font-mono text-slate-300 tracking-wide">{truncateAddress(account)}</span>
-                    <button onClick={copyAddress} className="text-slate-400 hover:text-emerald-400 p-1 rounded-md">
+                    <span className="text-xs font-mono text-slate-600 dark:text-slate-300 tracking-wide">{truncateAddress(account)}</span>
+                    <button onClick={copyAddress} className="text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1 rounded-md">
                       <Copy className="w-4 h-4" />
                     </button>
                     {copied && <span className="text-xs text-emerald-400">Copied</span>}
                   </div>
                 ) : (
-                  <button onClick={connectWallet} className="text-xs font-mono text-emerald-400 bg-slate-800 px-3 py-1 rounded-md">
+                  <button onClick={connectWallet} className="text-xs font-mono text-emerald-400 bg-white dark:bg-slate-800 px-3 py-1 rounded-md">
                     Connect Wallet---
                   </button>
                 )}
@@ -122,7 +131,7 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-              className="md:hidden p-2 text-slate-300 hover:text-emerald-400 hover:bg-slate-800 rounded-lg transition-colors"
+              className="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
             >
               {isAccountMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -131,7 +140,7 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
 
         {/* Mobile Navigation Menu */}
         {isAccountMenuOpen && (
-          <div className="md:hidden border-t border-slate-800 py-4 space-y-2 animate-in slide-in-from-top-5 duration-200">
+          <div className="md:hidden border-t border-slate-200 dark:border-slate-800 py-4 space-y-2 animate-in slide-in-from-top-5 duration-200">
             {sections.map((section) => {
               const Icon = section.icon;
               return (
@@ -144,7 +153,7 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
                   className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
                     activeSection === section.id
                       ? 'bg-emerald-500/10 text-emerald-400 border-l-4 border-emerald-500'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -153,15 +162,15 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
               );
             })}
             {/* Mobile Wallet Display */}
-             <div className="mt-4 px-4 pt-4 border-t border-slate-800">
-                <div className="flex items-center space-x-2 text-slate-400 bg-slate-900 p-3 rounded-lg">
+             <div className="mt-4 px-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex items-center space-x-2 text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-3 rounded-lg">
                     <Wallet className="w-4 h-4" />
                     {account ? (
       /* We use a Fragment (<>...</>) to group the address and balance as ONE element */
       <>
         <div className="flex items-center space-x-2">
           <span className="text-xs font-mono">{truncateAddress(account)}</span>
-          <button onClick={copyAddress} className="text-slate-400 hover:text-emerald-400 p-1 rounded-md">
+          <button onClick={copyAddress} className="text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1 rounded-md">
             <Copy className="w-4 h-4" />
           </button>
         </div>
@@ -172,7 +181,7 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
         </span>
       </>
     ) : (
-      <button onClick={connectWallet} className="text-xs font-mono text-emerald-400 bg-slate-800 px-3 py-1 rounded-md">
+      <button onClick={connectWallet} className="text-xs font-mono text-emerald-400 bg-white dark:bg-slate-800 px-3 py-1 rounded-md">
         Connect Wallet
       </button>
     )}
@@ -196,26 +205,26 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
   );
 
   return (
-    <section className="bg-slate-900 space-y-8">
+    <section className="bg-slate-50 dark:bg-slate-900 space-y-8">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-white mb-2">My Properties</h2>
-          <p className="text-slate-400">Manage and view all your registered land parcels</p>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">My Properties</h2>
+          <p className="text-slate-500 dark:text-slate-400">Manage and view all your registered land parcels</p>
         </div>
         
-        <div className="bg-slate-800 border text-white rounded-xl relative w-full md:w-96">
-          <Search className="absolute left-4 top-3.5 w-5 h-5 text-slate-500" />
+        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white rounded-xl relative w-full md:w-96">
+          <Search className="absolute left-4 top-3.5 w-5 h-5 text-slate-500 dark:text-slate-500" />
           <input
             type="text"
             placeholder="       Search by location or survey number..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-12 pr-4 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all shadow-sm"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-700 rounded-xl pl-12 pr-4 py-3 text-slate-700 dark:text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/50 transition-all shadow-sm"
           />
         </div>
       </div>
       <br />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-white">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-slate-900 dark:text-white">
         {filteredLands.map((land) => (
           <div
             key={land.id}
@@ -228,11 +237,11 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
                 onPropertyClick(land);
               }
             }}
-            className="group bg-slate-800 rounded-2xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-black/20 cursor-pointer border border-transparent hover:border-emerald-500/20"
+            className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/70 dark:shadow-black/20 cursor-pointer border border-transparent hover:border-emerald-500/20"
           >
             {/* Property Image */}
-            <div className="relative w-full h-48 bg-slate-800 overflow-hidden">
-              <span className="absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-wide text-white/0 group-hover:text-white/90 bg-slate-950/0 group-hover:bg-slate-950/80 px-2 py-1 rounded transition-all z-10">
+            <div className="relative w-full h-48 bg-white dark:bg-slate-800 overflow-hidden">
+              <span className="absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-wide text-white/0 group-hover:text-slate-900 dark:hover:text-white/90 bg-slate-950/0 group-hover:bg-white/90 dark:bg-slate-950/80 px-2 py-1 rounded transition-all z-10">
                 View details
               </span>
               <img
@@ -240,7 +249,7 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
                 alt={land.location}
                 className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
               />
-              <div className="absolute top-3 right-3 bg-slate-950/90 backdrop-blur-sm text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+              <div className="absolute top-3 right-3 bg-white/95 dark:bg-slate-950/90 backdrop-blur-sm text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                 {land.price}
               </div>
             </div>
@@ -249,19 +258,19 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
             <div className="p-6 space-y-5">
               <div>
                 <div className="flex items-start justify-between mb-1">
-                   <h3 className="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">{land.location}</h3>
-                   <MapPin className="w-5 h-5 text-slate-500" />
+                   <h3 className="text-lg font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">{land.location}</h3>
+                   <MapPin className="w-5 h-5 text-slate-500 dark:text-slate-500" />
                 </div>
-                <p className="text-xs font-mono text-slate-500 bg-slate-800/50 inline-block px-2 py-1 rounded">ID: {land.surveyNo}</p>
+                <p className="text-xs font-mono text-slate-500 dark:text-slate-500 bg-slate-100/80 dark:bg-slate-800/50 inline-block px-2 py-1 rounded">ID: {land.surveyNo}</p>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 py-4 border-t border-slate-800">
+              <div className="grid grid-cols-2 gap-4 py-4 border-t border-slate-200 dark:border-slate-800">
                 <div>
-                  <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Area</p>
-                  <p className="text-base font-semibold text-slate-200">{land.area} <span className="text-sm text-slate-500">Sq.ft</span></p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-500 uppercase font-bold tracking-wider">Area</p>
+                  <p className="text-base font-semibold text-slate-700 dark:text-slate-200">{land.area} <span className="text-sm text-slate-500 dark:text-slate-500">Sq.ft</span></p>
                 </div>
                 <div>
-                  <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Land ID</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-500 uppercase font-bold tracking-wider">Land ID</p>
                   <p className="text-base font-semibold text-emerald-400">#{land.id}</p>
                 </div>
               </div>
@@ -283,9 +292,9 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
       </div>
 
       {filteredLands.length === 0 && (
-        <div className="text-center py-20 bg-slate-900/50 border border-slate-800 border-dashed rounded-2xl">
+        <div className="text-center py-20 bg-slate-100/80 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 border-dashed rounded-2xl">
           <Home className="w-16 h-16 text-slate-800 mx-auto mb-4" />
-          <p className="text-slate-400 text-lg">No properties found matching your search</p>
+          <p className="text-slate-500 dark:text-slate-400 text-lg">No properties found matching your search</p>
         </div>
       )}
     </section>
@@ -294,7 +303,7 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
 
 // Transfer Modal
 // const TransferModal = ({ isOpen, land, onClose, transferStatus }) => {//if i dont simulate anymore use this
-  const TransferModal = ({ isOpen, land, onClose, setAccount, setMyLands, myLands}) => {
+  const TransferModal = ({ isOpen, land, onClose, setMyLands, myLands, sellerAccount, onRecorded }) => {
   const [buyerAddress, setBuyerAddress] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -323,6 +332,21 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
 
       const updatedLands = myLands.filter(item => item.id !== land.id);
       setMyLands(updatedLands);
+
+      const entry = appendTransaction({
+        role: 'seller',
+        type: TX_TYPES.TRANSFER_INITIATED,
+        status: TX_STATUS.CONFIRMED,
+        landId: land.id,
+        surveyNo: land.surveyNo,
+        propertyLocation: land.location,
+        amountEth: offerPrice,
+        counterparty: buyerAddress,
+        walletAddress: sellerAccount || 'not_connected',
+        network: 'demo',
+      });
+
+      if (onRecorded) onRecorded(entry);
 
       alert(
         land.surveyNo === DEMO_SURVEY_NO
@@ -369,49 +393,49 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
   return (
     <>
       <div
-        className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 transition-opacity"
+        className="fixed inset-0 bg-white/90 dark:bg-slate-950/80 backdrop-blur-sm z-50 transition-opacity"
         onClick={onClose}
       ></div>
 
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full shadow-2xl shadow-black/50 transform transition-all">
+        <div className="bg-white dark:bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full shadow-2xl shadow-slate-300/50 dark:shadow-black/50 transform transition-all">
           {/* Header */}
-          <div className="flex justify-between items-center p-6 border-b border-slate-800">
+          <div className="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-800">
             <div>
-              <h2 className="text-xl font-bold text-white">Initiate Transfer</h2>
-              <p className="text-sm text-slate-400 mt-1 flex items-center gap-1">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Initiate Transfer</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
                  <MapPin className="w-3 h-3" /> {land.location}
               </p>
             </div>
             <button
               onClick={onClose}
-              className="text-slate-500 hover:text-white hover:bg-slate-800 p-2 rounded-lg transition-all"
+              className="text-slate-500 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-all"
             >
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Body */}
-          <div className="p-6 space-y-5 text-white">
+          <div className="p-6 space-y-5 text-slate-900 dark:text-white">
             {/* Property Details Summary */}
-            <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
+            <div className="bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">Survey No</span>
-                <span className="text-slate-200 font-mono text-sm">{land.surveyNo}</span>
+                <span className="text-slate-500 dark:text-slate-500 text-xs font-bold uppercase tracking-wider">Survey No</span>
+                <span className="text-slate-700 dark:text-slate-200 font-mono text-sm">{land.surveyNo}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">Area</span>
-                <span className="text-slate-200 font-medium">{land.area} Sq.ft</span>
+                <span className="text-slate-500 dark:text-slate-500 text-xs font-bold uppercase tracking-wider">Area</span>
+                <span className="text-slate-700 dark:text-slate-200 font-medium">{land.area} Sq.ft</span>
               </div>
-              <div className="flex justify-between items-center pt-2 border-t border-slate-800">
-                <span className="text-slate-400 text-sm">Estimated Value</span>
+              <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-slate-800">
+                <span className="text-slate-500 dark:text-slate-400 text-sm">Estimated Value</span>
                 <span className="text-emerald-400 font-bold">{land.price}</span>
               </div>
             </div>
 
             {/* Buyer Address Input */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-2">
                 Buyer Wallet Address
               </label>
               <input
@@ -419,13 +443,13 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
                 placeholder="0x..."
                 value={buyerAddress}
                 onChange={(e) => setBuyerAddress(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
 
             {/* Offer Price Input */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">
+              <label className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-2">
                 Sale Price (in ETH)
               </label>
               <input
@@ -433,7 +457,7 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
                 placeholder="0.00"
                 value={offerPrice}
                 onChange={(e) => setOfferPrice(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
 
@@ -447,17 +471,17 @@ const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
           </div>
 
           {/* Footer */}
-          <div className="flex gap-3 p-6 border-t border-slate-800 bg-slate-900/50 rounded-b-2xl">
+          <div className="flex gap-3 p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900/50 rounded-b-2xl">
             <button
               onClick={onClose}
-              className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl font-semibold transition-all"
+              className="flex-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 py-3 rounded-xl font-semibold transition-all"
             >
               Cancel
             </button>
             <button
               onClick={handleInitiateTransfer}
               disabled={isSubmitting}
-              className="flex-1 bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-700 disabled:text-slate-500 text-white py-3 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 shadow-lg shadow-emerald-500/20"
+              className="flex-1 bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-200 dark:bg-slate-700 disabled:text-slate-400 dark:disabled:text-slate-500 dark:text-slate-500 text-white py-3 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 shadow-lg shadow-emerald-500/20"
             >
               {isSubmitting ? (
                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -489,10 +513,10 @@ const PendingRequestsSection = ({ requests }) => {
   };
 
   return (
-    <section className="space-y-6 text-white">
+    <section className="space-y-6 text-slate-900 dark:text-white">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-2">Pending Transfer Requests</h2>
-        <p className="text-slate-400">Review and manage incoming transfer offers from buyers</p>
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Pending Transfer Requests</h2>
+        <p className="text-slate-500 dark:text-slate-400">Review and manage incoming transfer offers from buyers</p>
       </div>
 
       {/* Requests Table */}
@@ -501,19 +525,19 @@ const PendingRequestsSection = ({ requests }) => {
             {requests.map((request) => (
               <div
                 key={request.id}
-                className="bg-slate-900 rounded-2xl p-6 hover:bg-slate-800/50 transition-all hover:border-emerald-500/30  "
+                className="bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 hover:bg-slate-100/80 dark:bg-slate-800/50 transition-all hover:border-emerald-500/30  "
               >
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-center mb-6">
                   {/* Buyer Info */}
                   <div>
-                    <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">
+                    <p className="text-[10px] text-slate-500 dark:text-slate-500 uppercase font-bold tracking-wider mb-1">
                       Buyer Address
                     </p>
                     <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center">
                              <Wallet className="w-4 h-4 text-emerald-400" />
                         </div>
-                        <p className="text-slate-200 font-mono text-sm">
+                        <p className="text-slate-700 dark:text-slate-200 font-mono text-sm">
                         {truncateAddress(request.buyerAddress)}
                         </p>
                     </div>
@@ -521,15 +545,15 @@ const PendingRequestsSection = ({ requests }) => {
 
                   {/* Land Location */}
                   <div>
-                    <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">
+                    <p className="text-[10px] text-slate-500 dark:text-slate-500 uppercase font-bold tracking-wider mb-1">
                       Property
                     </p>
-                    <p className="text-white font-semibold">{request.landLocation}</p>
+                    <p className="text-slate-900 dark:text-white font-semibold">{request.landLocation}</p>
                   </div>
 
                   {/* Offered Price */}
                   <div>
-                    <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">
+                    <p className="text-[10px] text-slate-500 dark:text-slate-500 uppercase font-bold tracking-wider mb-1">
                       Offered Price
                     </p>
                     <p className="text-emerald-400 font-bold text-xl">
@@ -540,17 +564,17 @@ const PendingRequestsSection = ({ requests }) => {
                   {/* Status & Time */}
                   <div className="flex flex-col items-end gap-2">
                     {getStatusBadge(request.status)}
-                    <span className="text-xs text-slate-500 font-mono">{request.timestamp}</span>
+                    <span className="text-xs text-slate-500 dark:text-slate-500 font-mono">{request.timestamp}</span>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-4 pt-4 border-t border-slate-800">
+                <div className="flex gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
                   <button className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-xl font-semibold transition-all flex items-center justify-center space-x-2 shadow-lg shadow-emerald-500/10">
                     <CheckCircle className="w-4 h-4" />
                     <span>Accept Offer</span>
                   </button>
-                  <button className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white py-2.5 rounded-xl font-semibold transition-all flex items-center justify-center space-x-2">
+                  <button className="flex-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white py-2.5 rounded-xl font-semibold transition-all flex items-center justify-center space-x-2">
                     <X className="w-4 h-4" />
                     <span>Reject</span>
                   </button>
@@ -559,9 +583,9 @@ const PendingRequestsSection = ({ requests }) => {
             ))}
         </div>
       ) : (
-        <div className="text-center py-20 bg-slate-900  ">
+        <div className="text-center py-20 bg-slate-50 dark:bg-slate-900  ">
           <Clock className="w-16 h-16 text-slate-800 mx-auto mb-4" />
-          <p className="text-slate-400 text-lg">No pending requests at the moment</p>
+          <p className="text-slate-500 dark:text-slate-400 text-lg">No pending requests at the moment</p>
         </div>
       )}
     </section>
@@ -581,6 +605,17 @@ const Dashboard = () => {
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
   const [selectedLand, setSelectedLand] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [actionToast, setActionToast] = useState(null);
+  const [txSurveyFilter, setTxSurveyFilter] = useState('');
+
+  const showRecordedToast = (message) => {
+    setActionToast(message);
+    setTimeout(() => setActionToast(null), 6000);
+  };
+
+  const handleTransferRecorded = () => {
+    showRecordedToast('Transfer recorded in Transaction History.');
+  };
 
   // Connect to MetaMask / Ethereum provider
   const connectWallet = async () => {
@@ -643,6 +678,14 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
+    if (location.state?.filterSurveyNo) {
+      setTxSurveyFilter(location.state.filterSurveyNo);
+      setActiveSection('transactions');
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, location.pathname, navigate]);
+
+  useEffect(() => {
     const openId = location.state?.openTransferFor;
     if (!openId) return;
     const full = getPropertyById(openId);
@@ -669,7 +712,20 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-slate-900 min-h-screen bg-slate-950 text-slate-200"> {/* FORCE DARK BACKGROUND */}
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-700 dark:text-slate-200">
+      {actionToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-slate-900 dark:bg-slate-800 text-white px-5 py-3 rounded-xl shadow-xl border border-emerald-500/30 text-sm">
+          <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+          <span>{actionToast}</span>
+          <button
+            type="button"
+            onClick={() => setActiveSection('transactions')}
+            className="text-emerald-400 font-semibold hover:underline"
+          >
+            View history
+          </button>
+        </div>
+      )}
       <DashboardHeader
         activeSection={activeSection}
         setActiveSection={setActiveSection}
@@ -681,7 +737,7 @@ const Dashboard = () => {
       />
 
       {/* Main Content */}
-      <main className="bg-blue-950 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="bg-slate-100 dark:bg-blue-950 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {activeSection === 'properties' && (
           <MyPropertiesSection
             lands={myLands}
@@ -691,12 +747,12 @@ const Dashboard = () => {
         )}
 
         {activeSection === 'transfer' && (
-          <div className="text-center py-20 bg-slate-900 border border-slate-800 rounded-3xl">
-            <div className="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="text-center py-20 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl">
+            <div className="w-20 h-20 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Send className="w-8 h-8 text-emerald-500" />
             </div>
-            <h2 className="text-3xl font-bold text-white mb-3">Initiate Transfer</h2>
-            <p className="text-slate-400 mb-8 max-w-md mx-auto">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white mb-3">Initiate Transfer</h2>
+            <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-md mx-auto">
               Please select a property from the "My Properties" tab to begin the ownership transfer process.
             </p>
             <button
@@ -714,6 +770,12 @@ const Dashboard = () => {
         )}
 
         {activeSection === 'land-status' && <Progress />}
+
+        {activeSection === 'transactions' && (
+          <TransactionHistorySection role="seller" initialSurveyFilter={txSurveyFilter} />
+        )}
+
+        {activeSection === 'market-insights' && <EthInrTrendPanel />}
       </main>
 
       {/* Transfer Modal */}
@@ -721,9 +783,10 @@ const Dashboard = () => {
         isOpen={isTransferModalOpen}
         land={selectedLand}
         onClose={handleCloseTransferModal}
-        transferStatus={transferStatus}
-        myLands={myLands}        // Added
+        myLands={myLands}
         setMyLands={setMyLands}
+        sellerAccount={account}
+        onRecorded={handleTransferRecorded}
       />
     </div>
   );
@@ -813,7 +876,7 @@ export default Dashboard;
 //   };
 
 //   return (
-//     <header className="sticky top-0 w-full bg-slate-950 border-b border-slate-800 z-40">
+//     <header className="sticky top-0 w-full bg-slate-950 border-b border-slate-200 dark:border-slate-800 z-40">
 //       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 //         <div className="flex justify-between items-center h-16">
 //           {/* Logo & Title */}
@@ -822,8 +885,8 @@ export default Dashboard;
 //               <Home className="w-6 h-6 text-slate-950" />
 //             </div>
 //             <div>
-//               <h1 className="text-xl font-bold text-white">GoLand</h1>
-//               <p className="text-xs text-slate-400">Land Owner Dashboard</p>
+//               <h1 className="text-xl font-bold text-slate-900 dark:text-white">GoLand</h1>
+//               <p className="text-xs text-slate-500 dark:text-slate-400">Land Owner Dashboard</p>
 //             </div>
 //           </div>
 
@@ -838,7 +901,7 @@ export default Dashboard;
 //                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
 //                     activeSection === section.id
 //                       ? 'bg-emerald-400/20 text-emerald-400 border border-emerald-400/50'
-//                       : 'text-slate-300 hover:text-emerald-400 hover:bg-slate-800'
+//                       : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800'
 //                   }`}
 //                 >
 //                   <Icon className="w-4 h-4" />
@@ -850,15 +913,15 @@ export default Dashboard;
 
 //           {/* Account Info */}
 //           <div className="flex items-center space-x-4">
-//             <div className="hidden sm:flex items-center space-x-2 bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">
+//             <div className="hidden sm:flex items-center space-x-2 bg-white dark:bg-slate-800 px-4 py-2 rounded-lg border border-slate-700">
 //               <Wallet className="w-4 h-4 text-emerald-400" />
-//               <span className="text-sm text-slate-300">{truncateAddress(account)}</span>
+//               <span className="text-sm text-slate-600 dark:text-slate-300">{truncateAddress(account)}</span>
 //             </div>
 
 //             {/* Mobile Menu Button */}
 //             <button
 //               onClick={() => setIsAccountMenuOpen(!isAccountMenuOpen)}
-//               className="md:hidden flex items-center space-x-2 text-slate-300 hover:text-emerald-400"
+//               className="md:hidden flex items-center space-x-2 text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400"
 //             >
 //               <ChevronDown className="w-5 h-5" />
 //             </button>
@@ -867,7 +930,7 @@ export default Dashboard;
 
 //         {/* Mobile Navigation */}
 //         {isAccountMenuOpen && (
-//           <div className="md:hidden border-t border-slate-800 py-4 space-y-2">
+//           <div className="md:hidden border-t border-slate-200 dark:border-slate-800 py-4 space-y-2">
 //             {sections.map((section) => {
 //               const Icon = section.icon;
 //               return (
@@ -880,7 +943,7 @@ export default Dashboard;
 //                   className={`w-full flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
 //                     activeSection === section.id
 //                       ? 'bg-emerald-400/20 text-emerald-400'
-//                       : 'text-slate-300 hover:text-emerald-400'
+//                       : 'text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400'
 //                   }`}
 //                 >
 //                   <Icon className="w-4 h-4" />
@@ -908,19 +971,19 @@ export default Dashboard;
 //   return (
 //     <section className="space-y-6">
 //       <div>
-//         <h2 className="text-2xl font-bold text-white mb-2">My Properties</h2>
-//         <p className="text-slate-400">Manage and view all your registered land parcels</p>
+//         <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">My Properties</h2>
+//         <p className="text-slate-500 dark:text-slate-400">Manage and view all your registered land parcels</p>
 //       </div>
 
 //       {/* Search Bar */}
 //       <div className="relative">
-//         <Search className="absolute left-4 top-3 w-5 h-5 text-slate-400" />
+//         <Search className="absolute left-4 top-3 w-5 h-5 text-slate-500 dark:text-slate-400" />
 //         <input
 //           type="text"
 //           placeholder="Search by location or survey number..."
 //           value={searchTerm}
 //           onChange={(e) => setSearchTerm(e.target.value)}
-//           className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-12 pr-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
+//           className="w-full bg-white dark:bg-slate-800 border border-slate-700 rounded-lg pl-12 pr-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
 //         />
 //       </div>
 
@@ -929,10 +992,10 @@ export default Dashboard;
 //         {filteredLands.map((land) => (
 //           <div
 //             key={land.id}
-//             className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden hover:border-emerald-400/50 transition-all hover:shadow-lg"
+//             className="bg-white dark:bg-slate-800 border border-slate-700 rounded-xl overflow-hidden hover:border-emerald-400/50 transition-all hover:shadow-lg"
 //           >
 //             {/* Property Image */}
-//             <div className="relative w-full h-48 bg-slate-700 overflow-hidden">
+//             <div className="relative w-full h-48 bg-slate-200 dark:bg-slate-700 overflow-hidden">
 //               <img
 //                 src={land.image}
 //                 alt={land.location}
@@ -948,18 +1011,18 @@ export default Dashboard;
 //               <div>
 //                 <div className="flex items-center space-x-2 mb-2">
 //                   <MapPin className="w-4 h-4 text-emerald-400" />
-//                   <h3 className="text-lg font-bold text-white">{land.location}</h3>
+//                   <h3 className="text-lg font-bold text-slate-900 dark:text-white">{land.location}</h3>
 //                 </div>
-//                 <p className="text-sm text-slate-400">Survey No: {land.surveyNo}</p>
+//                 <p className="text-sm text-slate-500 dark:text-slate-400">Survey No: {land.surveyNo}</p>
 //               </div>
 
 //               <div className="grid grid-cols-2 gap-4 py-3 border-t border-b border-slate-700">
 //                 <div>
-//                   <p className="text-xs text-slate-500 uppercase font-semibold">Area</p>
-//                   <p className="text-lg font-bold text-white">{land.area} Sq.ft</p>
+//                   <p className="text-xs text-slate-500 dark:text-slate-500 uppercase font-semibold">Area</p>
+//                   <p className="text-lg font-bold text-slate-900 dark:text-white">{land.area} Sq.ft</p>
 //                 </div>
 //                 <div>
-//                   <p className="text-xs text-slate-500 uppercase font-semibold">Land ID</p>
+//                   <p className="text-xs text-slate-500 dark:text-slate-500 uppercase font-semibold">Land ID</p>
 //                   <p className="text-lg font-bold text-emerald-400">#{land.id}</p>
 //                 </div>
 //               </div>
@@ -979,7 +1042,7 @@ export default Dashboard;
 //       {filteredLands.length === 0 && (
 //         <div className="text-center py-12">
 //           <Home className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-//           <p className="text-slate-400 text-lg">No properties found</p>
+//           <p className="text-slate-500 dark:text-slate-400 text-lg">No properties found</p>
 //         </div>
 //       )}
 //     </section>
@@ -1036,22 +1099,22 @@ export default Dashboard;
 //     <>
 //       {/* Backdrop */}
 //       <div
-//         className="fixed inset-0 bg-black/50 z-50"
+//         className="fixed inset-0 bg-slate-900/40 dark:bg-black/50 z-50"
 //         onClick={onClose}
 //       ></div>
 
 //       {/* Modal */}
 //       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-//         <div className="bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full shadow-2xl">
+//         <div className="bg-white dark:bg-slate-800 border border-slate-700 rounded-xl max-w-md w-full shadow-2xl">
 //           {/* Header */}
 //           <div className="flex justify-between items-center p-6 border-b border-slate-700">
 //             <div>
-//               <h2 className="text-xl font-bold text-white">Initiate Transfer</h2>
-//               <p className="text-sm text-slate-400 mt-1">{land.location}</p>
+//               <h2 className="text-xl font-bold text-slate-900 dark:text-white">Initiate Transfer</h2>
+//               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{land.location}</p>
 //             </div>
 //             <button
 //               onClick={onClose}
-//               className="text-slate-400 hover:text-white transition-all"
+//               className="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all"
 //             >
 //               <X className="w-6 h-6" />
 //             </button>
@@ -1060,24 +1123,24 @@ export default Dashboard;
 //           {/* Body */}
 //           <div className="p-6 space-y-4">
 //             {/* Property Details Summary */}
-//             <div className="bg-slate-700/50 border border-slate-700 rounded-lg p-4 space-y-2">
+//             <div className="bg-slate-200/80 dark:bg-slate-700/50 border border-slate-700 rounded-lg p-4 space-y-2">
 //               <div className="flex justify-between">
-//                 <span className="text-slate-400 text-sm">Survey No:</span>
-//                 <span className="text-white font-semibold">{land.surveyNo}</span>
+//                 <span className="text-slate-500 dark:text-slate-400 text-sm">Survey No:</span>
+//                 <span className="text-slate-900 dark:text-white font-semibold">{land.surveyNo}</span>
 //               </div>
 //               <div className="flex justify-between">
-//                 <span className="text-slate-400 text-sm">Area:</span>
-//                 <span className="text-white font-semibold">{land.area} Sq.ft</span>
+//                 <span className="text-slate-500 dark:text-slate-400 text-sm">Area:</span>
+//                 <span className="text-slate-900 dark:text-white font-semibold">{land.area} Sq.ft</span>
 //               </div>
 //               <div className="flex justify-between">
-//                 <span className="text-slate-400 text-sm">Current Price:</span>
+//                 <span className="text-slate-500 dark:text-slate-400 text-sm">Current Price:</span>
 //                 <span className="text-emerald-400 font-semibold">{land.price}</span>
 //               </div>
 //             </div>
 
 //             {/* Buyer Address Input */}
 //             <div>
-//               <label className="block text-sm font-semibold text-white mb-2">
+//               <label className="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
 //                 Buyer Wallet Address
 //               </label>
 //               <input
@@ -1085,13 +1148,13 @@ export default Dashboard;
 //                 placeholder="0x742d35Cc6634C0532925a3b844Bc622e4A8a4C0f"
 //                 value={buyerAddress}
 //                 onChange={(e) => setBuyerAddress(e.target.value)}
-//                 className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
+//                 className="w-full bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
 //               />
 //             </div>
 
 //             {/* Offer Price Input */}
 //             <div>
-//               <label className="block text-sm font-semibold text-white mb-2">
+//               <label className="block text-sm font-semibold text-slate-900 dark:text-white mb-2">
 //                 Offered Price (in ETH)
 //               </label>
 //               <input
@@ -1099,7 +1162,7 @@ export default Dashboard;
 //                 placeholder="25.5"
 //                 value={offerPrice}
 //                 onChange={(e) => setOfferPrice(e.target.value)}
-//                 className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
+//                 className="w-full bg-slate-200 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-400"
 //               />
 //             </div>
 
@@ -1116,7 +1179,7 @@ export default Dashboard;
 //           <div className="flex gap-3 p-6 border-t border-slate-700">
 //             <button
 //               onClick={onClose}
-//               className="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg font-semibold transition-all"
+//               className="flex-1 bg-slate-200 dark:bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg font-semibold transition-all"
 //             >
 //               Cancel
 //             </button>
@@ -1153,8 +1216,8 @@ export default Dashboard;
 //   return (
 //     <section className="space-y-6">
 //       <div>
-//         <h2 className="text-2xl font-bold text-white mb-2">Pending Transfer Requests</h2>
-//         <p className="text-slate-400">Review and manage incoming transfer offers from buyers</p>
+//         <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Pending Transfer Requests</h2>
+//         <p className="text-slate-500 dark:text-slate-400">Review and manage incoming transfer offers from buyers</p>
 //       </div>
 
 //       {/* Requests Table */}
@@ -1164,12 +1227,12 @@ export default Dashboard;
 //             {requests.map((request) => (
 //               <div
 //                 key={request.id}
-//                 className="bg-slate-800 border border-slate-700 rounded-lg p-6 hover:border-emerald-400/50 transition-all"
+//                 className="bg-white dark:bg-slate-800 border border-slate-700 rounded-lg p-6 hover:border-emerald-400/50 transition-all"
 //               >
 //                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center mb-4">
 //                   {/* Buyer Info */}
 //                   <div>
-//                     <p className="text-xs text-slate-500 uppercase font-semibold mb-1">
+//                     <p className="text-xs text-slate-500 dark:text-slate-500 uppercase font-semibold mb-1">
 //                       Buyer Address
 //                     </p>
 //                     <p className="text-white font-mono text-sm">
@@ -1179,15 +1242,15 @@ export default Dashboard;
 
 //                   {/* Land Location */}
 //                   <div>
-//                     <p className="text-xs text-slate-500 uppercase font-semibold mb-1">
+//                     <p className="text-xs text-slate-500 dark:text-slate-500 uppercase font-semibold mb-1">
 //                       Property
 //                     </p>
-//                     <p className="text-white font-semibold">{request.landLocation}</p>
+//                     <p className="text-slate-900 dark:text-white font-semibold">{request.landLocation}</p>
 //                   </div>
 
 //                   {/* Offered Price */}
 //                   <div>
-//                     <p className="text-xs text-slate-500 uppercase font-semibold mb-1">
+//                     <p className="text-xs text-slate-500 dark:text-slate-500 uppercase font-semibold mb-1">
 //                       Offered Price
 //                     </p>
 //                     <p className="text-emerald-400 font-bold text-lg">
@@ -1198,7 +1261,7 @@ export default Dashboard;
 //                   {/* Status & Time */}
 //                   <div className="flex items-center justify-between md:justify-end gap-2">
 //                     {getStatusBadge(request.status)}
-//                     <span className="text-xs text-slate-500">{request.timestamp}</span>
+//                     <span className="text-xs text-slate-500 dark:text-slate-500">{request.timestamp}</span>
 //                   </div>
 //                 </div>
 
@@ -1208,7 +1271,7 @@ export default Dashboard;
 //                     <CheckCircle className="w-4 h-4" />
 //                     <span>Accept Offer</span>
 //                   </button>
-//                   <button className="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg font-semibold transition-all flex items-center justify-center space-x-2">
+//                   <button className="flex-1 bg-slate-200 dark:bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-lg font-semibold transition-all flex items-center justify-center space-x-2">
 //                     <AlertCircle className="w-4 h-4" />
 //                     <span>Reject</span>
 //                   </button>
@@ -1218,9 +1281,9 @@ export default Dashboard;
 //           </div>
 //         </div>
 //       ) : (
-//         <div className="text-center py-12 bg-slate-800 border border-slate-700 rounded-lg">
+//         <div className="text-center py-12 bg-white dark:bg-slate-800 border border-slate-700 rounded-lg">
 //           <Clock className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-//           <p className="text-slate-400 text-lg">No pending requests at the moment</p>
+//           <p className="text-slate-500 dark:text-slate-400 text-lg">No pending requests at the moment</p>
 //         </div>
 //       )}
 //     </section>
@@ -1264,8 +1327,8 @@ export default Dashboard;
 //         {activeSection === 'transfer' && (
 //           <div className="text-center py-12">
 //             <Send className="w-16 h-16 text-slate-700 mx-auto mb-4" />
-//             <h2 className="text-2xl font-bold text-white mb-2">Initiate Transfer</h2>
-//             <p className="text-slate-400 mb-6">
+//             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Initiate Transfer</h2>
+//             <p className="text-slate-500 dark:text-slate-400 mb-6">
 //               Select a property from "My Properties" to initiate a transfer
 //             </p>
 //             <button

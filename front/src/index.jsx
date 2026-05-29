@@ -8,6 +8,7 @@ import BuyerDashboard from './Dashboard/BuyerDashboard';
 import OfficialDashboard from './Dashboard/OfficialDashboard';
 import PropertyDetailsPage from './Dashboard/PropertyDetailsPage';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { ThemeProvider } from './theme/ThemeContext';
 
 const router = createBrowserRouter([
   {
@@ -39,8 +40,9 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-    
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );
 

@@ -17,12 +17,21 @@ import {
   FileText,
   DollarSign,
   Copy,
+  LineChart,
 } from 'lucide-react';
 import Progress from './Progress';
 import { PHASES, DEMO_SURVEY_NO, getDemoState, setDemoPhase } from './demoTransferStore';
 
 const DEMO_UPDATE_EVENT = 'goland-demo-update';
 import { getMarketplaceProperties, getPropertyById, toMarketplaceListItem } from './propertyCatalog';
+import ThemeToggle from '../theme/ThemeToggle';
+import TransactionHistorySection from './TransactionHistorySection';
+import EthInrTrendPanel from './EthInrTrendPanel';
+import {
+  appendTransaction,
+  TX_TYPES,
+  TX_STATUS,
+} from './transactionLogStore';
 
 // import { sign } from 'node:crypto';
  //
@@ -66,6 +75,8 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
     { id: 'verify', label: 'Verify Land', icon: Shield },
     { id: 'offers', label: 'My Offers', icon: FileText },
     { id: 'land-status', label: 'Land Status', icon: TrendingUp },
+    { id: 'transactions', label: 'Transactions', icon: FileText },
+    { id: 'market-insights', label: 'Market Insights', icon: LineChart },
   ];
 
   const truncateAddress = (address) => {
@@ -73,7 +84,7 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
   };
 
   return (
-    <header className="sticky top-0 w-full bg-slate-900 border-b border-slate-800 z-40 shadow-lg shadow-black/20">
+    <header className="sticky top-0 w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-40 shadow-lg shadow-slate-200/70 dark:shadow-black/20">
       <div className=" px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo & Title */}
@@ -82,17 +93,17 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
               <Shield className="w-6 h-6 text-emerald-400" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white tracking-tight">
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
                 Go<span className="text-emerald-400">Land</span>
               </h1>
-              <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">
+              <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Buyer Portal
               </p>
             </div>
           </div>
 
           {/* Navigation Tabs (Desktop) */}
-          <nav className="hidden md:flex space-x-1 bg-slate-800/50 p-1 rounded-xl border border-slate-700/50">
+          <nav className="hidden md:flex space-x-1 bg-slate-100/80 dark:bg-slate-800/50 p-1 rounded-xl border border-slate-200 dark:border-slate-700/50">
             {sections.map((section) => {
               const Icon = section.icon;
               const isActive = activeSection === section.id;
@@ -102,11 +113,11 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
                   onClick={() => setActiveSection(section.id)}
                   className={`flex items-center space-x-2 px-4 py-2.5 rounded-lg transition-all duration-200 text-sm font-medium ${
                     isActive
-                      ? 'bg-slate-700 text-emerald-400 shadow-sm'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                      ? 'bg-slate-200 dark:bg-slate-700 text-emerald-400 shadow-sm'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-700/50'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-400' : 'text-slate-500'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-400' : 'text-slate-500 dark:text-slate-500'}`} />
                   <span>{section.label}</span>
                 </button>
               );
@@ -115,21 +126,22 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
 
           {/* Account Info */}
           <div className="flex items-center space-x-4">
-            <div className="hidden sm:flex items-center space-x-3 bg-slate-950 px-4 py-2 rounded-full border border-slate-800">
+            <ThemeToggle />
+            <div className="hidden sm:flex items-center space-x-3 bg-slate-100 dark:bg-slate-950 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-800">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               {account ? (
                 <div className="flex items-center space-x-3">
                   <div className="flex items-center space-x-2">
-                    <span className="text-xs font-mono text-slate-300 tracking-wide">{truncateAddress(account)}</span>
-                    <button onClick={copyAddress} className="text-slate-400 hover:text-emerald-400 p-1 rounded-md">
+                    <span className="text-xs font-mono text-slate-600 dark:text-slate-300 tracking-wide">{truncateAddress(account)}</span>
+                    <button onClick={copyAddress} className="text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1 rounded-md">
                       <Copy className="w-4 h-4" />
                     </button>
                     {copied && <span className="text-xs text-emerald-400">Copied</span>}
                   </div>
-                  <div className="text-xs text-slate-400 font-mono">{balance ? `${balance} ETH` : ''}</div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 font-mono">{balance ? `${balance} ETH` : ''}</div>
                 </div>
               ) : (
-                <button onClick={connectWallet} className="text-xs font-mono text-emerald-400 bg-slate-800 px-3 py-1 rounded-md">
+                <button onClick={connectWallet} className="text-xs font-mono text-emerald-400 bg-white dark:bg-slate-800 px-3 py-1 rounded-md">
                   Connect Wallet
                 </button>
               )}
@@ -138,7 +150,7 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 text-slate-300 hover:text-emerald-400 hover:bg-slate-800 rounded-lg transition-colors"
+              className="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -147,7 +159,7 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-800 py-4 space-y-2 animate-in slide-in-from-top-5 duration-200">
+          <div className="md:hidden border-t border-slate-200 dark:border-slate-800 py-4 space-y-2 animate-in slide-in-from-top-5 duration-200">
             {sections.map((section) => {
               const Icon = section.icon;
               return (
@@ -160,7 +172,7 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
                   className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${
                     activeSection === section.id
                       ? 'bg-emerald-500/10 text-emerald-400 border-l-4 border-emerald-500'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                      : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -168,15 +180,15 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
                 </button>
               );
             })}
-            <div className="mt-4 px-4 pt-4 border-t border-slate-800">
-              <div className="flex items-center space-x-2 text-slate-400 bg-slate-900 p-3 rounded-lg">
+            <div className="mt-4 px-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+              <div className="flex items-center space-x-2 text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900 p-3 rounded-lg">
                 <Wallet className="w-4 h-4" />
                 {account ? (
       /* We use a Fragment (<>...</>) to group the address and balance as ONE element */
       <>
         <div className="flex items-center space-x-2">
           <span className="text-xs font-mono">{truncateAddress(account)}</span>
-          <button onClick={copyAddress} className="text-slate-400 hover:text-emerald-400 p-1 rounded-md">
+          <button onClick={copyAddress} className="text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 p-1 rounded-md">
             <Copy className="w-4 h-4" />
           </button>
         </div>
@@ -187,7 +199,7 @@ const BuyerHeader = ({ activeSection, setActiveSection, account, connectWallet, 
         </span>
       </>
     ) : (
-      <button onClick={connectWallet} className="text-xs font-mono text-emerald-400 bg-slate-800 px-3 py-1 rounded-md">
+      <button onClick={connectWallet} className="text-xs font-mono text-emerald-400 bg-white dark:bg-slate-800 px-3 py-1 rounded-md">
         Connect Wallet
       </button>
     )}
@@ -229,14 +241,14 @@ const VerifyLandSection = () => {
   };
 
   return (
-    <section className="bg-slate-900 text-white space-y-8">
+    <section className="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white space-y-8">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-500/10 border border-emerald-500/20 rounded-2xl p-12 shadow-xl shadow-black/20">
+      <div className="bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-500/10 border border-emerald-500/20 rounded-2xl p-12 shadow-xl shadow-slate-200/70 dark:shadow-black/20">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-4">
             Verify Property Ownership
           </h1>
-          <p className="text-slate-300 text-lg">
+          <p className="text-slate-600 dark:text-slate-300 text-lg">
             Search blockchain records to verify land ownership and dispute status
           </p>
         </div>
@@ -244,20 +256,20 @@ const VerifyLandSection = () => {
         {/* Search Bar */}
         <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto">
           <div className="flex-1 relative">
-            <Search className="absolute left-4 top-4 w-5 h-5 text-slate-500" />
+            <Search className="absolute left-4 top-4 w-5 h-5 text-slate-500 dark:text-slate-500" />
             <input
               type="text"
               placeholder="Enter Parcel ID (e.g., PUNE-2024-001)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-12 pr-4 py-4 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50 transition-all"
+              className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl pl-12 pr-4 py-4 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/50 transition-all"
             />
           </div>
           <button
             onClick={handleSearch}
             disabled={isSearching}
-            className="bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-700 text-white px-8 py-4 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 shadow-lg shadow-emerald-500/20 whitespace-nowrap"
+            className="bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-200 dark:bg-slate-700 text-white px-8 py-4 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 shadow-lg shadow-emerald-500/20 whitespace-nowrap"
           >
             {isSearching ? (
               <>
@@ -276,27 +288,27 @@ const VerifyLandSection = () => {
 
       {/* Verification Result */}
       {verificationResult && (
-        <div className="bg-slate-900 border border-emerald-500/30 rounded-2xl p-8 shadow-xl shadow-black/20">
+        <div className="bg-white dark:bg-slate-900 border border-emerald-500/30 rounded-2xl p-8 shadow-xl shadow-slate-200/70 dark:shadow-black/20">
           <div className="flex items-center space-x-3 mb-6">
             <CheckCircle className="w-6 h-6 text-emerald-400" />
-            <h2 className="text-2xl font-bold text-white">Verification Result</h2>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Verification Result</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Property Details */}
             <div className="space-y-4">
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4">
-                <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">
+              <div className="bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+                <p className="text-slate-500 dark:text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">
                   Survey Number
                 </p>
                 <p className="text-white font-mono text-lg">{verificationResult.surveyNo}</p>
               </div>
 
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4">
-                <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">
+              <div className="bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+                <p className="text-slate-500 dark:text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">
                   Owner Address
                 </p>
-                <p className="text-slate-300 font-mono text-sm break-all">
+                <p className="text-slate-600 dark:text-slate-300 font-mono text-sm break-all">
                   {verificationResult.ownerAddress}
                 </p>
               </div>
@@ -304,8 +316,8 @@ const VerifyLandSection = () => {
 
             {/* Status & History */}
             <div className="space-y-4">
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4">
-                <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">
+              <div className="bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+                <p className="text-slate-500 dark:text-slate-500 text-xs font-bold uppercase tracking-wider mb-2">
                   Litigation Status
                 </p>
                 <div className="flex items-center space-x-2">
@@ -323,11 +335,11 @@ const VerifyLandSection = () => {
                 </div>
               </div>
 
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-4">
-                <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">
+              <div className="bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+                <p className="text-slate-500 dark:text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">
                   Last Transaction
                 </p>
-                <p className="text-slate-300 font-mono text-sm">
+                <p className="text-slate-600 dark:text-slate-300 font-mono text-sm">
                   {verificationResult.lastTransactionDate}
                 </p>
               </div>
@@ -342,10 +354,10 @@ const VerifyLandSection = () => {
 // ==================== MARKETPLACE SECTION ====================
 const MarketplaceSection = ({ properties, onMakeOfferClick, onPropertyClick }) => {
   return (
-    <section className="bg-slate-900 min-h-screen text-white ">
+    <section className="bg-slate-50 dark:bg-slate-900 min-h-screen text-slate-900 dark:text-white">
       <div className='bg-slate-900'>
-        <h1 className="text-3xl font-bold text-white mb-2">Marketplace</h1>
-        <p className="text-slate-400">Browse and make offers on available properties</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">Marketplace</h1>
+        <p className="text-slate-500 dark:text-slate-400">Browse and make offers on available properties</p>
       </div>
 
       {/* Properties Grid */}
@@ -362,11 +374,11 @@ const MarketplaceSection = ({ properties, onMakeOfferClick, onPropertyClick }) =
                 onPropertyClick(property);
               }
             }}
-            className="group bg-slate-800 rounded-2xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-black/20 cursor-pointer border border-transparent hover:border-emerald-500/20"
+            className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-slate-200/70 dark:shadow-black/20 cursor-pointer border border-transparent hover:border-emerald-500/20"
           >
             {/* Property Image */}
-            <div className="relative w-full h-40 bg-slate-800 overflow-hidden">
-              <span className="absolute bottom-2 left-2 text-[10px] font-semibold uppercase tracking-wide text-white/0 group-hover:text-white/90 bg-slate-950/0 group-hover:bg-slate-950/80 px-2 py-1 rounded transition-all z-10">
+            <div className="relative w-full h-40 bg-white dark:bg-slate-800 overflow-hidden">
+              <span className="absolute bottom-2 left-2 text-[10px] font-semibold uppercase tracking-wide text-white/0 group-hover:text-slate-900 dark:hover:text-white/90 bg-slate-950/0 group-hover:bg-white/90 dark:bg-slate-950/80 px-2 py-1 rounded transition-all z-10">
                 View details
               </span>
               <img
@@ -374,7 +386,7 @@ const MarketplaceSection = ({ properties, onMakeOfferClick, onPropertyClick }) =
                 alt={property.location}
                 className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
               />
-              <div className="absolute top-3 right-3 bg-slate-950/90 backdrop-blur-sm text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full text-xs font-bold shadow-lg">
+              <div className="absolute top-3 right-3 bg-white/95 dark:bg-slate-950/90 backdrop-blur-sm text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full text-xs font-bold shadow-lg">
                 {property.price}
               </div>
               {property.listingStatus === 'Sold' && (
@@ -387,21 +399,21 @@ const MarketplaceSection = ({ properties, onMakeOfferClick, onPropertyClick }) =
             {/* Property Info */}
             <div className="p-4 space-y-4">
               <div>
-                <h3 className="text-sm font-bold text-white group-hover:text-emerald-400 transition-colors line-clamp-1">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors line-clamp-1">
                   {property.location}
                 </h3>
-                <p className="text-xs font-mono text-slate-500 mt-1">{property.surveyNo}</p>
+                <p className="text-xs font-mono text-slate-500 dark:text-slate-500 mt-1">{property.surveyNo}</p>
               </div>
 
               <div className="flex items-center justify-between py-2 0">
                 <div>
-                  <p className="text-[10px] text-slate-500 uppercase font-bold">Area</p>
-                  <p className="text-xs font-semibold text-slate-200">
-                    {property.area} <span className="text-slate-500">Sq.ft</span>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-500 uppercase font-bold">Area</p>
+                  <p className="text-xs font-semibold text-slate-700 dark:text-slate-200">
+                    {property.area} <span className="text-slate-500 dark:text-slate-500">Sq.ft</span>
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[10px] text-slate-500 uppercase font-bold">Status</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-500 uppercase font-bold">Status</p>
                   <p className={`text-xs font-bold ${
                     property.listingStatus === 'Sold'
                       ? 'text-red-400'
@@ -423,7 +435,7 @@ const MarketplaceSection = ({ properties, onMakeOfferClick, onPropertyClick }) =
                 disabled={property.listingStatus === 'Sold'}
                 className={`w-full py-2 rounded-lg font-semibold transition-all text-sm shadow-lg active:scale-95 ${
                   property.listingStatus === 'Sold'
-                    ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
+                    ? 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-500 cursor-not-allowed'
                     : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/10'
                 }`}
               >
@@ -488,10 +500,10 @@ const MyOffersSection = ({ offers, demoPhase, onClaim }) => {
   };
 
   return (
-    <section className="bg-slate-900 text-white space-y-8 ">
+    <section className="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-white mb-2">My Offers</h1>
-        <p className="text-slate-400">Track offers you've sent to property sellers</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">My Offers</h1>
+        <p className="text-slate-500 dark:text-slate-400">Track offers you've sent to property sellers</p>
       </div>
 
       {/* Offers Table */}
@@ -500,7 +512,7 @@ const MyOffersSection = ({ offers, demoPhase, onClaim }) => {
           {offers.map((offer) => (
             <div
               key={offer.id}
-              className="bg-slate-800  rounded-2xl p-6 hover:border-emerald-500/30 transition-all hover:bg-slate-800/50"
+              className="bg-white dark:bg-slate-800  rounded-2xl p-6 hover:border-emerald-500/30 transition-all hover:bg-slate-100/80 dark:bg-slate-800/50"
             >
               <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
                 {/* Property Info */}
@@ -508,13 +520,13 @@ const MyOffersSection = ({ offers, demoPhase, onClaim }) => {
                   <p className="text-[10px] text-gray uppercase font-bold tracking-wider mb-1">
                     Property
                   </p>
-                  <p className="text-white font-semibold text-sm">{offer.propertyLocation}</p>
-                  <p className="text-xs font-mono text-slate-500 mt-1">{offer.surveyNo}</p>
+                  <p className="text-slate-900 dark:text-white font-semibold text-sm">{offer.propertyLocation}</p>
+                  <p className="text-xs font-mono text-slate-500 dark:text-slate-500 mt-1">{offer.surveyNo}</p>
                 </div>
 
                 {/* Offer Amount */}
                 <div>
-                  <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-500 uppercase font-bold tracking-wider mb-1">
                     Offer Amount
                   </p>
                   <p className="text-emerald-400 font-bold text-lg">{offer.offerAmount}</p>
@@ -522,7 +534,7 @@ const MyOffersSection = ({ offers, demoPhase, onClaim }) => {
 
                 {/* Status */}
                 <div>
-                  <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-500 uppercase font-bold tracking-wider mb-1">
                     Status
                   </p>
                   {getStatusBadge(offer.status)}
@@ -530,10 +542,10 @@ const MyOffersSection = ({ offers, demoPhase, onClaim }) => {
 
                 {/* Timestamp */}
                 <div className="md:col-span-2">
-                  <p className="text-[10px] text-slate-500 uppercase font-bold tracking-wider mb-1">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-500 uppercase font-bold tracking-wider mb-1">
                     Sent On
                   </p>
-                  <p className="text-slate-300 font-mono text-sm">{offer.timestamp}</p>
+                  <p className="text-slate-600 dark:text-slate-300 font-mono text-sm">{offer.timestamp}</p>
                 </div>
 
                 <div className="md:col-span-5">
@@ -560,7 +572,7 @@ const MyOffersSection = ({ offers, demoPhase, onClaim }) => {
                     }
                     if (demoAction?.type === 'claimed') {
                       return (
-                        <p className="mt-2 text-sm font-semibold text-slate-400 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-center">
+                        <p className="mt-2 text-sm font-semibold text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-center">
                           Claimed
                         </p>
                       );
@@ -592,10 +604,10 @@ const MyOffersSection = ({ offers, demoPhase, onClaim }) => {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 bg-slate-900 border border-slate-800 border-dashed rounded-2xl">
+        <div className="text-center py-16 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 border-dashed rounded-2xl">
           <Send className="w-16 h-16 text-slate-800 mx-auto mb-4" />
-          <p className="text-slate-400 text-lg">You haven't made any offers yet</p>
-          <p className="text-slate-500 text-sm mt-2">Browse the marketplace and make your first offer</p>
+          <p className="text-slate-500 dark:text-slate-400 text-lg">You haven't made any offers yet</p>
+          <p className="text-slate-500 dark:text-slate-500 text-sm mt-2">Browse the marketplace and make your first offer</p>
         </div>
       )}
     </section>
@@ -603,7 +615,7 @@ const MyOffersSection = ({ offers, demoPhase, onClaim }) => {
 };
 
 // ==================== MAKE OFFER MODAL ====================
-const MakeOfferModal = ({ isOpen, property, onClose }) => {
+const MakeOfferModal = ({ isOpen, property, onClose, buyerAccount, onRecorded }) => {
   const [offerPrice, setOfferPrice] = useState('');
   const [remarks, setRemarks] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -618,6 +630,21 @@ const MakeOfferModal = ({ isOpen, property, onClose }) => {
     // Simulated blockchain submission
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
+    const catalog = getPropertyById(property.id);
+    appendTransaction({
+      role: 'buyer',
+      type: TX_TYPES.OFFER_SUBMITTED,
+      status: TX_STATUS.CONFIRMED,
+      landId: property.id,
+      surveyNo: property.surveyNo,
+      propertyLocation: property.location,
+      amountEth: offerPrice,
+      counterparty: catalog?.ownerAddress || '',
+      walletAddress: buyerAccount || 'not_connected',
+      network: 'demo',
+    });
+    if (onRecorded) onRecorded();
+
     alert(`Offer of ${offerPrice} ETH sent to seller!`);
     setOfferPrice('');
     setRemarks('');
@@ -631,24 +658,24 @@ const MakeOfferModal = ({ isOpen, property, onClose }) => {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 transition-opacity"
+        className="fixed inset-0 bg-white/90 dark:bg-slate-950/80 backdrop-blur-sm z-50 transition-opacity"
         onClick={onClose}
       ></div>
 
       {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full shadow-2xl shadow-black/50 transform transition-all">
+        <div className="bg-white dark:bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full shadow-2xl shadow-slate-300/50 dark:shadow-black/50 transform transition-all">
           {/* Header */}
-          <div className="flex justify-between items-center p-6 border-b border-slate-800">
+          <div className="flex justify-between items-center p-6 border-b border-slate-200 dark:border-slate-800">
             <div>
-              <h2 className="text-xl font-bold text-white">Make an Offer</h2>
-              <p className="text-sm text-slate-400 mt-1 flex items-center gap-1">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">Make an Offer</h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-1">
                 <MapPin className="w-3 h-3" /> {property.location}
               </p>
             </div>
             <button
               onClick={onClose}
-              className="text-slate-500 hover:text-white hover:bg-slate-800 p-2 rounded-lg transition-all"
+              className="text-slate-500 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-all"
             >
               <X className="w-5 h-5" />
             </button>
@@ -657,30 +684,30 @@ const MakeOfferModal = ({ isOpen, property, onClose }) => {
           {/* Body */}
           <div className="p-6 space-y-5">
             {/* Property Summary */}
-            <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
+            <div className="bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">
+                <span className="text-slate-500 dark:text-slate-500 text-xs font-bold uppercase tracking-wider">
                   Survey No
                 </span>
-                <span className="text-slate-200 font-mono text-sm">{property.surveyNo}</span>
+                <span className="text-slate-700 dark:text-slate-200 font-mono text-sm">{property.surveyNo}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">
+                <span className="text-slate-500 dark:text-slate-500 text-xs font-bold uppercase tracking-wider">
                   List Price
                 </span>
                 <span className="text-emerald-400 font-bold">{property.price}</span>
               </div>
-              <div className="flex justify-between items-center pt-2 border-t border-slate-800">
-                <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">
+              <div className="flex justify-between items-center pt-2 border-t border-slate-200 dark:border-slate-800">
+                <span className="text-slate-500 dark:text-slate-500 text-xs font-bold uppercase tracking-wider">
                   Area
                 </span>
-                <span className="text-slate-200 text-sm">{property.area} Sq.ft</span>
+                <span className="text-slate-700 dark:text-slate-200 text-sm">{property.area} Sq.ft</span>
               </div>
             </div>
 
             {/* Offer Price Input */}
             <div>
-              <label className="block text-sm font-bold text-white mb-2 flex items-center space-x-1">
+              <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2 flex items-center space-x-1">
                 <DollarSign className="w-4 h-4 text-emerald-400" />
                 <span>Offer Price (ETH)</span>
               </label>
@@ -689,13 +716,13 @@ const MakeOfferModal = ({ isOpen, property, onClose }) => {
                 placeholder="e.g., 23.5"
                 value={offerPrice}
                 onChange={(e) => setOfferPrice(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors"
               />
             </div>
 
             {/* Remarks Input */}
             <div>
-              <label className="block text-sm font-bold text-white mb-2 flex items-center space-x-1">
+              <label className="block text-sm font-bold text-slate-900 dark:text-white mb-2 flex items-center space-x-1">
                 <FileText className="w-4 h-4 text-emerald-400" />
                 <span>Remarks (Optional)</span>
               </label>
@@ -704,7 +731,7 @@ const MakeOfferModal = ({ isOpen, property, onClose }) => {
                 value={remarks}
                 onChange={(e) => setRemarks(e.target.value)}
                 rows={3}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors resize-none"
+                className="w-full bg-white dark:bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 transition-colors resize-none"
               />
             </div>
 
@@ -718,17 +745,17 @@ const MakeOfferModal = ({ isOpen, property, onClose }) => {
           </div>
 
           {/* Footer */}
-          <div className="flex gap-3 p-6 border-t border-slate-800 bg-slate-900/50 rounded-b-2xl">
+          <div className="flex gap-3 p-6 border-t border-slate-200 dark:border-slate-800 bg-slate-100/80 dark:bg-slate-900/50 rounded-b-2xl">
             <button
               onClick={onClose}
-              className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 rounded-xl font-semibold transition-all"
+              className="flex-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 py-3 rounded-xl font-semibold transition-all"
             >
               Cancel
             </button>
             <button
               onClick={handleSubmit}
               disabled={isSubmitting}
-              className="flex-1 bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-700 disabled:text-slate-500 text-white py-3 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 shadow-lg shadow-emerald-500/20"
+              className="flex-1 bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-200 dark:bg-slate-700 disabled:text-slate-400 dark:disabled:text-slate-500 dark:text-slate-500 text-white py-3 rounded-xl font-bold transition-all flex items-center justify-center space-x-2 shadow-lg shadow-emerald-500/20"
             >
               {isSubmitting ? (
                 <>
@@ -761,6 +788,21 @@ const BuyerDashboard = () => {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [myPurchasedLands, setMyPurchasedLands] = useState([]);
   const [buyerPhase, setBuyerPhase] = useState(PHASES.IDLE);
+  const [actionToast, setActionToast] = useState(null);
+  const [txSurveyFilter, setTxSurveyFilter] = useState('');
+
+  const showRecordedToast = (message) => {
+    setActionToast(message);
+    setTimeout(() => setActionToast(null), 6000);
+  };
+
+  useEffect(() => {
+    if (location.state?.filterSurveyNo) {
+      setTxSurveyFilter(location.state.filterSurveyNo);
+      setActiveSection('transactions');
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, location.pathname, navigate]);
 
   useEffect(() => {
     const navEntry = performance.getEntriesByType('navigation')[0];
@@ -810,6 +852,23 @@ const BuyerDashboard = () => {
       });
 
       await tx.wait();
+
+      const catalog = getPropertyById(offer.id) || getMarketplaceProperties().find((p) => p.surveyNo === offer.surveyNo);
+      const amountMatch = offer.offerAmount?.match(/[\d.]+/);
+      appendTransaction({
+        role: 'buyer',
+        type: TX_TYPES.OWNERSHIP_CLAIMED,
+        txHash: tx.hash,
+        status: TX_STATUS.CONFIRMED,
+        landId: catalog?.id ?? offer.id,
+        surveyNo: offer.surveyNo,
+        propertyLocation: offer.propertyLocation,
+        amountEth: amountMatch ? amountMatch[0] : '35',
+        counterparty: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+        walletAddress: account || 'not_connected',
+        network: 'hardhat',
+      });
+      showRecordedToast('Claim recorded in Transaction History.');
 
       // Add the property to the Buyer's 'Purchased' list
       const newlyAcquiredLand = {
@@ -918,7 +977,20 @@ const BuyerDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b1220] text-[#a8b3cf]">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0b1220] text-slate-600 dark:text-[#a8b3cf]">
+      {actionToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-slate-900 text-white px-5 py-3 rounded-xl shadow-xl border border-emerald-500/30 text-sm">
+          <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+          <span>{actionToast}</span>
+          <button
+            type="button"
+            onClick={() => setActiveSection('transactions')}
+            className="text-emerald-400 font-semibold hover:underline"
+          >
+            View history
+          </button>
+        </div>
+      )}
       <BuyerHeader
         activeSection={activeSection}
         setActiveSection={setActiveSection}
@@ -946,7 +1018,21 @@ const BuyerDashboard = () => {
           />
         )}
         {activeSection === 'land-status' && <Progress />}
+
+        {activeSection === 'transactions' && (
+          <TransactionHistorySection role="buyer" initialSurveyFilter={txSurveyFilter} />
+        )}
+
+        {activeSection === 'market-insights' && <EthInrTrendPanel />}
       </main>
+
+      <MakeOfferModal
+        isOpen={isOfferModalOpen}
+        property={selectedProperty}
+        onClose={handleCloseOfferModal}
+        buyerAccount={account}
+        onRecorded={() => showRecordedToast('Offer recorded in Transaction History.')}
+      />
     </div>
   );
 };
