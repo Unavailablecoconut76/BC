@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { ethers } from 'ethers';
 import Progress from './Progress';
+import { DEMO_SURVEY_NO, initiateDemoTransfer } from './demoTransferStore';
 import land1 from '../../assets/land1.jpg';
 import land2 from '../../assets/land2.jpg';
 import land3 from '../../assets/land3.jpg';
@@ -323,27 +324,33 @@ const MyPropertiesSection = ({ lands, onTransferClick }) => {
     setIsSubmitting(true);
 
     try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const signer = await provider.getSigner();
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
-      // Trigger the MetaMask signature for the "Sale"
-      const tx = await signer.sendTransaction({
-        to: '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
-        value: ethers.parseEther(offerPrice), 
-      });
+      if (land.surveyNo === DEMO_SURVEY_NO) {
+        initiateDemoTransfer({
+          surveyNo: land.surveyNo,
+          landId: land.id,
+          propertyLocation: land.location,
+          offerAmount: `${offerPrice} ETH`,
+          buyer: buyerAddress,
+          seller: '0xDEF1234567890ABC1234567890ABC1234567890',
+        });
+      }
 
-      console.log('Transaction sent! Hash:', tx.hash);
-      await tx.wait();
-
-      // IMPORTANT: Remove the land from the Seller's state immediately
       const updatedLands = myLands.filter(item => item.id !== land.id);
       setMyLands(updatedLands);
 
-      alert(`Transfer of Land #${land.id} initiated! Now switch to the Buyer wallet to claim it.`);
+      alert(
+        land.surveyNo === DEMO_SURVEY_NO
+          ? `Transfer of Land #${land.id} initiated! A pending activity was created on the Official portal.`
+          : `Transfer of Land #${land.id} initiated! Now switch to the Buyer wallet to claim it.`
+      );
+      setBuyerAddress('');
+      setOfferPrice('');
       onClose();
     } catch (error) {
       console.error('Transfer failed:', error);
-      alert('Blockchain transaction failed. Hardhat node may not be active.');
+      alert('Failed to initiate transfer. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

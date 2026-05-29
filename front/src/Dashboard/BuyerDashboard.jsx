@@ -18,6 +18,9 @@ import {
   Copy,
 } from 'lucide-react';
 import Progress from './Progress';
+import { PHASES, DEMO_SURVEY_NO, getDemoState, setDemoPhase } from './demoTransferStore';
+
+const DEMO_UPDATE_EVENT = 'goland-demo-update';
 import land1 from '../../assets/land1.jpg';
 import land2 from '../../assets/land2.jpg';
 import land3 from '../../assets/land3.jpg';
@@ -79,7 +82,8 @@ const DUMMY_MY_OFFERS = [
     surveyNo: 'PUNE-2024-001',
     offerAmount: '24 ETH',
     timestamp: '2024-02-02 14:30:00',
-    status: 'accepted',
+    status: 'pending',
+    isDemoParcel: true,
   },
   {
     id: 2,
@@ -382,7 +386,7 @@ const VerifyLandSection = () => {
 };
 
 // ==================== MARKETPLACE SECTION ====================
-const MarketplaceSection = ({ onMakeOfferClick }) => {
+const MarketplaceSection = ({ properties, onMakeOfferClick }) => {
   return (
     <section className="bg-slate-900 min-h-screen text-white ">
       <div className='bg-slate-900'>
@@ -392,7 +396,7 @@ const MarketplaceSection = ({ onMakeOfferClick }) => {
 
       {/* Properties Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {DUMMY_MARKETPLACE_DATA.map((property) => (
+        {properties.map((property) => (
           <div
             key={property.id}
             className="group bg-slate-800  rounded-2xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-black/20"
@@ -407,6 +411,11 @@ const MarketplaceSection = ({ onMakeOfferClick }) => {
               <div className="absolute top-3 right-3 bg-slate-950/90 backdrop-blur-sm text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded-full text-xs font-bold shadow-lg">
                 {property.price}
               </div>
+              {property.listingStatus === 'Sold' && (
+                <div className="absolute top-3 left-3 bg-red-500/90 text-white px-2 py-1 rounded-full text-xs font-bold uppercase">
+                  Sold
+                </div>
+              )}
             </div>
 
             {/* Property Info */}
@@ -428,20 +437,27 @@ const MarketplaceSection = ({ onMakeOfferClick }) => {
                 <div className="text-right">
                   <p className="text-[10px] text-slate-500 uppercase font-bold">Status</p>
                   <p className={`text-xs font-bold ${
-                    property.litigationStatus === 'Clean'
+                    property.listingStatus === 'Sold'
+                      ? 'text-red-400'
+                      : property.litigationStatus === 'Clean'
                       ? 'text-emerald-400'
                       : 'text-yellow-400'
                   }`}>
-                    {property.litigationStatus}
+                    {property.listingStatus === 'Sold' ? 'Sold' : property.litigationStatus}
                   </p>
                 </div>
               </div>
 
               <button
                 onClick={() => onMakeOfferClick(property)}
-                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-lg font-semibold transition-all text-sm shadow-lg shadow-emerald-500/10 active:scale-95"
+                disabled={property.listingStatus === 'Sold'}
+                className={`w-full py-2 rounded-lg font-semibold transition-all text-sm shadow-lg active:scale-95 ${
+                  property.listingStatus === 'Sold'
+                    ? 'bg-slate-700 text-slate-500 cursor-not-allowed'
+                    : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-emerald-500/10'
+                }`}
               >
-                Make Offer
+                {property.listingStatus === 'Sold' ? 'Sold' : 'Make Offer'}
               </button>
             </div>
           </div>
@@ -451,8 +467,29 @@ const MarketplaceSection = ({ onMakeOfferClick }) => {
   );
 };
 
+const getDemoOfferAction = (offer, demoPhase) => {
+  if (!offer.isDemoParcel) return null;
+  if (demoPhase === PHASES.FINALIZED) {
+    return { type: 'claim' };
+  }
+  if (demoPhase === PHASES.REJECTED) {
+    return { type: 'rejected' };
+  }
+  if (demoPhase === PHASES.CLAIMED) {
+    return { type: 'claimed' };
+  }
+  if (
+    demoPhase === PHASES.INITIATED ||
+    demoPhase === PHASES.REVIEWING ||
+    demoPhase === PHASES.REVIEW_COMPLETE
+  ) {
+    return { type: 'awaiting' };
+  }
+  return null;
+};
+
 // ==================== MY OFFERS SECTION ====================
-const MyOffersSection = () => {
+const MyOffersSection = ({ offers, demoPhase, onClaim }) => {
   const getStatusBadge = (status) => {
     const baseClasses = 'flex items-center space-x-1 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide';
 
@@ -488,9 +525,9 @@ const MyOffersSection = () => {
       </div>
 
       {/* Offers Table */}
-      {DUMMY_MY_OFFERS.length > 0 ? (
+      {offers.length > 0 ? (
         <div className="space-y-4 bg-slate-900">
-          {DUMMY_MY_OFFERS.map((offer) => (
+          {offers.map((offer) => (
             <div
               key={offer.id}
               className="bg-slate-800  rounded-2xl p-6 hover:border-emerald-500/30 transition-all hover:bg-slate-800/50"
@@ -529,15 +566,57 @@ const MyOffersSection = () => {
                   <p className="text-slate-300 font-mono text-sm">{offer.timestamp}</p>
                 </div>
 
-                {offer.status === 'accepted' && (
-                <button 
-                  onClick={() => handleClaimOwnership(offer)}
-                  className="mt-4 w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center space-x-2"
-                >
-                  <CheckCircle className="w-4 h-4" />
-                  <span>Finalize & Claim Ownership</span>
-                </button>
-                )}
+                <div className="md:col-span-5">
+                  {(() => {
+                    const demoAction = getDemoOfferAction(offer, demoPhase);
+                    if (demoAction?.type === 'claim') {
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => onClaim(offer)}
+                          className="mt-2 w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center space-x-2"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                          <span>Finalize &amp; Claim Ownership</span>
+                        </button>
+                      );
+                    }
+                    if (demoAction?.type === 'rejected') {
+                      return (
+                        <p className="mt-2 text-sm font-semibold text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2 text-center">
+                          Rejected by office
+                        </p>
+                      );
+                    }
+                    if (demoAction?.type === 'claimed') {
+                      return (
+                        <p className="mt-2 text-sm font-semibold text-slate-400 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2 text-center">
+                          Claimed
+                        </p>
+                      );
+                    }
+                    if (demoAction?.type === 'awaiting') {
+                      return (
+                        <p className="mt-2 text-sm text-yellow-300 bg-yellow-500/10 border border-yellow-500/20 rounded-xl px-4 py-2 text-center">
+                          Awaiting government review
+                        </p>
+                      );
+                    }
+                    if (offer.status === 'accepted' && !offer.isDemoParcel) {
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => onClaim(offer)}
+                          className="mt-2 w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2 rounded-xl font-bold transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center space-x-2"
+                        >
+                          <CheckCircle className="w-4 h-4" />
+                          <span>Finalize &amp; Claim Ownership</span>
+                        </button>
+                      );
+                    }
+                    return null;
+                  })()}
+                </div>
               </div>
             </div>
           ))}
@@ -700,34 +779,6 @@ const MakeOfferModal = ({ isOpen, property, onClose }) => {
   );
 };
 
-const handleClaimOwnership = async (offer) => {
-  try {
-    const provider = new ethers.BrowserProvider(window.ethereum); //
-    const signer = await provider.getSigner(); //
-    console.log(signer);
-    // Trigger a small confirmation transaction to demonstrate blockchain interaction
-    const tx = await signer.sendTransaction({
-      to: "0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc", // Hardcoded seller or contract address
-      value: ethers.parseEther("24"), // Small fee to "seal" the deal
-    });
-
-    await tx.wait(); //
-
-    // Move the land into the Buyer's owned collection
-    setMyPurchasedLands([...myPurchasedLands, {
-      id: offer.landId || Math.random(),
-      location: offer.propertyLocation,
-      surveyNo: offer.surveyNo,
-      price: offer.offerAmount,
-      image: 'https://via.placeholder.com/350x250/1e293b/10b981?text=Owned+Property'
-    }]);
-
-    alert("Success! The Land Parcel ownership has been updated in the registry.");
-  } catch (err) {
-    console.error("Transfer acceptance failed", err);
-  }
-};
-
 // ==================== MAIN BUYER DASHBOARD ====================
 const BuyerDashboard = () => {
   const [activeSection, setActiveSection] = useState('marketplace');
@@ -737,6 +788,32 @@ const BuyerDashboard = () => {
   const [isOfferModalOpen, setIsOfferModalOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [myPurchasedLands, setMyPurchasedLands] = useState([]);
+  const [buyerPhase, setBuyerPhase] = useState(PHASES.IDLE);
+
+  useEffect(() => {
+    const navEntry = performance.getEntriesByType('navigation')[0];
+    const isPageReload = navEntry?.type === 'reload';
+    if (!isPageReload) {
+      setBuyerPhase(getDemoState().phase);
+    }
+
+    const syncFromStore = () => setBuyerPhase(getDemoState().phase);
+    window.addEventListener(DEMO_UPDATE_EVENT, syncFromStore);
+    const onStorage = (e) => {
+      if (e.key === 'goland_demo_transfer' || e.key === null) syncFromStore();
+    };
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener(DEMO_UPDATE_EVENT, syncFromStore);
+      window.removeEventListener('storage', onStorage);
+    };
+  }, []);
+
+  const marketplaceProperties = DUMMY_MARKETPLACE_DATA.map((property) => {
+    if (property.surveyNo !== DEMO_SURVEY_NO) return property;
+    const sold = buyerPhase === PHASES.FINALIZED || buyerPhase === PHASES.CLAIMED;
+    return { ...property, listingStatus: sold ? 'Sold' : property.listingStatus };
+  });
 
   const handleMakeOfferClick = (property) => {
     setSelectedProperty(property);
@@ -772,6 +849,11 @@ const BuyerDashboard = () => {
       };
 
       setMyPurchasedLands([...myPurchasedLands, newlyAcquiredLand]);
+
+      if (offer.surveyNo === DEMO_SURVEY_NO || offer.isDemoParcel) {
+        setDemoPhase(PHASES.CLAIMED);
+      }
+
       alert("Ownership verified! The property is now in your collection.");
     } catch (err) {
       console.error("Claiming failed", err);
@@ -861,10 +943,19 @@ const BuyerDashboard = () => {
 
       <main className="py-12 space-y-12">
         {activeSection === 'marketplace' && (
-          <MarketplaceSection />
+          <MarketplaceSection
+            properties={marketplaceProperties}
+            onMakeOfferClick={handleMakeOfferClick}
+          />
         )}
         {activeSection === 'verify' && <VerifyLandSection />}
-        {activeSection === 'offers' && <MyOffersSection />}
+        {activeSection === 'offers' && (
+          <MyOffersSection
+            offers={DUMMY_MY_OFFERS}
+            demoPhase={buyerPhase}
+            onClaim={handleClaimOwnership}
+          />
+        )}
         {activeSection === 'land-status' && <Progress />}
       </main>
     </div>

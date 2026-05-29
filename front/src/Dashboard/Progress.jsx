@@ -922,7 +922,7 @@ const stageFormMap = {
 // MAIN PROGRESS COMPONENT
 // ============================================================================
 
-export default function Progress() {
+export default function Progress({ onGiveApproval }) {
   const [currentStage, setCurrentStage] = useState(1);
   const [formData, setFormData] = useState(loadFormData());
   const [completedStages, setCompletedStages] = useState([]);
@@ -976,6 +976,27 @@ export default function Progress() {
       setErrors({});
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+
+  const canGiveApproval = () => {
+    if (currentStage !== 6) return false;
+    const priorComplete = [1, 2, 3, 4, 5].every((id) => completedStages.includes(id));
+    const stage6Errors = validateStage(formData, 6);
+    return priorComplete && Object.keys(stage6Errors).length === 0;
+  };
+
+  const handleGiveApproval = () => {
+    const stage6Errors = validateStage(formData, 6);
+    if (Object.keys(stage6Errors).length > 0) {
+      setErrors(stage6Errors);
+      return;
+    }
+    const priorComplete = [1, 2, 3, 4, 5].every((id) => completedStages.includes(id));
+    if (!priorComplete) {
+      return;
+    }
+    setCompletedStages((prev) => Array.from(new Set([...prev, 6])));
+    onGiveApproval?.();
   };
 
   const handleStageSelect = (stageId) => {
@@ -1118,13 +1139,21 @@ export default function Progress() {
                 <ChevronRight className="w-4 h-4" />
               </motion.button>
             ) : (
-              <div className="flex items-center gap-2 px-6 py-3 bg-emerald-500/20 border border-emerald-500/50 rounded-lg text-emerald-400 font-medium">
-                {/* <Check className="w-5 h-5" />
-                All Stages Completed! */}
-                <button type='submit'>
-                  Initiate Transfer
-                </button>
-              </div>
+              <motion.button
+                type="button"
+                whileHover={canGiveApproval() ? { scale: 1.02 } : {}}
+                whileTap={canGiveApproval() ? { scale: 0.98 } : {}}
+                onClick={handleGiveApproval}
+                disabled={!canGiveApproval()}
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-all ${
+                  canGiveApproval()
+                    ? 'bg-emerald-500 hover:bg-emerald-600 text-white cursor-pointer'
+                    : 'bg-slate-700 text-slate-500 cursor-not-allowed border border-slate-600'
+                }`}
+              >
+                <CheckCircle className="w-5 h-5" />
+                Give Approval
+              </motion.button>
             )}
           </div>
         </motion.div>

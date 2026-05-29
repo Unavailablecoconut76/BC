@@ -9,28 +9,21 @@ import {
   CheckCircle,
   AlertCircle,
   X,
-  ArrowRight,
-  ArrowLeft,
-  Trophy,
-  Layers,
   FolderOpen,
   Bolt,
   Copy,
   Menu,
 } from 'lucide-react';
 import Progress from './Progress';
+import {
+  PHASES,
+  DEMO_SURVEY_NO,
+  useDemoTransfer,
+  buildDemoOfficialActivity,
+  resetDemoTransfer,
+} from './demoTransferStore';
 
 const DUMMY_OFFICIAL_ACTIVITIES = [
-  {
-    id: 1,
-    propertyLocation: 'Pune, Maharashtra',
-    surveyNo: 'PUNE-2024-001',
-    offerAmount: '24 ETH',
-    timestamp: '2024-02-02 14:30:00',
-    status: 'pending',
-    buyer: '0x742d35Cc6634C0532925a3b844Bc622e4A8a4C0f',
-    seller: '0xDEF1234567890ABC1234567890ABC1234567890',
-  },
   {
     id: 2,
     propertyLocation: 'Mumbai, Maharashtra',
@@ -189,7 +182,7 @@ const getStatusBadge = (status) => {
   return <span className={`${base} bg-red-500/10 text-red-300 border border-red-500/20`}><AlertCircle className="w-3 h-3" /> Rejected</span>;
 };
 
-const OverviewSection = ({ totals }) => {
+const OverviewSection = ({ totals, onResetDemo }) => {
   return (
     <section className=" bg-slate-500">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -239,9 +232,16 @@ const OverviewSection = ({ totals }) => {
             <p className="text-slate-400 uppercase text-xs tracking-[0.25em]">Recent activity summary</p>
             <h2 className="text-2xl font-bold text-white mt-3">Government approval dashboard</h2>
           </div>
-          <div className="flex items-center gap-3 text-slate-400 text-sm">
+          <div className="flex flex-wrap items-center gap-3 text-slate-400 text-sm">
             <Bolt className="w-4 h-4 text-emerald-400" />
             <span>Fast-track Pune parcel review for demo flow</span>
+            <button
+              type="button"
+              onClick={onResetDemo}
+              className="ml-auto text-xs font-semibold uppercase tracking-wide text-slate-400 hover:text-emerald-400 border border-slate-600 hover:border-emerald-500/40 px-3 py-1.5 rounded-lg transition-colors"
+            >
+              Reset demo
+            </button>
           </div>
         </div>
       </div>
@@ -249,7 +249,78 @@ const OverviewSection = ({ totals }) => {
   );
 };
 
-const PendingActivitiesSection = ({ activities, onReview, onApprove, onReject, onInitiate }) => {
+const DemoActivityActions = ({ activity, onReview, onFinalize, onReject }) => {
+  const phase = activity.demoPhase;
+
+  if (phase === PHASES.FINALIZED) {
+    return <p className="text-sm text-emerald-400">Transfer finalized. Buyer may claim ownership.</p>;
+  }
+  if (phase === PHASES.REJECTED) {
+    return <p className="text-sm text-red-400">Request rejected. No further actions.</p>;
+  }
+  if (phase === PHASES.REVIEWING) {
+    return (
+      <p className="text-sm text-yellow-300 border border-yellow-500/20 bg-yellow-500/10 rounded-xl px-4 py-3">
+        Review in progress — complete all stages in Land Status, then Give Approval.
+      </p>
+    );
+  }
+
+  const reviewComplete = phase === PHASES.REVIEW_COMPLETE;
+  const reviewDisabled = reviewComplete || phase === PHASES.REVIEWING;
+
+  return (
+    <div className="flex flex-col gap-3">
+      <button
+        type="button"
+        onClick={() => onReview(activity)}
+        disabled={reviewDisabled}
+        className={`w-full inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-3 text-sm font-semibold transition-all ${
+          reviewDisabled
+            ? 'bg-slate-800 border-slate-700 text-slate-500 cursor-not-allowed'
+            : 'bg-slate-900 border-slate-700 text-white hover:border-emerald-500/30 hover:text-emerald-400'
+        }`}
+      >
+        <FolderOpen className="w-4 h-4" />
+        {reviewComplete ? 'Review complete' : 'Review Land Status'}
+      </button>
+
+      {reviewComplete && (
+        <button
+          type="button"
+          disabled
+          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-slate-800 border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-500 cursor-not-allowed"
+        >
+          <Shield className="w-4 h-4" />
+          Under inspection by govt.
+        </button>
+      )}
+
+      {reviewComplete && (
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={() => onFinalize(activity)}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-emerald-400 transition-all"
+          >
+            <CheckCircle className="w-4 h-4" />
+            Finalize
+          </button>
+          <button
+            type="button"
+            onClick={() => onReject(activity)}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white hover:bg-red-400 transition-all"
+          >
+            <AlertCircle className="w-4 h-4" />
+            Reject
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const PendingActivitiesSection = ({ activities, onReview, onFinalize, onReject }) => {
   return (
     <section className="bg-slate-900 space-y-6">
       <div className="flex items-center justify-between">
@@ -259,109 +330,88 @@ const PendingActivitiesSection = ({ activities, onReview, onApprove, onReject, o
         </div>
       </div>
 
-      <div className="grid gap-6">
-        {activities.map((activity) => (
-          <div key={activity.id} className="bg-slate-800 border border-slate-700 rounded-3xl p-6 shadow-lg shadow-black/10">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-start">
-              <div className="lg:col-span-2">
-                <p className="text-slate-400 uppercase text-xs tracking-[0.25em] mb-2">Parcel</p>
-                <p className="text-white font-semibold text-lg">{activity.propertyLocation}</p>
-                <p className="text-white text-slate-500 text-sm mt-1">Survey ID: {activity.surveyNo}</p>
-                <p className="text-white text-slate-500 text-sm mt-2">Buyer: {activity.buyer}</p>
-              </div>
+      {activities.length === 0 ? (
+        <div className="text-center py-16 bg-slate-800 border border-slate-700 border-dashed rounded-3xl">
+          <Clock className="w-12 h-12 text-slate-600 mx-auto mb-4" />
+          <p className="text-slate-400">No pending activities. Initiate a Pune transfer from the Seller dashboard.</p>
+        </div>
+      ) : (
+        <div className="grid gap-6">
+          {activities.map((activity) => (
+            <div key={activity.id} className="bg-slate-800 border border-slate-700 rounded-3xl p-6 shadow-lg shadow-black/10">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 items-start">
+                <div className="lg:col-span-2">
+                  <p className="text-slate-400 uppercase text-xs tracking-[0.25em] mb-2">Parcel</p>
+                  <p className="text-white font-semibold text-lg">{activity.propertyLocation}</p>
+                  <p className="text-white text-slate-500 text-sm mt-1">Survey ID: {activity.surveyNo}</p>
+                  <p className="text-white text-slate-500 text-sm mt-2">Buyer: {activity.buyer}</p>
+                </div>
 
-              <div>
-                <p className="text-gray text-slate-400 uppercase text-xs tracking-[0.25em] mb-2">Offer</p>
-                <p className="text-white text-emerald-300 text-lg font-semibold">{activity.offerAmount}</p>
-                <p className="text-white text-slate-500 text-sm mt-2">Received: {activity.timestamp}</p>
-              </div>
+                <div>
+                  <p className="text-gray text-slate-400 uppercase text-xs tracking-[0.25em] mb-2">Offer</p>
+                  <p className="text-white text-emerald-300 text-lg font-semibold">{activity.offerAmount}</p>
+                  <p className="text-white text-slate-500 text-sm mt-2">Received: {activity.timestamp}</p>
+                </div>
 
-              <div className='bg-sky-500'>
-                <p className="text-gray text-slate-400 uppercase text-xs tracking-[0.25em] mb-2">Status</p>
-                {getStatusBadge(activity.status)}
-              </div>
+                <div>
+                  <p className="text-gray text-slate-400 uppercase text-xs tracking-[0.25em] mb-2">Status</p>
+                  {activity.isDemo ? (
+                    <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide bg-yellow-500/10 text-yellow-300 border border-yellow-500/20">
+                      <Clock className="w-3 h-3" /> Pending
+                    </span>
+                  ) : (
+                    getStatusBadge(activity.status)
+                  )}
+                </div>
 
-              <div className="lg:col-span-2 flex flex-col gap-3">
-                <button
-                  onClick={() => onReview(activity)}
-                  className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 border border-slate-700 px-5 py-3 text-sm font-semibold text-white hover:border-emerald-500/30 hover:text-emerald-400 transition-all"
-                >
-                  <FolderOpen className="w-4 h-4" />
-                  Review Land Status
-                </button>
-
-                {activity.status === 'pending' ? (
-                  <div className="grid grid-cols-2 gap-3">
-                    <button
-                      onClick={() => onApprove(activity)}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-emerald-400 transition-all"
-                    >
-                      <CheckCircle className="w-4 h-4" />
-                      Initiate Transfer
-                    </button>
-                    <button
-                      onClick={() => onReject(activity)}
-                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-red-500 px-5 py-3 text-sm font-semibold text-white hover:bg-red-400 transition-all"
-                    >
-                      <AlertCircle className="w-4 h-4" />
-                      Reject
-                    </button>
-                  </div>
-                ) : activity.status === 'accepted' ? (
-                  <button
-                    onClick={() => onInitiate(activity)}
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-5 py-3 text-sm font-semibold text-slate-950 hover:bg-sky-400 transition-all"
-                  >
-                    <ArrowRight className="w-4 h-4" />
-                    Finalize & Claim Ownership
-                  </button>
-                ) : (
-                  <div className="text-sm text-slate-400">No actions available for rejected requests.</div>
-                )}
+                <div className="lg:col-span-2">
+                  {activity.isDemo ? (
+                    <DemoActivityActions
+                      activity={activity}
+                      onReview={onReview}
+                      onFinalize={onFinalize}
+                      onReject={onReject}
+                    />
+                  ) : (
+                    <div className="text-sm text-slate-400">Historical record — no demo actions.</div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 };
 
-const TransferCompleteScreen = ({ onExit }) => (
-  <div className="min-h-[60vh] flex items-center justify-center">
-    <div className="bg-slate-900 border border-sky-500/30 rounded-3xl p-10 shadow-2xl shadow-sky-500/10 max-w-xl w-full text-center">
-      <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-sky-500/10 text-sky-400">
-        <CheckCircle className="h-12 w-12" />
-      </div>
-      <h1 className="text-4xl font-bold text-white mb-4">transfer process complete!</h1>
-      <p className="text-slate-400 mb-8">
-        The transfer has been approved and the Pune parcel status is now accepted. Click Exit to return to the dashboard.
-      </p>
-      <button
-        onClick={onExit}
-        className="inline-flex items-center gap-2 rounded-full bg-sky-500 px-8 py-3 text-sm font-semibold text-slate-950 hover:bg-sky-400 transition-all"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Exit to Dashboard
-      </button>
-    </div>
-  </div>
-);
-
 const OfficialDashboard = () => {
   const [activeSection, setActiveSection] = useState('overview');
-  const [activities, setActivities] = useState(DUMMY_OFFICIAL_ACTIVITIES);
-  const [showTransferComplete, setShowTransferComplete] = useState(false);
-  const [selectedActivity, setSelectedActivity] = useState(null);
+  const demo = useDemoTransfer();
   const [account, setAccount] = useState(null);
   const [balance, setBalance] = useState(null);
   const [copied, setCopied] = useState(false);
 
+  const staticActivities = useMemo(
+    () => DUMMY_OFFICIAL_ACTIVITIES.filter((item) => item.surveyNo !== DEMO_SURVEY_NO),
+    []
+  );
+
+  const demoActivity = buildDemoOfficialActivity(demo);
+  const pendingActivities = useMemo(() => {
+    const demoPending =
+      demoActivity &&
+      [PHASES.INITIATED, PHASES.REVIEWING, PHASES.REVIEW_COMPLETE].includes(demo.phase)
+        ? [demoActivity]
+        : [];
+    return [...demoPending, ...staticActivities.filter((item) => item.status === 'pending')];
+  }, [demoActivity, demo.phase, staticActivities]);
+
   const totals = useMemo(() => ({
-    pending: activities.filter((item) => item.status === 'pending').length,
-    accepted: activities.filter((item) => item.status === 'accepted').length,
-    rejected: activities.filter((item) => item.status === 'rejected').length,
-  }), [activities]);
+    pending: pendingActivities.length,
+    accepted: staticActivities.filter((item) => item.status === 'accepted').length + (demo.phase === PHASES.FINALIZED || demo.phase === PHASES.CLAIMED ? 1 : 0),
+    rejected: staticActivities.filter((item) => item.status === 'rejected').length + (demo.phase === PHASES.REJECTED ? 1 : 0),
+  }), [pendingActivities.length, staticActivities, demo.phase]);
 
   useEffect(() => {
     if (!window.ethereum) return;
@@ -417,44 +467,41 @@ const OfficialDashboard = () => {
     }
   };
 
-  const handleReview = (activity) => {
-    setSelectedActivity(activity);
+  const handleReview = () => {
+    demo.setPhase(PHASES.REVIEWING);
     setActiveSection('land-status');
   };
 
-  const handleApprove = (activity) => {
-    setActivities((prev) => prev.map((item) => item.id === activity.id ? { ...item, status: 'accepted' } : item));
-    setShowTransferComplete(true);
-    setSelectedActivity(activity);
+  const handleReject = () => {
+    demo.setPhase(PHASES.REJECTED);
+    setActiveSection('pending');
   };
 
-  const handleReject = (activity) => {
-    setActivities((prev) => prev.map((item) => item.id === activity.id ? { ...item, status: 'rejected' } : item));
+  const handleFinalize = () => {
+    demo.setPhase(PHASES.FINALIZED);
+    setActiveSection('pending');
   };
 
-  const handleFinalize = async (activity) => {
-    if (window.ethereum && account) {
-      try {
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
-        const tx = await signer.sendTransaction({
-          to: activity.buyer,
-          value: ethers.parseEther('0.0005'),
-        });
-        await tx.wait();
-      } catch (err) {
-        console.error('Crypto transfer simulation failed', err);
-      }
-    }
-    setShowTransferComplete(true);
-    setSelectedActivity(activity);
+  const handleGiveApproval = () => {
+    demo.setPhase(PHASES.REVIEW_COMPLETE);
+    setActiveSection('pending');
   };
 
-  const handleExitComplete = () => {
-    setShowTransferComplete(false);
+  const handleResetDemo = () => {
+    resetDemoTransfer();
     setActiveSection('overview');
-    setSelectedActivity(null);
   };
+
+  const displayPendingActivities = useMemo(() => {
+    const list = [...pendingActivities];
+    if (
+      demoActivity &&
+      (demo.phase === PHASES.FINALIZED || demo.phase === PHASES.REJECTED)
+    ) {
+      list.unshift({ ...demoActivity, demoPhase: demo.phase });
+    }
+    return list;
+  }, [pendingActivities, demoActivity, demo.phase]);
 
   return (
     <div className="min-h-screen bg-[#0b1220] text-[#a8b3cf]">
@@ -469,22 +516,19 @@ const OfficialDashboard = () => {
       />
 
       <main className="py-12 space-y-10 px-4 sm:px-6 lg:px-8">
-        {showTransferComplete ? (
-          <TransferCompleteScreen onExit={handleExitComplete} />
-        ) : (
-          <>
-            {activeSection === 'overview' && <OverviewSection totals={totals} />}
-            {activeSection === 'pending' && (
-              <PendingActivitiesSection
-                activities={activities}
-                onReview={handleReview}
-                onApprove={handleApprove}
-                onReject={handleReject}
-                onInitiate={handleFinalize}
-              />
-            )}
-            {activeSection === 'land-status' && <Progress />}
-          </>
+        {activeSection === 'overview' && (
+          <OverviewSection totals={totals} onResetDemo={handleResetDemo} />
+        )}
+        {activeSection === 'pending' && (
+          <PendingActivitiesSection
+            activities={displayPendingActivities}
+            onReview={handleReview}
+            onFinalize={handleFinalize}
+            onReject={handleReject}
+          />
+        )}
+        {activeSection === 'land-status' && (
+          <Progress onGiveApproval={handleGiveApproval} />
         )}
       </main>
     </div>
