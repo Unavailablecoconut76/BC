@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ethers } from 'ethers';
 import {
   Wallet,
@@ -21,59 +22,12 @@ import Progress from './Progress';
 import { PHASES, DEMO_SURVEY_NO, getDemoState, setDemoPhase } from './demoTransferStore';
 
 const DEMO_UPDATE_EVENT = 'goland-demo-update';
-import land1 from '../../assets/land1.jpg';
-import land2 from '../../assets/land2.jpg';
-import land3 from '../../assets/land3.jpg';
-import land4 from '../../assets/land4.jpg';
+import { getMarketplaceProperties, getPropertyById, toMarketplaceListItem } from './propertyCatalog';
 
 // import { sign } from 'node:crypto';
  //
 
 //BUY PLOT options..
-
-// ==================== DUMMY DATA ====================
-const DUMMY_MARKETPLACE_DATA = [
-  {
-    id: 101,
-    location: 'Pune, Maharashtra',
-    area: 1200,
-    price: '25 ETH',
-    surveyNo: 'PUNE-2024-001',
-    owner: '0x742d35Cc6634C0532925a3b844Bc622e4A8a4C0f',
-    image: land1,
-    litigationStatus: 'Clean',
-  },
-  {
-    id: 102,
-    location: 'Mumbai, Maharashtra',
-    area: 1500,
-    price: '35 ETH',
-    surveyNo: 'MUMBAI-2024-002',
-    owner: '0x8ba1f109551bD432803012645Ac136ddd64DBA72',
-    image: land2,
-    litigationStatus: 'Clean',
-  },
-  {
-    id: 103,
-    location: 'Bangalore, Karnataka',
-    area: 2000,
-    price: '45 ETH',
-    surveyNo: 'BANGALORE-2024-003',
-    owner: '0xaBc1234567890DEF1234567890DEF1234567890',
-    image: land3,
-    litigationStatus: 'Disputed',
-  },
-  {
-    id: 104,
-    location: 'Delhi, Delhi',
-    area: 1800,
-    price: '50 ETH',
-    surveyNo: 'DELHI-2024-004',
-    owner: '0xDEF1234567890ABC1234567890ABC1234567890',
-    image: land4,
-    litigationStatus: 'Clean',
-  },
-];
 
 const DUMMY_MY_OFFERS = [
   {
@@ -386,7 +340,7 @@ const VerifyLandSection = () => {
 };
 
 // ==================== MARKETPLACE SECTION ====================
-const MarketplaceSection = ({ properties, onMakeOfferClick }) => {
+const MarketplaceSection = ({ properties, onMakeOfferClick, onPropertyClick }) => {
   return (
     <section className="bg-slate-900 min-h-screen text-white ">
       <div className='bg-slate-900'>
@@ -399,10 +353,22 @@ const MarketplaceSection = ({ properties, onMakeOfferClick }) => {
         {properties.map((property) => (
           <div
             key={property.id}
-            className="group bg-slate-800  rounded-2xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-black/20"
+            role="button"
+            tabIndex={0}
+            onClick={() => onPropertyClick(property)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onPropertyClick(property);
+              }
+            }}
+            className="group bg-slate-800 rounded-2xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-black/20 cursor-pointer border border-transparent hover:border-emerald-500/20"
           >
             {/* Property Image */}
             <div className="relative w-full h-40 bg-slate-800 overflow-hidden">
+              <span className="absolute bottom-2 left-2 text-[10px] font-semibold uppercase tracking-wide text-white/0 group-hover:text-white/90 bg-slate-950/0 group-hover:bg-slate-950/80 px-2 py-1 rounded transition-all z-10">
+                View details
+              </span>
               <img
                 src={property.image}
                 alt={property.location}
@@ -449,7 +415,11 @@ const MarketplaceSection = ({ properties, onMakeOfferClick }) => {
               </div>
 
               <button
-                onClick={() => onMakeOfferClick(property)}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onMakeOfferClick(property);
+                }}
                 disabled={property.listingStatus === 'Sold'}
                 className={`w-full py-2 rounded-lg font-semibold transition-all text-sm shadow-lg active:scale-95 ${
                   property.listingStatus === 'Sold'
@@ -781,6 +751,8 @@ const MakeOfferModal = ({ isOpen, property, onClose }) => {
 
 // ==================== MAIN BUYER DASHBOARD ====================
 const BuyerDashboard = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeSection, setActiveSection] = useState('marketplace');
   const [account, setAccount] = useState(null);
   const [balance, setBalance] = useState(null);
@@ -809,7 +781,7 @@ const BuyerDashboard = () => {
     };
   }, []);
 
-  const marketplaceProperties = DUMMY_MARKETPLACE_DATA.map((property) => {
+  const marketplaceProperties = getMarketplaceProperties().map((property) => {
     if (property.surveyNo !== DEMO_SURVEY_NO) return property;
     const sold = buyerPhase === PHASES.FINALIZED || buyerPhase === PHASES.CLAIMED;
     return { ...property, listingStatus: sold ? 'Sold' : property.listingStatus };
@@ -929,6 +901,22 @@ const BuyerDashboard = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const openId = location.state?.openOfferFor;
+    if (!openId) return;
+    const full = getPropertyById(openId);
+    if (full) {
+      setActiveSection('marketplace');
+      setSelectedProperty(toMarketplaceListItem(full));
+      setIsOfferModalOpen(true);
+    }
+    navigate(location.pathname, { replace: true, state: {} });
+  }, [location.state, location.pathname, navigate]);
+
+  const handlePropertyClick = (property) => {
+    navigate(`/dashboardbuyer/property/${property.id}`);
+  };
+
   return (
     <div className="min-h-screen bg-[#0b1220] text-[#a8b3cf]">
       <BuyerHeader
@@ -946,6 +934,7 @@ const BuyerDashboard = () => {
           <MarketplaceSection
             properties={marketplaceProperties}
             onMakeOfferClick={handleMakeOfferClick}
+            onPropertyClick={handlePropertyClick}
           />
         )}
         {activeSection === 'verify' && <VerifyLandSection />}

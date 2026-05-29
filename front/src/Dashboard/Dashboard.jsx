@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Wallet,
   Home,
@@ -19,40 +20,7 @@ import {
 import { ethers } from 'ethers';
 import Progress from './Progress';
 import { DEMO_SURVEY_NO, initiateDemoTransfer } from './demoTransferStore';
-import land1 from '../../assets/land1.jpg';
-import land2 from '../../assets/land2.jpg';
-import land3 from '../../assets/land3.jpg';
-import land4 from '../../assets/land4.jpg';
-
-
-
-// Dummy data for myLands 
-const DUMMY_LANDS = [
-  {
-    id: 101,
-    location: 'Pune, Maharashtra',
-    area: 1200,
-    price: '25 ETH',
-    surveyNo: 'PUNE-2024-001',
-    image: land1, // Updated placeholder colors
-  },
-  {
-    id: 102,
-    location: 'Mumbai, Maharashtra',
-    area: 1500,
-    price: '35 ETH',
-    surveyNo: 'MUMBAI-2024-002',
-    image: land2,
-  },
-  {
-    id: 103,
-    location: 'Bangalore, Karnataka',
-    area: 2000,
-    price: '45 ETH',
-    surveyNo: 'BANGALORE-2024-003',
-    image: land3,
-  },
-];
+import { getSellerProperties, getPropertyById, toSellerListItem } from './propertyCatalog';
 
 // Dummy pending requests (Unchanged)
 const DUMMY_PENDING_REQUESTS = [
@@ -218,7 +186,7 @@ const DashboardHeader = ({ activeSection, setActiveSection, account, balance,con
 };
 
 // My Properties Section
-const MyPropertiesSection = ({ lands, onTransferClick }) => {
+const MyPropertiesSection = ({ lands, onTransferClick, onPropertyClick }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredLands = lands.filter(
@@ -251,10 +219,22 @@ const MyPropertiesSection = ({ lands, onTransferClick }) => {
         {filteredLands.map((land) => (
           <div
             key={land.id}
-            className="group bg-slate-800  rounded-2xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-black/20"
+            role="button"
+            tabIndex={0}
+            onClick={() => onPropertyClick(land)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onPropertyClick(land);
+              }
+            }}
+            className="group bg-slate-800 rounded-2xl overflow-hidden hover:border-emerald-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-black/20 cursor-pointer border border-transparent hover:border-emerald-500/20"
           >
             {/* Property Image */}
             <div className="relative w-full h-48 bg-slate-800 overflow-hidden">
+              <span className="absolute bottom-3 left-3 text-[10px] font-semibold uppercase tracking-wide text-white/0 group-hover:text-white/90 bg-slate-950/0 group-hover:bg-slate-950/80 px-2 py-1 rounded transition-all z-10">
+                View details
+              </span>
               <img
                 src={land.image}
                 alt={land.location}
@@ -287,7 +267,11 @@ const MyPropertiesSection = ({ lands, onTransferClick }) => {
               </div>
 
               <button
-                onClick={() => onTransferClick(land)}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onTransferClick(land);
+                }}
                 className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl font-semibold transition-all flex items-center justify-center space-x-2 shadow-lg shadow-emerald-500/20 active:scale-95"
               >
                 <Send className="w-4 h-4" />
@@ -586,10 +570,12 @@ const PendingRequestsSection = ({ requests }) => {
 
 // Main Dashboard Component
 const Dashboard = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeSection, setActiveSection] = useState('properties');
   const [account, setAccount] = useState(null); // connected wallet address, null when not connected
   const [balance, setBalance] = useState(0);
-  const [myLands,setMyLands] = useState(DUMMY_LANDS);
+  const [myLands, setMyLands] = useState(getSellerProperties);
   const [pendingRequests] = useState(DUMMY_PENDING_REQUESTS);
   const [transferStatus, setTransferStatus] = useState('idle'); // idle, pending, success, error
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
@@ -656,6 +642,22 @@ const Dashboard = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const openId = location.state?.openTransferFor;
+    if (!openId) return;
+    const full = getPropertyById(openId);
+    if (full) {
+      setActiveSection('properties');
+      setSelectedLand(toSellerListItem(full));
+      setIsTransferModalOpen(true);
+    }
+    navigate(location.pathname, { replace: true, state: {} });
+  }, [location.state, location.pathname, navigate]);
+
+  const handlePropertyClick = (land) => {
+    navigate(`/dashboard/property/${land.id}`);
+  };
+
   const handleTransferClick = (land) => {
     setSelectedLand(land);
     setIsTransferModalOpen(true);
@@ -681,7 +683,11 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="bg-blue-950 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {activeSection === 'properties' && (
-          <MyPropertiesSection lands={myLands} setMyLands={setMyLands} onTransferClick={handleTransferClick} />
+          <MyPropertiesSection
+            lands={myLands}
+            onTransferClick={handleTransferClick}
+            onPropertyClick={handlePropertyClick}
+          />
         )}
 
         {activeSection === 'transfer' && (
